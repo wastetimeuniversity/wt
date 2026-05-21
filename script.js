@@ -1,4 +1,4 @@
-/* -- CANVAS BG -- white particles + cursor glow on background ── */
+/* -- CANVAS BG -- white particles + cursor glow on background -- */
 (function(){
   const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
   let W,H; const rsz=()=>{W=c.width=innerWidth;H=c.height=innerHeight}; rsz(); addEventListener('resize',rsz);
@@ -42,14 +42,14 @@
   })();
 })();
 
-/* ── ENHANCEMENT TIER CLICK - smooth expand ── */
+/* -- ENHANCEMENT TIER CLICK - smooth expand -- */
 function enhTierClick(row, tier) {
   const wasActive = row.classList.contains('active');
   document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('active'));
   const box = document.getElementById('enh-tier-detail');
 
   if (wasActive) {
-    // clicking the same row — collapse
+    // clicking the same row - collapse
     box.classList.remove('open');
     setTimeout(() => { if (!box.classList.contains('open')) box.innerHTML = '<div class="enh-detail-inner"></div>'; }, 380);
     return;
@@ -57,13 +57,13 @@ function enhTierClick(row, tier) {
 
   row.classList.add('active');
   const map = {
-    'F':   { c:'#22c45e', desc:'The most common roll at 18.78%. Provides only a 1× multiplier — the baseline. Always reroll F on any currency you actively use.', tip:'Never lock F. Reroll immediately.' },
+    'F':   { c:'#22c45e', desc:'The most common roll at 18.78%. Provides only a 1× multiplier - the baseline. Always reroll F on any currency you actively use.', tip:'Never lock F. Reroll immediately.' },
     'D':   { c:'#4ade80', desc:'Very common at 17.84%. A 1.5× boost is a minor step up from baseline. Only acceptable very early when rerolls are scarce.', tip:'Reroll unless you have no rerolls left.' },
-    'C':   { c:'#bef264', desc:'Common at 15.96%. A 2.2× multiplier is below average but usable as a short-term hold while farming more rerolls.', tip:'Lock temporarily if needed — aim higher for primary currencies.' },
+    'C':   { c:'#bef264', desc:'Common at 15.96%. A 2.2× multiplier is below average but usable as a short-term hold while farming more rerolls.', tip:'Lock temporarily if needed - aim higher for primary currencies.' },
     'B':   { c:'#fbbf24', desc:'Average roll at 14.08%. A 3.5× multiplier makes a noticeable difference. Decent for secondary currencies as a medium-term hold.', tip:'Lock secondary currencies at B while hunting S+ for primaries.' },
     'A':   { c:'#f59e0b', desc:'Above average at 11.27%. A 5× boost is solid and worth locking on most currencies until you can roll S or higher.', tip:'Lock and keep on non-primary currencies. Hunt higher for Time / Eons.' },
     'S':   { c:'#f97316', desc:'Rare at 9.39%. A 7.7× multiplier is where enhancements become genuinely powerful. Lock on every active currency.', tip:'Lock immediately on anything you actively use.' },
-    'S+':  { c:'#ef4444', desc:'Very rare at 7.51%. At 10.99× this is an excellent roll that will noticeably accelerate progression on any currency.', tip:'Always lock S+. Great roll — protect it.' },
+    'S+':  { c:'#ef4444', desc:'Very rare at 7.51%. At 10.99× this is an excellent roll that will noticeably accelerate progression on any currency.', tip:'Always lock S+. Great roll - protect it.' },
     'S++': { c:'#ff2222', desc:'Extremely rare at just 1.88%. The 14.99× multiplier is the absolute peak attainable before unlocking the CH2 Upgrade Tree. Celebrate this roll.', tip:'Best possible without CH2. Lock it and never look back.' },
     'P':   { c:'#a855f7', desc:'Requires the Chapter 2 Upgrade Tree to enter the roll pool. At 25.99× this is a massive leap above S++ and will dramatically accelerate CH2+ progression.', tip:'Unlock the CH2 Upgrade Tree first, then hunt for P on primary currencies.' },
     'P+':  { c:'#d946ef', desc:'The rarest and most powerful tier at 49.99×. Requires the CH2 Upgrade Tree. Securing P+ on your key currencies is a major milestone that compresses enormous amounts of grind.', tip:'The holy grail. Prioritise getting CH2 Upgrade Tree unlocked to access this tier.' },
@@ -72,13 +72,20 @@ function enhTierClick(row, tier) {
 
   // Populate inner content then animate open
   box.style.borderColor = d.c + '55';
-  box.innerHTML = `<div class="enh-detail-inner"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-family:'Lilita One',cursive;font-size:1.15rem;color:${d.c};text-shadow:0 0 10px ${d.c}88;">${tier}</span><span style="font-size:0.78rem;font-weight:800;color:rgba(255,255,255,0.5);">— Selected Tier</span></div><p style="font-size:0.84rem;font-weight:600;color:rgba(255,255,255,0.62);line-height:1.65;margin-bottom:10px;">${d.desc}</p><div style="padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.04);border-left:3px solid ${d.c};font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.5);"><span style="color:${d.c};font-weight:800;">💡 </span>${d.tip}</div></div>`;
+  box.innerHTML = `<div class="enh-detail-inner"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-family:'Lilita One',cursive;font-size:1.15rem;color:${d.c};text-shadow:0 0 10px ${d.c}88;">${tier}</span><span style="font-size:0.78rem;font-weight:800;color:rgba(255,255,255,0.5);">- Selected Tier</span></div><p style="font-size:0.84rem;font-weight:600;color:rgba(255,255,255,0.62);line-height:1.65;margin-bottom:10px;">${d.desc}</p><div style="padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.04);border-left:3px solid ${d.c};font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.5);"><span style="color:${d.c};font-weight:800;">💡 </span>${d.tip}</div></div>`;
   // Force reflow then open
   void box.offsetHeight;
   box.classList.add('open');
 }
 
-/* ── MODAL SYSTEM ── */
+/* -- MODAL SYSTEM -- */
+/*
+  Modal overlay helpers for opening and closing the popup panels.
+  openModal(id): shows the overlay, enables the fade-in transition,
+    and disables page scrolling while open.
+  closeModal(id): hides the overlay and re-enables page scrolling.
+  closeModalOutside(e, id): closes the modal when clicking the backdrop.
+*/
 function openModal(id) {
   const overlay = document.getElementById(id);
   if (!overlay) return;
@@ -107,7 +114,10 @@ document.addEventListener('keydown', e => {
 // Init modals as hidden
 document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
 
-/* ── OTHERS SUB-TABS ── */
+/* -- OTHERS SUB-TABS -- */
+/* Switches between the two sub-tabs inside the "Others" main tab.
+   Hides both panels first, then shows the selected panel and highlights the pill button.
+*/
 function showOthersTab(name) {
   document.querySelectorAll('.others-subtab').forEach(t => {
     t.style.display = 'none';
@@ -119,14 +129,14 @@ function showOthersTab(name) {
   if (pill) pill.classList.add('active');
 }
 
-/* ── ROBLOX LIVE STATS (direct + CORS proxy fallback) ── */
+/* -- ROBLOX LIVE STATS (direct + CORS proxy fallback) -- */
 (function fetchRobloxStats() {
   const UNIVERSE_ID = '7649346422';
   const DIRECT  = `https://games.roblox.com/v1/games?universeIds=${UNIVERSE_ID}`;
   const PROXIED = `https://api.allorigins.win/get?url=${encodeURIComponent(DIRECT)}`;
 
   function fmt(n) {
-    if (!n && n !== 0) return '—';
+    if (!n && n !== 0) return '-';
     if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
     if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
     if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
@@ -140,14 +150,14 @@ function showOthersTab(name) {
     set('stat-visits',    fmt(g.visits));
     set('stat-favorites', fmt(g.favoritedCount));
     set('stat-likes',     fmt(g.likeCount));
-    set('stat-maxplayers',g.maxPlayers ?? '—');
+    set('stat-maxplayers',g.maxPlayers ?? '-');
     const badge = document.getElementById('live-badge');
     if (badge) badge.style.display = 'inline-flex';
     return true;
   }
   function setFailed() {
     ['stat-active','stat-visits','stat-favorites','stat-likes','stat-maxplayers']
-      .forEach(id => { const el=document.getElementById(id); if(el) el.textContent='—'; });
+      .forEach(id => { const el=document.getElementById(id); if(el) el.textContent='-'; });
   }
   function tryFetch() {
     fetch(DIRECT)
@@ -167,7 +177,10 @@ function showOthersTab(name) {
   setInterval(tryFetch, 60000);
 })();
 
-/* ── TABS ── */
+/* -- TABS -- */
+/* Selects one of the main page tabs and updates the navigation state.
+   Also scrolls the page to the top after switching tabs.
+*/
 function showTab(n){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -181,7 +194,8 @@ function showTab(n){
   scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ── CHAPTERS ── */
+/* -- CHAPTERS -- */
+/* Shows the requested chapter content and updates the chapter pill button state. */
 function showChapter(n){
   document.querySelectorAll('.chapter-content').forEach(c=>c.style.display='none');
   document.querySelectorAll('.chapter-pill').forEach(p=>p.classList.remove('active'));
@@ -189,10 +203,18 @@ function showChapter(n){
   const pills=document.querySelectorAll('.chapter-pill'); if(pills[n-1])pills[n-1].classList.add('active');
 }
 
-/* ── FAQ ── */
-function toggleFaq(btn){const i=btn.closest('.faq-item'),was=i.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(x=>x.classList.remove('open'));if(!was)i.classList.add('open');}
+/* -- FAQ -- */
+/* Toggles a FAQ item open or closed and closes any other question that is currently expanded. */
+function toggleFaq(btn){
+  const i = btn.closest('.faq-item');
+  const was = i.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(x => x.classList.remove('open'));
+  if (!was) i.classList.add('open');
+}
 
+/* Copies a redeem code into the clipboard and shows a temporary button state. */
 function copyCode(code, btn){
+
   const text = String(code);
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));
@@ -205,6 +227,8 @@ function copyCode(code, btn){
   btn.style.opacity = '0.85';
   setTimeout(()=>{ btn.textContent = original; btn.disabled = false; btn.style.opacity=''; }, 1200);
 }
+
+/* Fallback copy method for browsers that do not support navigator.clipboard. */
 function fallbackCopy(text){
   const ta = document.createElement('textarea');
   ta.value = text;
@@ -216,7 +240,7 @@ function fallbackCopy(text){
   document.body.removeChild(ta);
 }
 
-/* ── IDLE COUNTER (in seconds, accelerating) ── */
+/* -- IDLE COUNTER (in seconds, accelerating) -- */
 (function(){
   let secs = 0, rate = 1;
   const el = document.getElementById('hdr-counter');
@@ -244,7 +268,7 @@ function fallbackCopy(text){
   }, 1000);
 })();
 
-/* ── SESSION TIMER (real time spent on the guide) ── */
+/* -- SESSION TIMER (real time spent on the guide) -- */
 (function(){
   const el = document.getElementById('hdr-session');
   const start = Date.now();
@@ -262,7 +286,7 @@ function fallbackCopy(text){
   }, 1000);
 })();
 
-/* ── TOAST NOTIFICATION ── */
+/* -- TOAST NOTIFICATION -- */
 (function(){
   const el = document.createElement('div');
   el.className = 'wt-toast'; el.id = 'wt-toast';
@@ -277,7 +301,7 @@ function showToast(msg, duration) {
   el._t = setTimeout(() => el.classList.remove('show'), duration || 3200);
 }
 
-/* ── MOBILE NAV ── */
+/* -- MOBILE NAV -- */
 function toggleMobileNav() {
   const links = document.getElementById('nav-links');
   const ham   = document.getElementById('nav-hamburger');
@@ -292,7 +316,10 @@ function closeMobileNav() {
   if (ham)   ham.textContent = '☰';
 }
 
-/* ── CHAPTER/OTHERS PILL STAGGER ANIMATION ── */
+/* -- CHAPTER/OTHERS PILL STAGGER ANIMATION -- */
+/* Applies a small stagger delay to pill buttons so they animate in sequence.
+   This creates a nicer entrance effect for the chip-style pills.
+*/
 function staggerPills(selector) {
   document.querySelectorAll(selector).forEach((el, i) => {
     el.style.animationDelay = (i * 0.07) + 's';
@@ -301,7 +328,7 @@ function staggerPills(selector) {
 staggerPills('.chapter-pill');
 staggerPills('[id^="others-pill-"]');
 
-/* ── TIER HINT — hide once a row is clicked ── */
+/* -- TIER HINT - hide once a row is clicked -- */
 (function(){
   const hint = document.getElementById('tier-hint');
   document.querySelectorAll('.tier-row').forEach(row => {
@@ -311,7 +338,7 @@ staggerPills('[id^="others-pill-"]');
   });
 })();
 
-/* ── ENHANCED MOUSE TRAIL — alternates pink/blue/gold ── */
+/* -- ENHANCED MOUSE TRAIL - alternates pink/blue/gold -- */
 let _trailIdx = 0;
 const _trailCols = ['rgba(217,70,180,0.7)','rgba(46,168,232,0.7)','rgba(245,166,35,0.6)','rgba(168,85,247,0.7)'];
 document.addEventListener('mousemove',e=>{
@@ -324,7 +351,7 @@ document.addEventListener('mousemove',e=>{
   setTimeout(()=>d.remove(),560);
 });
 
-/* ── NAV SPARKLES ── */
+/* -- NAV SPARKLES -- */
 document.querySelectorAll('.nav-btn').forEach(btn=>{
   btn.addEventListener('mouseenter',()=>{
     for(let i=0;i<3;i++){
@@ -336,7 +363,7 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
   });
 });
 
-/* ── CLICK BURST ── */
+/* -- CLICK BURST -- */
 (function(){
   const BURST_COLS = ['#d946b4','#2ea8e8','#f5a623','#a855f7','#22c45e','#ffffff'];
   const SHAPES = ['●','✦','★','◆','✸','⬡'];
@@ -345,7 +372,7 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
     const x = e.clientX, y = e.clientY;
     const col = BURST_COLS[Math.floor(Math.random() * BURST_COLS.length)];
 
-    // ── Ring pulse ──
+    // -- Ring pulse --
     const ring = document.createElement('div');
     ring.style.cssText = `
       position:fixed; left:${x}px; top:${y}px;
@@ -363,7 +390,7 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
     });
     setTimeout(() => ring.remove(), 580);
 
-    // ── Particle burst ──
+    // -- Particle burst --
     const count = 10 + Math.floor(Math.random() * 6);
     for (let i = 0; i < count; i++) {
       const angle  = (i / count) * Math.PI * 2;
@@ -398,7 +425,7 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
       setTimeout(() => p.remove(), dur + delay + 60);
     }
 
-    // ── Central flash ──
+    // -- Central flash --
     const flash = document.createElement('div');
     flash.style.cssText = `
       position:fixed; left:${x}px; top:${y}px;
@@ -414,7 +441,7 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
   });
 })();
 
-/* ── SCROLL PROGRESS BAR ── */
+/* -- SCROLL PROGRESS BAR -- */
 (function(){
   const bar = document.getElementById('scroll-progress');
   function updateBar(){
@@ -427,7 +454,7 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
 
 /* Parallax removed - background is fixed */
 
-/* ── SCROLL REVEAL - auto-applied, no HTML changes needed ── */
+/* -- SCROLL REVEAL - auto-applied, no HTML changes needed -- */
 (function(){
   // Elements that slide up
   const upSels = '.game-panel,.quick-stat,.section-title,.section-sub,.glow-divider,.coming-soon,.countdown-wrapper';
@@ -462,7 +489,7 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
   document.querySelectorAll('.sr,.sr-left,.sr-right,.sr-scale').forEach(el => io.observe(el));
 })();
 
-/* ── CARD TILT on .game-panel and .quick-stat ── */
+/* -- CARD TILT on .game-panel and .quick-stat -- */
 (function(){
   const MAX = 6;
   function tiltOn(e){
@@ -487,9 +514,9 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
 })();
 
 /* -- COUNTDOWN TIMER (for Chapter 4 release) -- */
-/* ─────────────────────────────────────────
+/* -----------------------------------------
    WTU Countdown Timer - countdown.js
-   ─────────────────────────────────────────
+   -----------------------------------------
 
    ★ TO SET THE RELEASE DATE ★
    Edit TARGET_DATE below. Always use UTC
@@ -502,7 +529,7 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
    Example: new Date("2025-12-25T18:00:00Z")
             = 25 Dec 2025 at 6:00 PM UTC
 
-   ───────────────────────────────────────── */
+   ----------------------------------------- */
 
 const TARGET_DATE = new Date("2026-05-17T03:15:00Z");
 
@@ -512,7 +539,7 @@ const TARGET_DATE = new Date("2026-05-17T03:15:00Z");
 
 const targetTimestamp = TARGET_DATE.getTime();
 
-// ── DOM refs ──────────────────────────────
+// -- DOM refs ------------------------------
 const elDays     = document.getElementById('days');
 const elHours    = document.getElementById('hours');
 const elMinutes  = document.getElementById('minutes');
@@ -521,7 +548,7 @@ const elStatus   = document.getElementById('statusMsg');
 const elLaunched = document.getElementById('launchedMsg');
 const elDisplay  = document.getElementById('countdownDisplay');
 
-// ── Init ──────────────────────────────────
+// -- Init ----------------------------------
 (function init() {
   if (targetTimestamp <= Date.now()) {
     showLaunched();
@@ -531,7 +558,7 @@ const elDisplay  = document.getElementById('countdownDisplay');
   setInterval(tick, 1000);
 })();
 
-// ── Core tick ─────────────────────────────
+// -- Core tick -----------------------------
 function tick() {
   const diff = targetTimestamp - Date.now();
 
@@ -555,7 +582,7 @@ function tick() {
   setUnit(elSeconds, seconds, true);
 }
 
-// ── Helpers ───────────────────────────────
+// -- Helpers -------------------------------
 
 function setUnit(el, value, animate = false) {
   const str = String(value).padStart(2, '0');

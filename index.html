@@ -3,14 +3,18 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Waste Time - Ultimate Guide</title>
+
+<title>Waste Time Wiki</title>
 <link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="styles.css"/>
+
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Oxanium:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css"/>
 </head>
 
 <body>
@@ -18,14 +22,14 @@
 <div id="scroll-progress"></div>
 <canvas id="bg-canvas"></canvas>
 
-<!-- ── HEADER ── -->
+<!-- -- HEADER -- -->
 <header class="site-header">
   <div class="header-logo-wrap">
     <img src="img/l_ogo.webp" alt="Waste Time" class="header-logo" onerror="this.style.display='none'"/>
   </div>
   <div class="header-title-block">
     <div class="header-title">WASTE TIME</div>
-    <div class="header-sub">✦ Ultimate Guide ✦</div>
+    <div class="header-sub">✦ Wiki ✦</div>
   </div>
   <div class="header-stats">
     <div class="hstat">
@@ -41,17 +45,17 @@
       <span class="hstat-lbl">⏳ Idle Time</span>
     </div>
   </div>
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
 </header>
 
-<!-- ── TICKER ── -->
+<!-- -- TICKER -- -->
 <div class="ticker-wrap"><div class="ticker-inner">
   ✦ CH.1 &nbsp;·&nbsp; CH.2 &nbsp;·&nbsp; CH.3 &nbsp;·&nbsp; CH.4 &nbsp;&nbsp;|&nbsp;&nbsp; ENHANCEMENTS &nbsp;·&nbsp; SPECIAL RANKS &nbsp;·&nbsp; GAMEPASSES &nbsp;·&nbsp; CODES &nbsp;·&nbsp; FAQ &nbsp;&nbsp;|&nbsp;&nbsp; ✦ CH.1 &nbsp;·&nbsp; CH.2 &nbsp;·&nbsp; CH.3 &nbsp;·&nbsp; CH.4 &nbsp;&nbsp;|&nbsp;&nbsp; ENHANCEMENTS &nbsp;·&nbsp; SPECIAL RANKS &nbsp;·&nbsp; GAMEPASSES &nbsp;·&nbsp; CODES &nbsp;·&nbsp; FAQ &nbsp;&nbsp;|&nbsp;&nbsp;
 </div></div>
 
-<!-- ── NAV ── -->
+<!-- -- NAV -- -->
 <nav class="nav-wrapper">
   <div class="nav-inner">
-    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
   </div>
   <div class="nav-links" id="nav-links">
     <button class="nav-btn active" onclick="showTab('home');closeMobileNav()">🏠 Home</button>
@@ -82,7 +86,7 @@
   </div>
 </nav>
 
-<!-- ── MAIN ── -->
+<!-- -- MAIN -- -->
 <main class="site-main">
 
   <!-- HOME -->
@@ -102,6 +106,8 @@
         <div class="quick-stat"><span class="quick-stat-num">4</span><span class="quick-stat-label">Chapters</span></div>
         <div class="quick-stat"><span class="quick-stat-num" id="stat-maxplayers"><span class="skel"></span></span><span class="quick-stat-label">Max Players/Server</span></div>
       </div>
+      <br>
+      <div class="section-sub">‼️ Note for Testers: API Data calls are not working yet. Working on it! ‼️</div>
     </div>
 
     <div class="glow-divider"></div>
@@ -117,7 +123,7 @@
           </div>
           <div class="panel-body">
             <div class="card-title">Chapter 4 Expansion!</div>
-            <div class="card-body">A new chapter is coming soon! Click to view the full countdown and sneak peeks.</div>
+            <div class="card-body">Updates, fixes and new content are dropping to Chapter 4 soon! Click to view more details. See sneak peeks to get a preview of what's coming.</div>
           </div>
         </div>
         <div class="game-panel home-expand-card" style="cursor:pointer;" onclick="openModal('modal-bulletins')">
@@ -126,37 +132,8 @@
             <span style="margin-left:auto;font-size:0.7rem;font-weight:800;color:rgba(255,255,255,0.45);letter-spacing:0.08em;">CLICK TO EXPAND ↗</span>
           </div>
           <div class="panel-body">
-            <div class="card-title">Chapter 4 Sneak Peeks</div>
-            <div class="card-body">Latest news, updates, and announcements for Waste Time. Click to read more.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="glow-divider"></div>
-
-    <div class="section-block">
-      <div class="section-title">What is Waste Time?</div>
-      <div class="section-sub">- Data incoming -</div>
-      <div class="hero-2col">
-        <div class="game-panel">
-          <div class="panel-bar pink">
-            <span>⌛ Overview</span>
-            <button class="panel-x" onclick="">✕</button>
-          </div>
-          <div class="panel-body">
-            <div class="card-title">The Game</div>
-            <div class="card-body">-</div>
-          </div>
-        </div>
-        <div class="game-panel">
-          <div class="panel-bar blue">
-            <span>🔄 Core Loop</span>
-            <button class="panel-x" onclick="">✕</button>
-          </div>
-          <div class="panel-body">
-            <div class="card-title">How to Play</div>
-            <div class="card-body">-</div>
+            <div class="card-title">Latest Announcements and Releases</div>
+            <div class="card-body">Latest announcements, updates, and sneak peeks for Waste Time, directly from the owner and developers. Click to read more.</div>
           </div>
         </div>
       </div>
@@ -172,7 +149,7 @@
           <div class="panel-bar pink"><span>📖 Chapters</span></div>
           <div class="panel-body">
             <div class="card-title">Chapter Guides</div>
-            <div class="card-body">Step-by-step walkthroughs for all 4 chapters — from your first second to endgame.</div>
+            <div class="card-body">Step-by-step walkthroughs for all 4 chapters - from your first second to endgame.</div>
           </div>
         </div>
         <div class="game-panel nav-guide-card" style="cursor:pointer" onclick="showTab('enhancements')">
@@ -186,14 +163,14 @@
           <div class="panel-bar green"><span>🎟️ Codes</span></div>
           <div class="panel-body">
             <div class="card-title">Redeem Codes</div>
-            <div class="card-body">All active and expired codes — grab free Locks and Rerolls now.</div>
+            <div class="card-body">All active and expired codes - grab free Locks and Rerolls now.</div>
           </div>
         </div>
         <div class="game-panel nav-guide-card" style="cursor:pointer" onclick="showTab('others');showOthersTab('special-ranks')">
           <div class="panel-bar blue"><span>🏆 Special Ranks</span></div>
           <div class="panel-body">
             <div class="card-title">Special Ranks</div>
-            <div class="card-body">Ethereal, Gold Coin, Lucky, Flame — what they are and how to get them.</div>
+            <div class="card-body">Ethereal, Gold Coin, Lucky, Flame - what they are and how to get them.</div>
           </div>
         </div>
         <div class="game-panel nav-guide-card" style="cursor:pointer" onclick="showTab('others');showOthersTab('gamepasses')">
@@ -207,7 +184,7 @@
           <div class="panel-bar dark"><span>❓ FAQ</span></div>
           <div class="panel-body">
             <div class="card-title">Frequently Asked Questions</div>
-            <div class="card-body">Quick answers to the most common questions about the game.</div>
+            <div class="card-body">Quick answers to the most common questions about the game or this website.</div>
           </div>
         </div>
       </div>
@@ -217,7 +194,7 @@
   <!-- CHAPTERS -->
   <div id="tab-chapters" class="tab-panel">
     <div class="section-title">Chapter Guides</div>
-    <div class="section-sub">Select a chapter below</div>
+    <div class="section-sub">Select a chapter below.</div>
     <div class="chapter-tab-row">
       <button class="chapter-pill active" onclick="showChapter(1)">Chapter 1</button>
       <button class="chapter-pill"        onclick="showChapter(2)">Chapter 2</button>
@@ -262,89 +239,11 @@
     </div>
   </div>
 
-  <!-- CURRENCIES -->
-  <div id="tab-currencies" class="tab-panel">
-    <div class="section-title">Currency Guide</div>
-    <div class="section-sub">- Data incoming -</div>
-    <div class="panel-grid" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-bottom:24px;">
-      <div class="game-panel">
-        <div class="panel-bar blue"><span>⏳ Time</span></div>
-        <div class="panel-body">
-          <div class="card-label blue">Primary</div>
-          <div class="card-body">-</div>
-          <div class="prog-wrap"><div class="prog-fill blue" style="width:100%"></div></div>
-        </div>
-      </div>
-      <div class="game-panel">
-        <div class="panel-bar pink"><span>♾️ Eons</span></div>
-        <div class="panel-body">
-          <div class="card-label pink">Rebirth</div>
-          <div class="card-body">-</div>
-          <div class="prog-wrap"><div class="prog-fill pink" style="width:78%"></div></div>
-        </div>
-      </div>
-      <div class="game-panel">
-        <div class="panel-bar gold"><span>⭐ Stars</span></div>
-        <div class="panel-body">
-          <div class="card-label gold">Advanced</div>
-          <div class="card-body">-</div>
-          <div class="prog-wrap"><div class="prog-fill gold" style="width:55%"></div></div>
-        </div>
-      </div>
-      <div class="game-panel">
-        <div class="panel-bar purple"><span>🌌 Universes</span></div>
-        <div class="panel-body">
-          <div class="card-label purple">Prestige</div>
-          <div class="card-body">-</div>
-          <div class="prog-wrap"><div class="prog-fill" style="width:32%;background:linear-gradient(90deg,#5b21b6,#a855f7);box-shadow:0 0 8px rgba(168,85,247,0.4)"></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="glow-divider"></div>
-    <div class="game-panel">
-      <div class="panel-bar dark"><span>📊 Conversion Table</span></div>
-      <div class="panel-body" style="padding:0;">
-        <table class="styled-table">
-          <thead><tr><th>From</th><th>To</th><th>Rate</th><th>Bonus</th><th>Notes</th></tr></thead>
-          <tbody>
-            <tr><td>⏳ Time</td><td>♾️ Eons</td><td>-</td><td>-</td><td>-</td></tr>
-            <tr><td>♾️ Eons</td><td>⭐ Stars</td><td>-</td><td>-</td><td>-</td></tr>
-            <tr><td>⭐ Stars</td><td>🌌 Universes</td><td>-</td><td>-</td><td>-</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- ZONES -->
-  <div id="tab-zones" class="tab-panel">
-    <div class="section-title">Zones & Rooms</div>
-    <div class="section-sub">- Data incoming -</div>
-    <div class="panel-grid" style="margin-bottom:24px;">
-      <div class="game-panel"><div class="panel-bar blue"><span>Zone 1</span></div><div class="panel-body"><div class="card-title">-</div><div class="card-body">-</div></div></div>
-      <div class="game-panel"><div class="panel-bar pink"><span>Zone 2</span></div><div class="panel-body"><div class="card-title">-</div><div class="card-body">-</div></div></div>
-      <div class="game-panel"><div class="panel-bar gold"><span>Zone 3</span></div><div class="panel-body"><div class="card-title">-</div><div class="card-body">-</div></div></div>
-      <div class="game-panel"><div class="panel-bar red"><span>Zone 4</span></div><div class="panel-body"><div class="card-title">-</div><div class="card-body">-</div></div></div>
-    </div>
-    <div class="game-panel" data-no-tilt>
-      <div class="panel-bar dark"><span>📊 Zone Unlock Chart</span></div>
-      <div class="panel-body" style="padding:0;">
-        <table class="styled-table">
-          <thead><tr><th>#</th><th>Name</th><th>Requirement</th><th>Multiplier</th><th>Notes</th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-            <tr><td>2</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-            <tr><td>3</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-            <tr><td>4</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
   <!-- ENHANCEMENTS -->
   <div id="tab-enhancements" class="tab-panel">
+  <!-- Enhancement tab-specific inline styles used only for the tier list and enhancement cards -->
   <style>
+  /* Enhancement tab-specific styles */
   .enh-pill{padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.06em;display:inline-flex;align-items:center;gap:6px;}
   .enh-pill.green{background:rgba(34,196,94,0.12);border:1.5px solid rgba(34,196,94,0.4);color:#22c45e;}
   .enh-pill.purple{background:rgba(168,85,247,0.12);border:1.5px solid rgba(168,85,247,0.4);color:#c084fc;}
@@ -380,7 +279,6 @@
   .ch-block{border-radius:9px;overflow:hidden;border:1.5px solid;}
   .ch-header{padding:8px 14px;font-family:'Lilita One',cursive;font-size:0.9rem;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
   .ch-body{padding:10px 12px;}
-  #enh-tier-detail{display:none;margin-top:14px;padding:14px;border-radius:8px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);}
   .updated-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:20px;background:rgba(34,196,94,0.1);border:1.5px solid rgba(34,196,94,0.3);font-size:0.72rem;font-weight:800;color:#22c45e;letter-spacing:0.05em;margin-bottom:18px;}
   .blink-dot{width:7px;height:7px;border-radius:50%;background:#22c45e;box-shadow:0 0 6px #22c45e;animation:blinkDot 1.4s ease-in-out infinite;}
   @keyframes blinkDot{0%,100%{opacity:1;box-shadow:0 0 6px #22c45e}50%{opacity:0.2;box-shadow:none}}
@@ -389,16 +287,16 @@
     <div class="section-title">💎 Enhancements</div>
     <div class="section-sub">Randomised boost multipliers applied to each in-game currency - one of the most impactful progression systems in Waste Time.</div>
 
-    <!-- Enhancement screenshot banner -->
-    <div class="enh-screenshot-wrap">
-      <img src="img/EnhImg.png" alt="Enhancements in action - glowing crystals and pink energy in Waste Time" class="enh-screenshot">
-      <div class="enh-screenshot-overlay">
-        <span class="enh-screenshot-tag">✦ Enhancement System in Action</span>
-      </div>
-    </div>
-
     <!-- Updated pill -->
     <div class="updated-pill"><span class="blink-dot"></span>Last Updated: 18 May 2026, 5:30 PM (UTC)</div>
+
+    <!-- Enhancement banner -->
+    <div class="enh-screenshot-wrap">
+      <img src="img/EnhImg.png" alt="Image of the enhancements area - glowing crystals and pink energy in Waste Time" class="enh-screenshot">
+      <div class="enh-screenshot-overlay">
+        <span class="enh-screenshot-tag">✦ Enhancement Area</span>
+      </div>
+    </div>
 
     <!-- Intro paragraph -->
     <div style="padding:16px 18px;border-radius:10px;background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.07);margin-bottom:22px;font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.62);line-height:1.75;">
@@ -407,7 +305,7 @@
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px;">
       <span class="enh-pill green">✅ Unlocked at 1 Sx Time - Chapter 1</span>
       <span class="enh-pill purple">🔒 P &amp; P+ require CH2 Upgrade Tree</span>
-      <span class="enh-pill blue">🪙 Applies to all in-game currencies</span>
+      <span class="enh-pill blue">🪙 Applies to most in-game currencies</span>
       <span class="enh-pill gold">📊 10 tiers total</span>
     </div>
 
@@ -463,7 +361,7 @@
     <div class="game-panel" style="margin-bottom:16px;" data-no-tilt>
       <div class="panel-bar purple"><span>📊 All Enhancement Tiers</span></div>
       <div class="panel-body">
-        <div style="font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.38);margin-bottom:12px;">Click any tier row to expand details — click again to close. Tiers marked 🔒 require the <span style="color:#a855f7;">CH2 Upgrade Tree</span> to appear in your roll pool.</div>
+        <div style="font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.38);margin-bottom:12px;">Click any tier row to expand details - click again to close. Tiers marked 🔒 require the <span style="color:#a855f7;">CH2 Upgrade Tree</span> to appear in your roll pool.</div>
         <div class="tier-hint" id="tier-hint">👆 tap a row to see tips & advice</div>
         <!-- Table header -->
         <div style="display:grid;grid-template-columns:60px 1fr 110px 90px;gap:10px;padding:0 14px 8px;font-size:0.62rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);">
@@ -768,7 +666,7 @@
 
     <!-- Special Ranks sub-tab -->
     <div id="others-special-ranks" class="others-subtab">
-      <div class="section-sub" style="margin-bottom:16px;">Special ranks available in Waste Time — each with unique passive bonuses.</div>
+      <div class="section-sub" style="margin-bottom:16px;">Special ranks available in Waste Time - each with unique passive bonuses.</div>
       <div class="hero-2col" style="margin-bottom:20px; align-items:start;">
         <div class="game-panel" data-no-tilt>
           <div class="panel-bar blue"><span>🏆 Special Ranks</span><button class="panel-x">✕</button></div>
@@ -924,6 +822,7 @@
   </div>
 </footer>
 
+<!-- Main page behavior and interactive logic for tabs, modals, timers, and effects. -->
 <script src="script.js" defer></script>
 </body>
 </html>
