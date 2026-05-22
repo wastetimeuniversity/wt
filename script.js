@@ -1,4 +1,4 @@
-/* -- CANVAS BG -- white particles + cursor glow on background -- */
+/* -- CANVAS BG -- colored ambient washes + particles + cursor glow -- */
 (function(){
   const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
   let W,H; const rsz=()=>{W=c.width=innerWidth;H=c.height=innerHeight}; rsz(); addEventListener('resize',rsz);
@@ -13,9 +13,45 @@
   // cursor position tracked for bg glow - starts off-screen
   let mx=-9999,my=-9999;
   document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-  let f=0;
+
+  // Slow-drifting ambient blobs - each has a phase offset so they move independently
+  // These are the page-level gradient washes, drawn on the full-screen canvas
+  const blobs = [
+    { // pink - top-left drift
+      col: '217,70,180', alpha: 0.13,
+      bx: 0.18, by: 0.28, r: 0.38,
+      phase: 0, speed: 0.00018, ax: 0.07, ay: 0.05
+    },
+    { // blue - bottom-right drift
+      col: '46,168,232', alpha: 0.11,
+      bx: 0.82, by: 0.72, r: 0.34,
+      phase: Math.PI * 0.66, speed: 0.00022, ax: 0.06, ay: 0.07
+    },
+    { // purple - centre drift
+      col: '168,85,247', alpha: 0.09,
+      bx: 0.50, by: 0.48, r: 0.30,
+      phase: Math.PI * 1.33, speed: 0.00015, ax: 0.08, ay: 0.06
+    },
+  ];
+
+  let t = 0;
   (function loop(){
-    f++; ctx.clearRect(0,0,W,H);
+    t++; ctx.clearRect(0,0,W,H);
+
+    // --- Full-page ambient colour blobs ---
+    blobs.forEach(b => {
+      b.phase += b.speed * (Math.PI * 2);
+      const cx = (b.bx + Math.sin(b.phase)           * b.ax) * W;
+      const cy = (b.by + Math.cos(b.phase * 0.71)    * b.ay) * H;
+      const r  = b.r * Math.max(W, H);
+      const g  = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      g.addColorStop(0, `rgba(${b.col},${b.alpha})`);
+      g.addColorStop(0.55, `rgba(${b.col},${(b.alpha * 0.4).toFixed(3)})`);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    });
+
     // cursor glow - subtle brightness on the background only
     if(mx>-9999){
       const cg=ctx.createRadialGradient(mx,my,0,mx,my,220);
@@ -23,13 +59,6 @@
       cg.addColorStop(1,'transparent');
       ctx.fillStyle=cg; ctx.fillRect(0,0,W,H);
     }
-    // very subtle ambient washes - kept from original
-    const g1=ctx.createRadialGradient(W*.15,H*.25,0,W*.15,H*.25,W*.3);
-    g1.addColorStop(0,'rgba(180,40,140,0.03)'); g1.addColorStop(1,'transparent');
-    ctx.fillStyle=g1; ctx.fillRect(0,0,W,H);
-    const g2=ctx.createRadialGradient(W*.85,H*.7,0,W*.85,H*.7,W*.28);
-    g2.addColorStop(0,'rgba(40,120,200,0.03)'); g2.addColorStop(1,'transparent');
-    ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
     // white particles
     pts.forEach(p=>{
       p.x+=p.vx; p.y+=p.vy; p.tp+=p.ts;
@@ -93,6 +122,7 @@ function openModal(id) {
   // force reflow so transition fires
   void overlay.offsetHeight;
   overlay.classList.add('open');
+  document.body.classList.add('modal-open');
   document.body.style.overflow = 'hidden';
 }
 function closeModal(id) {
@@ -100,7 +130,13 @@ function closeModal(id) {
   if (!overlay) return;
   overlay.classList.remove('open');
   document.body.style.overflow = '';
-  setTimeout(() => { overlay.style.display = ''; }, 360);
+  setTimeout(() => {
+    overlay.style.display = '';
+    // Only remove modal-open if no other modals are still open
+    if (!document.querySelector('.modal-overlay.open')) {
+      document.body.classList.remove('modal-open');
+    }
+  }, 360);
 }
 function closeModalOutside(e, id) {
   if (e.target === document.getElementById(id)) closeModal(id);
@@ -129,52 +165,37 @@ function showOthersTab(name) {
   if (pill) pill.classList.add('active');
 }
 
-/* -- ROBLOX LIVE STATS (direct + CORS proxy fallback) -- */
-(function fetchRobloxStats() {
-  const UNIVERSE_ID = '7649346422';
-  const DIRECT  = `https://games.roblox.com/v1/games?universeIds=${UNIVERSE_ID}`;
-  const PROXIED = `https://api.allorigins.win/get?url=${encodeURIComponent(DIRECT)}`;
+/* -- ROBLOX LIVE STATS (hardcoded values only) -- */
+(function loadHardcodedRobloxStats() {
+  const stats = {
+    playing: 0,
+    visits: 0,
+    favoritedCount: 0,
+    likeCount: 0,
+    maxPlayers: 15,
+  };
 
-  function fmt(n) {
+  const fmt = n => {
     if (!n && n !== 0) return '-';
-    if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
-    if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
-    if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
+    if (n >= 1e9) return (n/1e9).toFixed(1) + 'B';
+    if (n >= 1e6) return (n/1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return (n/1e3).toFixed(1) + 'K';
     return n.toLocaleString();
-  }
-  function applyStats(data) {
-    const g = data.data && data.data[0];
-    if (!g) return false;
-    const set = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
-    set('stat-active',    fmt(g.playing));
-    set('stat-visits',    fmt(g.visits));
-    set('stat-favorites', fmt(g.favoritedCount));
-    set('stat-likes',     fmt(g.likeCount));
-    set('stat-maxplayers',g.maxPlayers ?? '-');
-    const badge = document.getElementById('live-badge');
-    if (badge) badge.style.display = 'inline-flex';
-    return true;
-  }
-  function setFailed() {
-    ['stat-active','stat-visits','stat-favorites','stat-likes','stat-maxplayers']
-      .forEach(id => { const el=document.getElementById(id); if(el) el.textContent='-'; });
-  }
-  function tryFetch() {
-    fetch(DIRECT)
-      .then(r => r.json())
-      .then(data => { if (!applyStats(data)) throw new Error('no data'); })
-      .catch(() => {
-        fetch(PROXIED)
-          .then(r => r.json())
-          .then(wrapper => {
-            try { const data = JSON.parse(wrapper.contents); if (!applyStats(data)) setFailed(); }
-            catch { setFailed(); }
-          })
-          .catch(setFailed);
-      });
-  }
-  tryFetch();
-  setInterval(tryFetch, 60000);
+  };
+
+  const setText = (id, v) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = v;
+  };
+
+  setText('stat-active', fmt(stats.playing));
+  setText('stat-visits', fmt(stats.visits));
+  setText('stat-favorites', fmt(stats.favoritedCount));
+  setText('stat-likes', fmt(stats.likeCount));
+  setText('stat-maxplayers', stats.maxPlayers ?? '-');
+
+  const badge = document.getElementById('live-badge');
+  if (badge) badge.style.display = 'inline-flex';
 })();
 
 /* -- TABS -- */
@@ -212,17 +233,40 @@ function toggleFaq(btn){
   if (!was) i.classList.add('open');
 }
 
-/* Copies a redeem code into the clipboard and shows a temporary button state. */
-function copyCode(code, btn){
+/* Copies a redeem code into the clipboard and shows a fixed bottom toast. */
+// ── Singleton copy-toast element ──────────────────────────────────────────
+const _copyToastEl = (() => {
+  const el = document.createElement('div');
+  el.id = 'copy-fixed-toast';
+  el.className = 'copy-fixed-toast';
+  document.body.appendChild(el);
+  return el;
+})();
+let _copyToastTimer = null;
+function _showCopyToast(msg) {
+  _copyToastEl.textContent = msg;
+  _copyToastEl.classList.remove('copy-toast-exit');
+  _copyToastEl.classList.add('copy-toast-show');
+  clearTimeout(_copyToastTimer);
+  _copyToastTimer = setTimeout(() => {
+    _copyToastEl.classList.add('copy-toast-exit');
+    setTimeout(() => {
+      _copyToastEl.classList.remove('copy-toast-show', 'copy-toast-exit');
+    }, 380);
+  }, 1600);
+}
 
+function copyCode(code, btn){
   const text = String(code);
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));
   } else {
     fallbackCopy(text);
   }
+  _showCopyToast('✓ Copied: ' + code);
+
   const original = btn.textContent;
-  btn.textContent = 'Copied';
+  btn.textContent = '✓';
   btn.disabled = true;
   btn.style.opacity = '0.85';
   setTimeout(()=>{ btn.textContent = original; btn.disabled = false; btn.style.opacity=''; }, 1200);
@@ -600,3 +644,408 @@ function showLaunched() {
   elLaunched.classList.add('visible');
   elStatus.textContent = '';
 }
+/* ══════════════════════════════════════════
+   FEATURE 1 – TIER ROW HOVER GLOW
+   Sets --tier-color on each row for the CSS glow to use
+   ══════════════════════════════════════════ */
+(function(){
+  const colorMap = {
+    F:'rgba(34,196,94,0.45)', D:'rgba(74,222,128,0.45)', C:'rgba(190,242,100,0.45)',
+    B:'rgba(251,191,36,0.45)', A:'rgba(245,158,11,0.45)', S:'rgba(249,115,22,0.45)',
+    'S+':'rgba(239,68,68,0.45)', 'S++':'rgba(255,34,34,0.5)',
+    P:'rgba(168,85,247,0.5)', 'P+':'rgba(217,70,239,0.55)'
+  };
+  document.querySelectorAll('.tier-row').forEach(row => {
+    const badge = row.querySelector('.tier-badge');
+    if (!badge) return;
+    const tier = badge.textContent.trim();
+    const col = colorMap[tier];
+    if (col) row.style.setProperty('--tier-color', col);
+  });
+})();
+
+/* ══════════════════════════════════════════
+   FEATURE 2 – ANIMATED STAT COUNTERS
+   Numbers count up when live stats are applied
+   ══════════════════════════════════════════ */
+function animateCountUp(el, targetStr) {
+  // Parse numeric value and suffix from formatted string like "1.2M", "45.6K"
+  const suffixes = [
+    { s: 'B', m: 1e9 }, { s: 'M', m: 1e6 }, { s: 'K', m: 1e3 }
+  ];
+  let targetNum = null, suffix = '', decimals = 0;
+  for (const { s, m } of suffixes) {
+    if (targetStr.endsWith(s)) {
+      const raw = parseFloat(targetStr);
+      targetNum = raw * m;
+      suffix = s;
+      decimals = targetStr.includes('.') ? 1 : 0;
+      break;
+    }
+  }
+  if (targetNum === null) {
+    // plain number or non-numeric
+    const plain = parseInt(targetStr.replace(/,/g,''), 10);
+    if (isNaN(plain)) { el.textContent = targetStr; return; }
+    targetNum = plain;
+  }
+
+  const duration = 900;
+  const start = performance.now();
+  const startVal = 0;
+
+  function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+    const cur = startVal + (targetNum - startVal) * eased;
+    let display;
+    if (suffix === 'B') display = (cur / 1e9).toFixed(decimals) + 'B';
+    else if (suffix === 'M') display = (cur / 1e6).toFixed(decimals) + 'M';
+    else if (suffix === 'K') display = (cur / 1e3).toFixed(decimals) + 'K';
+    else display = Math.floor(cur).toLocaleString();
+    el.textContent = display;
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = targetStr;
+  }
+  requestAnimationFrame(step);
+}
+
+// Patch applyStats to use animateCountUp
+(function(){
+  // Wait for DOM then patch
+  const orig = window._applyStatsOrig;
+  // We hook into the stat elements directly after fetch resolves
+  // by overriding textContent assignment via MutationObserver on stat elements
+  const statIds = ['stat-active','stat-visits','stat-favorites','stat-likes','stat-maxplayers'];
+  statIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const obs = new MutationObserver(() => {
+      const val = el.textContent.trim();
+      if (val && val !== '-' && !/\d/.test(el.textContent) === false) {
+        obs.disconnect();
+        const saved = val;
+        el.textContent = '0';
+        animateCountUp(el, saved);
+      }
+    });
+    obs.observe(el, { childList: true, subtree: true });
+  });
+})();
+
+/* ══════════════════════════════════════════
+   FEATURE 3 – PANEL BAR LOAD SHIMMER
+   One-time sweep across panel bars when tab becomes visible
+   ══════════════════════════════════════════ */
+(function(){
+  // Fire shimmer on all visible panel bars on first tab show
+  function shimmerBars(tabEl) {
+    tabEl.querySelectorAll('.panel-bar').forEach((bar, i) => {
+      setTimeout(() => {
+        bar.classList.remove('shimmer-once');
+        void bar.offsetWidth;
+        bar.classList.add('shimmer-once');
+        setTimeout(() => bar.classList.remove('shimmer-once'), 1000);
+      }, i * 80);
+    });
+  }
+  // Hook into showTab
+  const origShowTab = window.showTab;
+  window.showTab = function(n) {
+    origShowTab(n);
+    const panel = document.getElementById('tab-' + n);
+    if (panel) setTimeout(() => shimmerBars(panel), 60);
+  };
+  // Fire on home tab immediately
+  setTimeout(() => {
+    const home = document.getElementById('tab-home');
+    if (home) shimmerBars(home);
+  }, 400);
+})();
+
+/* ══════════════════════════════════════════
+   FEATURE 5 – TIER COMPARISON MODE (user-toggled)
+   ══════════════════════════════════════════ */
+(function(){
+  const tierData = {
+    F:   { c:'#22c45e', mult:1,     chance:18.78 },
+    D:   { c:'#4ade80', mult:1.5,   chance:17.84 },
+    C:   { c:'#bef264', mult:2.2,   chance:15.96 },
+    B:   { c:'#fbbf24', mult:3.5,   chance:14.08 },
+    A:   { c:'#f59e0b', mult:5,     chance:11.27 },
+    S:   { c:'#f97316', mult:7.7,   chance:9.39  },
+    'S+': { c:'#ef4444', mult:10.99, chance:7.51  },
+    'S++':{ c:'#ff2222', mult:14.99, chance:1.88  },
+    P:   { c:'#a855f7', mult:25.99, chance:3.29  },
+    'P+': { c:'#d946ef', mult:49.99, chance:7.5   },
+  };
+
+  let compareMode = false;
+  let compareA = null, compareB = null;
+
+  // Expose toggle so the button in HTML can call it
+  window.toggleCompareMode = function() {
+    compareMode = !compareMode;
+    const btn  = document.getElementById('compare-toggle-btn');
+    const hint = document.getElementById('compare-hint');
+    const box  = document.getElementById('tier-compare-box');
+    const detailBox = document.getElementById('enh-tier-detail');
+
+    if (compareMode) {
+      btn && btn.classList.add('active');
+      hint && (hint.style.display = 'block');
+      document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('active'));
+      if (detailBox) {
+        detailBox.classList.remove('open');
+        setTimeout(() => { if (!detailBox.classList.contains('open')) detailBox.innerHTML = '<div class="enh-detail-inner"></div>'; }, 380);
+      }
+    } else {
+      btn && btn.classList.remove('active');
+      hint && (hint.style.display = 'none');
+      if (compareA) { compareA.row.classList.remove('compare-a'); compareA = null; }
+      if (compareB) { compareB.row.classList.remove('compare-b'); compareB = null; }
+      if (box) box.classList.remove('open');
+      document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('compare-a','compare-b'));
+    }
+  };
+
+  window.enhTierClick = (function(origFn){
+    return function(row, tier) {
+      const box  = document.getElementById('tier-compare-box');
+      const detailBox = document.getElementById('enh-tier-detail');
+
+      const clearCompareSelections = () => {
+        document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('compare-a','compare-b'));
+        compareA = null;
+        compareB = null;
+        if (box) box.classList.remove('open');
+      };
+
+      const closeDetailPanel = () => {
+        if (!detailBox) return;
+        detailBox.classList.remove('open');
+        setTimeout(() => {
+          if (!detailBox.classList.contains('open')) {
+            detailBox.innerHTML = '<div class="enh-detail-inner"></div>';
+          }
+        }, 380);
+      };
+
+      const renderComparison = (aSel, bSel) => {
+        if (!aSel || !bSel || !box) return;
+        const a = tierData[aSel.tier];
+        const b = tierData[bSel.tier];
+        if (!a || !b) return;
+
+        const multRatio = (b.mult / a.mult).toFixed(2);
+        const multDiff  = (b.mult - a.mult).toFixed(2);
+        const better    = b.mult > a.mult;
+        const arrowCol  = better ? '#22c45e' : '#ef4444';
+        const arrowIcon = better ? '▲' : '▼';
+        const speedup   = better
+          ? `${multRatio}× faster with ${bSel.tier}`
+          : `${(a.mult/b.mult).toFixed(2)}× faster with ${aSel.tier}`;
+
+        box.innerHTML = `<div class="compare-inner">
+          <div style="font-size:0.68rem;font-weight:800;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;">Tier Comparison</div>
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <div style="text-align:center;flex:1;">
+              <div style="font-family:'Lilita One',cursive;font-size:1.4rem;color:${a.c};text-shadow:0 0 12px ${a.c}88;">${aSel.tier}</div>
+              <div style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.45);margin-top:2px;">${a.mult}×</div>
+              <div style="font-size:0.65rem;color:rgba(255,255,255,0.3);">${a.chance}% chance</div>
+            </div>
+            <div style="text-align:center;padding:8px 14px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+              <div style="font-family:'Lilita One',cursive;font-size:1.1rem;color:${arrowCol};">${arrowIcon} ${Math.abs(multDiff)}×</div>
+              <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.35);margin-top:3px;">${speedup}</div>
+            </div>
+            <div style="text-align:center;flex:1;">
+              <div style="font-family:'Lilita One',cursive;font-size:1.4rem;color:${b.c};text-shadow:0 0 12px ${b.c}88;">${bSel.tier}</div>
+              <div style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.45);margin-top:2px;">${b.mult}×</div>
+              <div style="font-size:0.65rem;color:rgba(255,255,255,0.3);">${b.chance}% chance</div>
+            </div>
+          </div>
+        </div>`;
+        void box.offsetHeight;
+        box.classList.add('open');
+      };
+
+      if (!compareMode) {
+        clearCompareSelections();
+        closeDetailPanel();
+        origFn(row, tier);
+        return;
+      }
+
+      if (!compareA) {
+        compareA = { row, tier };
+        row.classList.add('compare-a');
+        closeDetailPanel();
+        return;
+      }
+
+      if (compareA.tier === tier) {
+        compareA.row.classList.remove('compare-a');
+        compareA = null;
+        compareB = null;
+        if (box) box.classList.remove('open');
+        return;
+      }
+
+      if (compareB && compareB.tier === tier) {
+        compareB.row.classList.remove('compare-b');
+        compareB = null;
+        if (box) box.classList.remove('open');
+        return;
+      }
+
+      if (compareB) {
+        compareB.row.classList.remove('compare-b');
+      }
+
+      compareB = { row, tier };
+      row.classList.add('compare-b');
+      renderComparison(compareA, compareB);
+    };
+  })(window.enhTierClick);
+})();
+
+/* ══════════════════════════════════════════
+   FEATURE 6 – BACK TO TOP BUTTON
+   ══════════════════════════════════════════ */
+(function(){
+  const btn = document.getElementById('back-to-top');
+  if (!btn) return;
+
+  // Robust click: scroll both documentElement and body for full cross-browser support
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Fallback for browsers that ignore behavior:'smooth' on window.scrollTo
+    document.documentElement.scrollTop = 0;
+  });
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 320) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  }, { passive: true });
+})();
+
+/* ══════════════════════════════════════════
+   FEATURE 7 – KEYBOARD SHORTCUTS
+   H=Home, C=Chapters, E=Enhancements, O=Others, K=Codes, F=FAQ
+   ══════════════════════════════════════════ */
+(function(){
+  const keyMap = {
+    h: 'home', c: 'chapters', e: 'enhancements',
+    o: 'others', k: 'codes', f: 'faq'
+  };
+  const navIdMap = {
+    home: 'nav-home', chapters: 'nav-chapters', enhancements: 'nav-enhancements',
+    others: 'nav-others', codes: 'nav-codes', faq: 'nav-faq'
+  };
+  document.addEventListener('keydown', e => {
+    // Don't fire if typing in an input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+    // Don't fire if a modal is open
+    if (document.body.classList.contains('modal-open')) return;
+    const tab = keyMap[e.key.toLowerCase()];
+    if (!tab) return;
+    e.preventDefault();
+    showTab(tab);
+    // Flash the kbd hint
+    const navBtn = document.getElementById(navIdMap[tab]);
+    if (navBtn) {
+      const hint = navBtn.querySelector('.kbd-hint');
+      if (hint) {
+        hint.classList.remove('kbd-flash');
+        void hint.offsetWidth;
+        hint.classList.add('kbd-flash');
+        setTimeout(() => hint.classList.remove('kbd-flash'), 350);
+      }
+    }
+    showToast(`⌨️ Jumped to ${tab.charAt(0).toUpperCase() + tab.slice(1)} [${e.key.toUpperCase()}]`, 1800);
+  });
+})();
+
+/* ══════════════════════════════════════════
+   FEATURE 8 – MILESTONE ACHIEVEMENT BADGES
+   ══════════════════════════════════════════ */
+(function(){
+  const milestones = [
+    { secs: 60,  icon: '⏱️', title: 'Time Scholar',      sub: '1 minute on the Wiki!' },
+    { secs: 300, icon: '🎲', title: 'Reroll Enthusiast', sub: '5 minutes — you deserve a P+ roll' },
+    { secs: 600, icon: '✦',  title: 'Waste Time Legend', sub: '10 minutes of dedication!' },
+  ];
+  const earned = new Set();
+
+  function showAchievement(icon, title, sub) {
+    const popup = document.getElementById('achievement-popup');
+    const elIcon  = document.getElementById('ach-icon');
+    const elTitle = document.getElementById('ach-title');
+    const elSub   = document.getElementById('ach-sub');
+    if (!popup) return;
+    elIcon.textContent  = icon;
+    elTitle.textContent = title;
+    elSub.textContent   = sub;
+    popup.classList.add('show');
+    setTimeout(() => popup.classList.remove('show'), 4200);
+  }
+
+  // Hook into the session timer
+  const origInterval = setInterval;
+  // Poll from session start
+  const sessionStart = Date.now();
+  setInterval(() => {
+    const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
+    milestones.forEach(m => {
+      if (!earned.has(m.secs) && elapsed >= m.secs) {
+        earned.add(m.secs);
+        showAchievement(m.icon, m.title, m.sub);
+      }
+    });
+  }, 5000);
+})();
+
+/* ══════════════════════════════════════════
+   FEATURE 10 – CODES FILTER
+   ══════════════════════════════════════════ */
+function filterCodes(filter, btn) {
+  // Update active button state
+  document.querySelectorAll('.codes-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const rows = document.querySelectorAll('#tab-codes .styled-table tbody tr');
+  let shown = 0;
+  rows.forEach(row => {
+    const isExpired = row.classList.contains('expired');
+    const isActive  = row.classList.contains('activec') || (!isExpired);
+    let show = false;
+    if (filter === 'all')     show = true;
+    if (filter === 'active')  show = !isExpired;
+    if (filter === 'expired') show = isExpired;
+    row.style.display = show ? '' : 'none';
+    if (show) shown++;
+  });
+
+  // Update counts
+  const total   = rows.length;
+  const expired = Array.from(rows).filter(r => r.classList.contains('expired')).length;
+  const active  = total - expired;
+  const countEl = document.getElementById('count-' + filter);
+  if (countEl) countEl.textContent = shown;
+}
+
+// Init counts on load
+(function(){
+  document.addEventListener('DOMContentLoaded', () => {
+    const rows    = document.querySelectorAll('#tab-codes .styled-table tbody tr');
+    const total   = rows.length;
+    const expired = Array.from(rows).filter(r => r.classList.contains('expired')).length;
+    const active  = total - expired;
+    const allEl  = document.getElementById('count-all');
+    const actEl  = document.getElementById('count-active');
+    const expEl  = document.getElementById('count-expired');
+    if (allEl)  allEl.textContent  = total;
+    if (actEl)  actEl.textContent  = active;
+    if (expEl)  expEl.textContent  = expired;
+  });
+})();
