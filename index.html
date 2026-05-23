@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>Waste Time Wiki</title>
-<link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="stylesheet" href="styles.css"/>
 
 
@@ -32,10 +32,6 @@
     <div class="header-sub">✦ Wiki ✦</div>
   </div>
   <div class="header-stats">
-    <div class="hstat">
-      <span class="hstat-val">4</span>
-      <span class="hstat-lbl">Chapters</span>
-    </div>
     <div class="hstat" title="Time you've spent on this guide">
       <span class="hstat-val" id="hdr-session">0s</span>
       <span class="hstat-lbl">⏱️ Time Here</span>
@@ -50,8 +46,8 @@
 
 <!-- -- TICKER -- -->
 <div class="ticker-wrap"><div class="ticker-inner">
-  <span class="tk-accent">✦</span>&nbsp; CH.1 <span class="tk-dim">·</span> CH.2 <span class="tk-dim">·</span> CH.3 <span class="tk-dim">·</span> CH.4 <span class="tk-sep">|</span> ENHANCEMENTS <span class="tk-dim">·</span> SPECIAL RANKS <span class="tk-dim">·</span> GAMEPASSES <span class="tk-dim">·</span> CODES <span class="tk-dim">·</span> FAQ <span class="tk-sep">|</span> <span class="tk-accent">💎</span>&nbsp; TIER LIST &amp; STRATEGY <span class="tk-sep">|</span> <span class="tk-accent">🎟️</span>&nbsp; REDEEM CODES <span class="tk-sep">|</span> <span class="tk-accent">🏆</span>&nbsp; SPECIAL RANKS <span class="tk-sep">|</span>&nbsp;&nbsp;
-  <span class="tk-accent">✦</span>&nbsp; CH.1 <span class="tk-dim">·</span> CH.2 <span class="tk-dim">·</span> CH.3 <span class="tk-dim">·</span> CH.4 <span class="tk-sep">|</span> ENHANCEMENTS <span class="tk-dim">·</span> SPECIAL RANKS <span class="tk-dim">·</span> GAMEPASSES <span class="tk-dim">·</span> CODES <span class="tk-dim">·</span> FAQ <span class="tk-sep">|</span> <span class="tk-accent">💎</span>&nbsp; TIER LIST &amp; STRATEGY <span class="tk-sep">|</span> <span class="tk-accent">🎟️</span>&nbsp; REDEEM CODES <span class="tk-sep">|</span> <span class="tk-accent">🏆</span>&nbsp; SPECIAL RANKS <span class="tk-sep">|</span>&nbsp;&nbsp;
+  <span class="tk-accent">✦</span>&nbsp; CH.1 <span class="tk-dim">·</span> CH.2 <span class="tk-dim">·</span> CH.3 <span class="tk-dim">·</span> CH.4 <span class="tk-sep">|</span> ENHANCEMENTS <span class="tk-dim">·</span> GAMEPASSES <span class="tk-dim">·</span> FAQ <span class="tk-sep">|</span> <span class="tk-accent">💎</span>&nbsp; TIER LIST &amp; STRATEGY <span class="tk-sep">|</span> <span class="tk-accent">🎟️</span>&nbsp; REDEEM CODES <span class="tk-sep">|</span> <span class="tk-accent">🏆</span>&nbsp; SPECIAL RANKS <span class="tk-sep">|</span> <span class="tk-accent">⭐</span>&nbsp; WASTE TIME UNIVERSITY WIKI <span class="tk-sep">|</span>&nbsp;&nbsp;
+  <span class="tk-accent">✦</span>&nbsp; CH.1 <span class="tk-dim">·</span> CH.2 <span class="tk-dim">·</span> CH.3 <span class="tk-dim">·</span> CH.4 <span class="tk-sep">|</span> ENHANCEMENTS <span class="tk-dim">·</span> GAMEPASSES <span class="tk-dim">·</span> FAQ <span class="tk-sep">|</span> <span class="tk-accent">💎</span>&nbsp; TIER LIST &amp; STRATEGY <span class="tk-sep">|</span> <span class="tk-accent">🎟️</span>&nbsp; REDEEM CODES <span class="tk-sep">|</span> <span class="tk-accent">🏆</span>&nbsp; SPECIAL RANKS <span class="tk-sep">|</span> <span class="tk-accent">⭐</span>&nbsp; WASTE TIME UNIVERSITY WIKI <span class="tk-sep">|</span>&nbsp;&nbsp;
 </div></div>
 
 <!-- -- NAV -- -->
@@ -92,7 +88,9 @@
 
   <!-- HOME -->
   <div id="tab-home" class="tab-panel active">
-    <div class="section-block hero-panel">
+    <div class="section-block">
+    <div class="hero-panel-outer" style="border: 2.5px solid rgba(157, 42, 224, 0.621);">
+    <div class="hero-panel">
       <div class="hero-grid-bg"></div>
       <div class="hero-panel-content">
       <div class="section-title">Welcome to Waste Time Wiki!</div>
@@ -109,13 +107,15 @@
         <div class="quick-stat"><span class="quick-stat-num">4</span><span class="quick-stat-label">Chapters</span></div>
         <div class="quick-stat"><span class="quick-stat-num" id="stat-maxplayers"><span class="skel"></span></span><span class="quick-stat-label">Max Players/Server</span></div>
       </div>
-      </div><!-- end z-index:1 wrapper -->
-    </div>
+      </div><!-- end hero-panel-content -->
+    </div><!-- end hero-panel -->
+    </div><!-- end hero-panel-outer -->
+    </div><!-- end section-block -->
 
     <div class="glow-divider"></div>
 
         <div class="section-block">
-      <div class="section-title">✨ Latest Updates</div>
+      <div class="section-title">✨ Latest Updates</div> <!--Need to update on arrival of new data...-->
       <div class="section-sub">A direct look at what's new!</div>
       <div class="hero-2col">
         <div class="game-panel home-expand-card" style="cursor:pointer;" onclick="openModal('modal-events')">
@@ -375,9 +375,30 @@
           <div style="font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.38);">Click any tier row to expand details - click again to close. Tiers marked 🔒 require the <span style="color:#a855f7;">CH2 Upgrade Tree</span> to appear in your roll pool.</div>
           <button id="compare-toggle-btn" class="compare-toggle-btn" onclick="toggleCompareMode()">⚡ Compare Tiers</button>
         </div>
-        <div class="tier-hint" id="tier-hint">👆 tap a row to see tips & advice</div>
+        <!-- Compare slot picker panel -->
+        <div id="compare-slot-panel">
+          <div class="compare-slots-row">
+            <div class="compare-slot" id="compare-slot-a">
+              <div class="compare-slot-label">Tier A</div>
+              <div class="compare-slot-tier" id="slot-a-tier">—</div>
+              <div class="compare-slot-mult" id="slot-a-mult" style="display:none;"></div>
+              <div class="compare-slot-empty-hint" id="slot-a-hint">Drag or tap a tier row</div>
+            </div>
+            <div class="compare-vs-divider">VS</div>
+            <div class="compare-slot" id="compare-slot-b">
+              <div class="compare-slot-label">Tier B</div>
+              <div class="compare-slot-tier" id="slot-b-tier">—</div>
+              <div class="compare-slot-mult" id="slot-b-mult" style="display:none;"></div>
+              <div class="compare-slot-empty-hint" id="slot-b-hint">Drag or tap a tier row</div>
+            </div>
+          </div>
+          <div class="compare-step-hint" id="compare-step-hint">👇 Drag or tap any tier row to select Tier A</div>
+          <button class="compare-reset-btn" onclick="resetCompareSlots()">↺ Reset Selection</button>
+          <div class="compare-drag-hint"><span class="drag-icon">☰</span> Drag rows onto slots — works on mobile too</div>
+        </div>
+        <div class="tier-hint" id="tier-hint">👆 tap a row to see tips &amp; advice</div>
         <!-- Table header -->
-        <div class="tier-list-header" style="display:grid;grid-template-columns:60px 1fr 110px 90px;gap:10px;padding:0 14px 8px;font-size:0.62rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);">
+        <div class="tier-list-header" style="display:grid;grid-template-columns:60px 1fr 110px 90px;gap:14px;padding:0 14px 10px;font-size:0.62rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);">
           <div>Tier</div><div>Roll Chance</div><div style="text-align:right;">Multiplier</div><div style="text-align:right;">Access</div>
         </div>
         <!-- F -->
@@ -468,8 +489,6 @@
         </div>
         <!-- Detail expand box -->
         <div id="enh-tier-detail"><div class="enh-detail-inner"></div></div>
-        <!-- Compare hint -->
-        <div class="compare-hint" id="compare-hint" style="display:none;">⚡ Compare mode ON — click a first tier, then a second to compare. Click same tier again to deselect.</div>
         <!-- Tier comparison box -->
         <div id="tier-compare-box"><div class="compare-inner" id="compare-inner"></div></div>
       </div>
@@ -744,7 +763,7 @@
 
     <!-- Gamepasses sub-tab -->
     <div id="others-gamepasses" class="others-subtab" style="display:none;">
-      <div class="section-sub" style="margin-bottom:16px;">Robux-powered passes that unlock permanent perks and quality-of-life features.</div>
+      <div class="section-sub" style="margin-bottom:16px;">Gamepasses that unlock permanent perks and quality-of-life features.</div>
       <div class="coming-soon"><span class="coming-soon-icon">🎮</span><h3>Gamepasses Data Incoming</h3><p>Details on all available Gamepasses will be added here soon.</p></div>
     </div>
   </div>
@@ -752,28 +771,31 @@
   <!-- CODES -->
   <div id="tab-codes" class="tab-panel">
     <div class="section-title">Redeem Codes</div>
-    <div class="section-sub">There is 1 active code as of right now.</div>
+    <div class="section-sub" id="codes-section-sub">Loading codes...</div>
     <div class="game-panel" style="margin-bottom:20px;">
       <div class="panel-bar green"><span>📋 Information</span><button class="panel-x">✕</button></div>
       <div class="panel-body"><div class="card-title">How to Redeem</div><div class="card-body">
         Click the "+" icon on the right sidebar. On the "More" panel that opens up, click on "Info". There, you will find a button named "Codes". You will be able to enter the redeem codes in the blank field of the panel that opens for rewards!
       </div></div>
       <div class="panel-body"><div class="card-title">Does this website list all Redeem Codes in Waste Time?</div><div class="card-body">
-        The websites lists all codes released on Waste Time since the full game recode released in Update v3.0. New codes released may take 1-2 days to be uploaded to this website. we recommend checking <a href="https://discordapp.com/channels/1457538790557225124/1462700934885933077"># codes</a> and <a href="https://discordapp.com/channels/1457538790557225124/1458273855666786397"># updates</a> in the Waste Time Official server to get codes immediately on release.
+        The website lists all codes released on Waste Time since the full game recode released in Update v3.0. New codes released may take 1-2 days to be uploaded to this website. We recommend checking <a href="https://discordapp.com/channels/1457538790557225124/1462700934885933077"># codes</a> and <a href="https://discordapp.com/channels/1457538790557225124/1458273855666786397"># updates</a> in the Waste Time Official server to get codes immediately on release.
       </div></div>
     </div>
     <div class="game-panel" data-no-tilt>
       <div class="panel-bar dark"><span>🎟️ Redeem Codes List</span></div>
       <div class="codes-filter-bar">
-        <button class="codes-filter-btn all active" onclick="filterCodes('all',this)">All <span class="codes-filter-count" id="count-all">13</span></button>
-        <button class="codes-filter-btn active-codes" onclick="filterCodes('active',this)">Active <span class="codes-filter-count" id="count-active">0</span></button>
-        <button class="codes-filter-btn expired-codes" onclick="filterCodes('expired',this)">Expired <span class="codes-filter-count" id="count-expired">13</span></button>
+        <div class="codes-filter-segment">
+          <button class="codes-filter-btn all active" onclick="filterCodes('all',this)"><span class="codes-filter-icon">📋</span> All <span class="codes-filter-count" id="count-all">13</span></button>
+          <button class="codes-filter-btn active-codes" onclick="filterCodes('active',this)"><span class="codes-filter-icon">✅</span> Active <span class="codes-filter-count" id="count-active">0</span></button>
+          <button class="codes-filter-btn expired-codes" onclick="filterCodes('expired',this)"><span class="codes-filter-icon">⛔</span> Expired <span class="codes-filter-count" id="count-expired">13</span></button>
+        </div>
       </div>
       <div class="panel-body" style="padding:0;">
-        <table class="styled-table">
-          <thead><tr><th>Code</th><th>Reward</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr class="expired"><td class="codes"><span>ChapterIV</span><button class="code-copy-button" onclick="copyCode('ChapterIV', this)">Copy</button></td><td>🔒 10 locks</td><td>Expired</td></tr>
+        <div class="codes-table-wrap">
+          <table class="styled-table">
+            <thead><tr><th>Code</th><th>Reward</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr class="expired"><td class="codes"><span>ChapterIV</span><button class="code-copy-button" onclick="copyCode('ChapterIV', this)">Copy</button></td><td>🔒 10 locks</td><td>Expired</td></tr>
             <tr class="expired"><td class="codes"><span>ClansUPD</span><button class="code-copy-button" onclick="copyCode('ClansUPD', this)">Copy</button></td><td>🔒 7 locks</td><td>Expired</td></tr>
             <tr class="expired"><td class="codes"><span>MoreTree</span><button class="code-copy-button" onclick="copyCode('MoreTree', this)">Copy</button></td><td>🔒 7 locks</td><td>Expired</td></tr>
             <tr class="expired"><td class="codes"><span>sorryfordelay2</span><button class="code-copy-button" onclick="copyCode('sorryfordelay2', this)">Copy</button></td><td>🔒 7 locks</td><td>Expired</td></tr>
@@ -788,6 +810,7 @@
             <tr class="expired"><td class="codes"><span>etherealontop</span><button class="code-copy-button" onclick="copyCode('etherealontop', this)">Copy</button></td><td>🔒 25 locks</td><td>Expired</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   </div>
@@ -795,18 +818,20 @@
   <!-- FAQ -->
   <div id="tab-faq" class="tab-panel">
     <div class="section-title">FAQ</div>
-    <div class="section-sub">- Questions incoming -</div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">- <span class="chev">▼</span></button><div class="faq-a">-</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">- <span class="chev">▼</span></button><div class="faq-a">-</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">- <span class="chev">▼</span></button><div class="faq-a">-</div></div>
+    <div class="section-sub">— Questions incoming —</div>
+    <div class="coming-soon" style="margin-top:12px;">
+      <span class="coming-soon-icon">❓</span>
+      <h3>FAQ Coming Soon</h3>
+      <p>Common questions and answers will be added here. Check the <a href="https://discordapp.com/channels/1457538790557225124/1458273855666786397">Waste Time Official server</a> in the meantime.</p>
+    </div>
   </div>
 
 
-<!-- ══════════════════════════════════════════
+<!-- ==========================================
      MODAL OVERLAYS - Upcoming Events & Bulletins
-     ══════════════════════════════════════════ -->
+     ========================================== -->
 
-<!-- ══ MODAL: Upcoming Events ══ -->
+<!-- == MODAL: Upcoming Events == -->
 <div id="modal-events" class="modal-overlay" onclick="closeModalOutside(event,'modal-events')">
   <div class="modal-box">
     <div class="panel-bar purple" style="border-radius:0;flex-shrink:0;">
@@ -837,7 +862,7 @@
   </div>
 </div>
 
-<!-- ══ MODAL: Bulletins ══ -->
+<!-- == MODAL: Bulletins == -->
 <div id="modal-bulletins" class="modal-overlay" onclick="closeModalOutside(event,'modal-bulletins')">
   <div class="modal-box">
     <div class="panel-bar gold" style="border-radius:0;flex-shrink:0;">
@@ -870,7 +895,7 @@
 <script src="script.js" defer></script>
 
 <!-- Back to top button -->
-<button id="back-to-top" title="Back to top" aria-label="Back to top">▲</button>
+<button id="back-to-top" title="Back to top" aria-label="Back to top"></button>
 
 <!-- Achievement popup container -->
 <div id="achievement-popup" class="achievement-popup">

@@ -518,32 +518,73 @@ body {
 }
 .section-sub { font-size:0.85rem; font-weight:700; color:rgba(255,255,255,0.55); margin-bottom:22px; }
 .section-block { margin-bottom:42px; }
+/* ── HERO PANEL ── */
+.hero-panel-outer {
+  position: relative;
+  border-radius: 14px;
+  padding: 3px; /* gap for the animated border */
+  margin-bottom: 0; /* inherits from .section-block */
+  background: transparent;
+  isolation: isolate;
+}
+
+/* The travelling glow border — a conic-gradient that rotates around the perimeter */
+.hero-panel-outer::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 15px;
+  background: conic-gradient(
+    from var(--hero-border-angle, 0deg),
+    transparent 0deg,
+    rgba(217,70,180,0.0) 40deg,
+    rgba(217,70,180,0.9) 80deg,
+    rgba(168,85,247,1.0) 110deg,
+    rgba(46,168,232,0.9) 140deg,
+    rgba(46,168,232,0.0) 180deg,
+    transparent 200deg,
+    transparent 360deg
+  );
+  animation: heroBorderSpin 4s linear infinite;
+  z-index: 0;
+  filter: blur(2px);
+}
+
+/* Solid backing so the conic gradient only shows at the edge */
+.hero-panel-outer::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 12px;
+  background: rgba(9,10,18,0.97);
+  z-index: 1;
+}
+
+@property --hero-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes heroBorderSpin {
+  to { --hero-border-angle: 360deg; }
+}
+
 .hero-panel {
   position: relative;
   overflow: hidden;
   border-radius: 12px;
   padding: 24px 20px;
   background: rgba(9, 10, 18, 0.94);
-  border: 1px dotted rgba(255,255,255,0.14);
+  border: none;
   box-shadow: 0 32px 90px rgba(0,0,0,0.34), inset 0 0 0 1px rgba(255,255,255,0.05);
+  z-index: 2; /* sits above the outer pseudo-elements */
 }
 .hero-panel > * {
   position: relative;
   z-index: 2;
 }
-.hero-panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  border: 1px dotted rgba(255,255,255,0.18);
-  box-shadow: 0 0 18px rgba(217,70,180,0.16), 0 0 26px rgba(46,168,232,0.12);
-  opacity: 0.72;
-  transform: scale(1.02);
-  animation: heroPanelBorderGlow 4.2s ease-in-out infinite;
-  z-index: 3;
-}
+/* inner ambient colour wash — no border pseudo-element needed anymore */
 .hero-panel::after {
   content: '';
   position: absolute;
@@ -557,10 +598,7 @@ body {
   opacity: 0.72;
   animation: heroPanelColorShift 18s ease-in-out infinite;
   z-index: 1;
-}
-@keyframes heroPanelBorderGlow {
-  0%, 100% { opacity: 0.68; transform: scale(1.02); }
-  50% { opacity: 0.95; transform: scale(1.03); }
+  pointer-events: none;
 }
 @keyframes heroPanelColorShift {
   0% { transform: translate(0,0) scale(1); }
@@ -657,7 +695,31 @@ body {
 .coming-soon p { color:var(--text-dim); font-size:0.85rem; }
 
 /* -- TABLE -- */
-.styled-table { width:100%; border-collapse:collapse; font-size:0.86rem; margin-top:10px; }
+.codes-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0;
+}
+
+.codes-table-wrap::-webkit-scrollbar {
+  height: 7px;
+}
+.codes-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+}
+.codes-table-wrap::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.04);
+}
+
+.styled-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  margin-top: 10px;
+}
 .styled-table thead tr { background:rgba(217,70,180,0.15); }
 .styled-table th {
   font-family:'Nunito',sans-serif; font-size:0.65rem; font-weight:800;
@@ -671,6 +733,20 @@ body {
 /* Prevent Status column from being cut off on narrow screens */
 .styled-table td:last-child,
 .styled-table th:last-child { white-space: nowrap; min-width: 64px; }
+
+@media (max-width: 620px) {
+  .codes-table-wrap {
+    padding-bottom: 10px;
+  }
+  .styled-table th,
+  .styled-table td {
+    padding: 10px 11px;
+  }
+  .styled-table th:first-child,
+  .styled-table td:first-child {
+    min-width: 180px;
+  }
+}
 
 /* -- PROGRESS BAR -- */
 .prog-wrap { height:14px; background:#111; border-radius:4px; overflow:hidden; border:1px solid rgba(255,255,255,0.08); margin-top:8px; position:relative; }
@@ -786,12 +862,20 @@ a:active {
   align-items:center;
   justify-content:space-between;
   gap:12px;
-  font-family: 'Source Code Pro', monospace;
 }
 .codes span {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.84rem;
+  font-weight: 500;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+  color: #e8d9ff;
+  background: rgba(30, 20, 50, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: 4px;
+  padding: 2px 7px;
+  letter-spacing: 0.02em;
 }
 .code-copy-button {
   display:inline-flex;
@@ -1165,9 +1249,9 @@ body.modal-open .site-header {
 /* Improved scroll reveal */
 .sr { transition: opacity .7s cubic-bezier(0.22,1,0.36,1), transform .7s cubic-bezier(0.22,1,0.36,1); }
 .sr-scale { transition: opacity .6s cubic-bezier(0.34,1.56,0.64,1), transform .6s cubic-bezier(0.34,1.56,0.64,1); }
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 1 – TIER ROW HOVER GLOW (pulsing)
-   ══════════════════════════════════════════ */
+   ========================================== */
 @keyframes tierGlowPulse {
   0%, 100% {
     box-shadow: 0 0 10px var(--tier-color, rgba(255,255,255,0.16)),
@@ -1214,10 +1298,344 @@ body.modal-open .site-header {
   box-shadow: 0 0 20px rgba(168,85,247,0.35), 0 0 40px rgba(168,85,247,0.12);
 }
 
-/* ══════════════════════════════════════════
+.tier-list-header {
+  gap: 14px;
+}
+
+/* ── Compare mode slot-picker panel ── */
+#compare-slot-panel {
+  display: none;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(168,85,247,0.05);
+  border: 1.5px solid rgba(168,85,247,0.22);
+  animation: fadeUp .22s ease;
+}
+#compare-slot-panel.visible { display: block; }
+
+.tier-hint {
+  margin-top: 12px;
+}
+
+.tier-list-header {
+  margin-top: 14px;
+  margin-bottom: 12px;
+}
+
+.compare-slots-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.compare-slot {
+  flex: 1;
+  min-width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 10px;
+  border-radius: 8px;
+  border: 2px dashed rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.03);
+  min-height: 72px;
+  transition: border-color .2s, background .2s;
+  position: relative;
+}
+.compare-slot.slot-a-filled {
+  border-style: solid;
+  border-color: #fbbf24;
+  background: rgba(251,191,36,0.07);
+}
+.compare-slot.slot-b-filled {
+  border-style: solid;
+  border-color: #a855f7;
+  background: rgba(168,85,247,0.07);
+}
+
+.compare-slot-label {
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 2px;
+}
+.compare-slot.slot-a-filled .compare-slot-label { color: rgba(251,191,36,0.7); }
+.compare-slot.slot-b-filled .compare-slot-label { color: rgba(168,85,247,0.7); }
+
+.compare-slot-tier {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: rgba(255,255,255,0.18);
+  letter-spacing: 0.04em;
+}
+
+.compare-slot-mult {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.35);
+}
+
+.compare-slot-empty-hint {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.04em;
+}
+
+.compare-slot-clear {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: rgba(220,50,50,0.3);
+  border: 1px solid rgba(220,50,50,0.5);
+  color: #fff;
+  font-size: 0.55rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+  line-height: 1;
+}
+.compare-slot-clear:hover { background: rgba(220,50,50,0.6); }
+
+.compare-vs-divider {
+  flex-shrink: 0;
+  font-family: 'Lilita One', cursive;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+.compare-step-hint {
+  margin-top: 10px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: rgba(168,85,247,0.55);
+  letter-spacing: 0.07em;
+  text-align: center;
+  animation: hintPulse 2.2s ease-in-out infinite;
+}
+.compare-step-hint.done {
+  color: rgba(34,196,94,0.6);
+  animation: none;
+}
+
+.compare-reset-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 5px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.35);
+  font-family: 'Nunito', sans-serif; font-size: 0.68rem; font-weight: 800;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  width: 100%;
+  transition: background .15s, color .15s;
+}
+.compare-reset-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.65);
+}
+
+/* Result card inside compare box - richer layout */
+#tier-compare-box .compare-inner {
+  /* Inherits from existing rules - extra style below */
+}
+.compare-result-card {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.compare-result-side {
+  flex: 1;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.02);
+}
+.compare-result-center {
+  flex: 0 0 auto;
+  min-width: 110px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.04);
+  border-left: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+.compare-result-tier-name {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.55rem;
+  line-height: 1;
+}
+.compare-result-mult {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.55);
+}
+.compare-result-chance {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.3);
+  font-weight: 700;
+}
+.compare-result-diff-num {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.1rem;
+}
+.compare-result-speedup {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.4;
+}
+.compare-result-bar-wrap {
+  width: 100%;
+  margin-top: 8px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.compare-result-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .5s cubic-bezier(0.34,1.2,0.64,1);
+}
+.compare-result-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-top: 4px;
+}
+/* chance diff pill */
+.compare-chance-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  margin-top: 3px;
+}
+
+/* ==========================================
+   FEATURE 5B – COMPARE DRAG & DROP
+   ========================================== */
+
+/* Rows become grabable in compare mode */
+.tier-row.draggable-row {
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.tier-row.draggable-row:active { cursor: grabbing; }
+
+/* Rows dim while being dragged so the ghost stands out */
+.tier-row.is-dragging {
+  opacity: 0.38;
+  transform: scale(0.97);
+  transition: opacity .15s, transform .15s !important;
+}
+
+/* Touch-friendly drag instruction label inside slot panel */
+.compare-drag-hint {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: rgba(168,85,247,0.38);
+  letter-spacing: 0.07em;
+  text-align: center;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.compare-drag-hint .drag-icon {
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+/* Drop-target highlight for Slot A (gold) */
+.compare-slot.drag-over-a {
+  border-style: solid !important;
+  border-color: #fbbf24 !important;
+  background: rgba(251,191,36,0.13) !important;
+  box-shadow: 0 0 0 3px rgba(251,191,36,0.18), 0 0 20px rgba(251,191,36,0.22) !important;
+  transform: scale(1.03);
+  transition: transform .12s, box-shadow .12s !important;
+}
+
+/* Drop-target highlight for Slot B (purple) */
+.compare-slot.drag-over-b {
+  border-style: solid !important;
+  border-color: #a855f7 !important;
+  background: rgba(168,85,247,0.13) !important;
+  box-shadow: 0 0 0 3px rgba(168,85,247,0.18), 0 0 20px rgba(168,85,247,0.22) !important;
+  transform: scale(1.03);
+  transition: transform .12s, box-shadow .12s !important;
+}
+
+/* Touch drag ghost - floating chip that follows the finger */
+#compare-drag-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10010;
+  padding: 9px 20px;
+  border-radius: 10px;
+  background: rgba(13, 10, 25, 0.95);
+  border: 2.5px solid;           /* color set inline by JS */
+  font-family: 'Lilita One', cursive;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  transform: translate(-50%, -70%); /* appear above finger */
+  display: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: ghostPulse 0.9s ease-in-out infinite alternate;
+}
+@keyframes ghostPulse {
+  from { box-shadow: 0 6px 24px rgba(0,0,0,0.65), 0 0 10px currentColor; }
+  to   { box-shadow: 0 10px 36px rgba(0,0,0,0.75), 0 0 24px currentColor; }
+}
+
+/* Pulse animation for empty slots when compare mode is active
+   so users intuitively know they're drop targets */
+#compare-slot-panel.visible .compare-slot:not(.slot-a-filled):not(.slot-b-filled) {
+  animation: slotIdlePulse 2.4s ease-in-out infinite;
+}
+@keyframes slotIdlePulse {
+  0%, 100% { border-color: rgba(255,255,255,0.12); }
+  50%       { border-color: rgba(168,85,247,0.38); box-shadow: 0 0 12px rgba(168,85,247,0.12); }
+}
+
+/* ==========================================
    FEATURE 4 – CODE COPY FIXED TOAST
    Fixed at bottom of viewport, smooth slide-up enter, slide-down exit
-   ══════════════════════════════════════════ */
+   ========================================== */
 .copy-fixed-toast {
   position: fixed;
   bottom: 88px;
@@ -1253,9 +1671,9 @@ body.modal-open .site-header {
   transition: opacity .3s ease, transform .3s ease;
 }
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 5 – TIER COMPARISON MODE
-   ══════════════════════════════════════════ */
+   ========================================== */
 .tier-row.compare-a { outline: 2px solid #fbbf24; outline-offset: -2px; background: rgba(251,191,36,0.08); box-shadow: 0 0 24px rgba(251,191,36,0.18); }
 .tier-row.compare-b { outline: 2px solid #a855f7; outline-offset: -2px; background: rgba(168,85,247,0.08); box-shadow: 0 0 24px rgba(168,85,247,0.18); }
 
@@ -1274,7 +1692,7 @@ body.modal-open .site-header {
 #tier-compare-box.open {
   grid-template-rows: 1fr;
   padding: 14px;
-  margin-top: 10px;
+  margin-top: 18px;
   border-color: rgba(255,255,255,0.1);
 }
 .compare-hint {
@@ -1285,39 +1703,79 @@ body.modal-open .site-header {
   animation: hintPulse 2.5s ease-in-out infinite;
 }
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 6 – BACK TO TOP BUTTON
-   ══════════════════════════════════════════ */
+   ========================================== */
 #back-to-top {
   position: fixed;
   bottom: 32px; right: 24px;
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, #ff6ad5, #c8189a);
-  border: 2px solid #7a0f5a;
-  box-shadow: 0 4px 0 #7a0f5a, 0 0 18px rgba(217,70,180,0.45);
-  color: #fff;
-  font-size: 1.1rem;
+  width: auto;
+  padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow:
+    0 8px 28px rgba(0,0,0,0.75),
+    0 2px 0 rgba(255,255,255,0.07) inset,
+    0 0 0 1px rgba(255,255,255,0.04);
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: stretch;
   z-index: 8000;
   opacity: 0; pointer-events: none;
   transform: translateY(12px) scale(0.88);
-  transition: opacity .3s ease, transform .3s cubic-bezier(0.34,1.56,0.64,1);
+  transition: opacity .3s ease, transform .3s cubic-bezier(0.34,1.56,0.64,1),
+              border-color .2s, box-shadow .2s;
+  font-size: inherit;
+  color: inherit;
+  /* kill default button styles */
+  -webkit-appearance: none; appearance: none;
 }
+
+/* Panel-bar style top strip */
+#back-to-top::before {
+  content: '✦ BACK TO TOP';
+  display: flex; align-items: center; justify-content: center;
+  padding: 9px 16px;
+  font-family: 'Lilita One', cursive;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6), 0 0 14px rgba(255,255,255,0.12);
+  background: linear-gradient(135deg, #c8189a, #ff5ed8, #d020aa);
+  box-shadow: 0 3px 0 #7a0f5a, 0 0 20px rgba(217,70,180,0.35);
+  position: relative;
+}
+
+/* Gloss overlay on the bar */
+#back-to-top::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 45%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 100%);
+  border-radius: 10px 10px 0 0;
+  pointer-events: none;
+}
+
 #back-to-top.visible {
   opacity: 1; pointer-events: all;
   transform: translateY(0) scale(1);
 }
 #back-to-top:hover {
-  filter: brightness(1.2);
-  box-shadow: 0 4px 0 #7a0f5a, 0 0 28px rgba(217,70,180,0.7);
+  border-color: rgba(255,255,255,0.24);
+  box-shadow:
+    0 14px 40px rgba(0,0,0,0.85),
+    0 2px 0 rgba(255,255,255,0.1) inset,
+    0 0 28px rgba(217,70,180,0.3);
 }
-#back-to-top:active { transform: translateY(2px) scale(0.95); }
+#back-to-top:active {
+  transform: translateY(2px) scale(0.97);
+}
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 7 – KEYBOARD SHORTCUT HINT
-   ══════════════════════════════════════════ */
+   ========================================== */
 .kbd-hint {
   display: inline-flex; align-items: center; justify-content: center;
   width: 18px; height: 18px;
@@ -1344,9 +1802,9 @@ body.modal-open .site-header {
 }
 .kbd-flash { animation: kbdFlash .32s ease-out; }
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 8 – MILESTONE ACHIEVEMENT BADGES
-   ══════════════════════════════════════════ */
+   ========================================== */
 .achievement-popup {
   position: fixed;
   bottom: 80px; right: 24px;
@@ -1384,60 +1842,143 @@ body.modal-open .site-header {
   color: rgba(255,255,255,0.45); margin-top: 2px;
 }
 
-/* ══════════════════════════════════════════
-   FEATURE 10 – CODES FILTER BAR
-   ══════════════════════════════════════════ */
+/* ==========================================
+   FEATURE 10 – CODES FILTER BAR (redesigned)
+   ========================================== */
 .codes-filter-bar {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0;
   background: rgba(255,255,255,0.02);
   border-bottom: 1px solid rgba(255,255,255,0.06);
-  flex-wrap: wrap;
-}
-.codes-filter-btn {
-  padding: 5px 14px; border-radius: 20px;
-  font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 800;
-  letter-spacing: 0.06em; cursor: pointer; border: 1.5px solid transparent;
-  transition: all .18s;
-}
-.codes-filter-btn.all {
-  background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.6);
-}
-.codes-filter-btn.all.active,
-.codes-filter-btn.all:hover {
-  background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3);
-  color: #fff;
-}
-.codes-filter-btn.active-codes {
-  background: rgba(34,196,94,0.08); border-color: rgba(34,196,94,0.25);
-  color: rgba(34,196,94,0.7);
-}
-.codes-filter-btn.active-codes.active,
-.codes-filter-btn.active-codes:hover {
-  background: rgba(34,196,94,0.18); border-color: rgba(34,196,94,0.5);
-  color: #22c45e;
-}
-.codes-filter-btn.expired-codes {
-  background: rgba(220,50,50,0.07); border-color: rgba(220,50,50,0.22);
-  color: rgba(220,80,80,0.65);
-}
-.codes-filter-btn.expired-codes.active,
-.codes-filter-btn.expired-codes:hover {
-  background: rgba(220,50,50,0.15); border-color: rgba(220,50,50,0.45);
-  color: #e05050;
-}
-.codes-filter-count {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 18px; height: 18px; border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  font-size: 0.6rem; font-weight: 900;
-  margin-left: 4px; vertical-align: middle;
 }
 
-/* ══════════════════════════════════════════
+/* Segmented control container */
+.codes-filter-segment {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  gap: 0;
+}
+
+.codes-filter-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 10px;
+  border-radius: 0;
+  font-family: 'Nunito', sans-serif; font-size: 0.74rem; font-weight: 800;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  transition: background .18s, border-color .18s, color .18s;
+  position: relative;
+}
+
+/* Divider between segments */
+.codes-filter-btn + .codes-filter-btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 1px;
+  background: rgba(255,255,255,0.07);
+}
+
+/* ALL */
+.codes-filter-btn.all {
+  color: rgba(255,255,255,0.4);
+}
+.codes-filter-btn.all:hover {
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.75);
+}
+.codes-filter-btn.all.active {
+  color: #ffffff;
+  border-bottom-color: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.04);
+}
+
+/* ACTIVE */
+.codes-filter-btn.active-codes {
+  color: rgba(34,196,94,0.5);
+}
+.codes-filter-btn.active-codes:hover {
+  background: rgba(34,196,94,0.06);
+  color: rgba(34,196,94,0.85);
+}
+.codes-filter-btn.active-codes.active {
+  color: #22c45e;
+  border-bottom-color: #22c45e;
+  background: rgba(34,196,94,0.07);
+  text-shadow: 0 0 12px rgba(34,196,94,0.4);
+}
+
+/* EXPIRED */
+.codes-filter-btn.expired-codes {
+  color: rgba(220,80,80,0.45);
+}
+.codes-filter-btn.expired-codes:hover {
+  background: rgba(220,50,50,0.06);
+  color: rgba(220,80,80,0.8);
+}
+.codes-filter-btn.expired-codes.active {
+  color: #e05050;
+  border-bottom-color: #e05050;
+  background: rgba(220,50,50,0.07);
+  text-shadow: 0 0 12px rgba(220,50,50,0.35);
+}
+
+/* Filter icon */
+.codes-filter-icon {
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+
+/* Count badge - redesigned */
+.codes-filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  font-size: 0.62rem;
+  font-weight: 900;
+  margin-left: 1px;
+  letter-spacing: 0;
+  transition: background .18s;
+}
+.codes-filter-btn.all.active .codes-filter-count {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+.codes-filter-btn.active-codes .codes-filter-count {
+  background: rgba(34,196,94,0.12);
+  color: rgba(34,196,94,0.7);
+}
+.codes-filter-btn.active-codes.active .codes-filter-count {
+  background: rgba(34,196,94,0.22);
+  color: #22c45e;
+}
+.codes-filter-btn.expired-codes .codes-filter-count {
+  background: rgba(220,50,50,0.1);
+  color: rgba(220,80,80,0.6);
+}
+.codes-filter-btn.expired-codes.active .codes-filter-count {
+  background: rgba(220,50,50,0.2);
+  color: #e05050;
+}
+
+/* ==========================================
    FEATURE 3 – PANEL BAR LOAD SHIMMER
-   ══════════════════════════════════════════ */
+   ========================================== */
 @keyframes barShimmer {
   0%   { left: -80%; }
   100% { left: 150%; }
@@ -1447,20 +1988,23 @@ body.modal-open .site-header {
   animation: barShimmer .7s ease forwards;
 }
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 9 – ANIMATED GRID BACKGROUND (hero panel only)
-   ══════════════════════════════════════════ */
+   ========================================== */
 .hero-grid-bg {
   position: absolute; inset: 0; pointer-events: none; overflow: hidden;
   border-radius: inherit; z-index: 0;
 }
-..hero-grid-bg::before {
+.hero-grid-bg::before {
   content: '';
-  position: absolute; inset: 0;
-  background: transparent;
-  display: none;
+  position: absolute; inset: -40px;
+  background-image:
+    linear-gradient(rgba(168,85,247,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168,85,247,0.06) 1px, transparent 1px);
+  background-size: 36px 36px;
+  animation: gridDrift 24s linear infinite;
 }
 @keyframes gridDrift {
   from { transform: translate(0, 0); }
-  to   { transform: translate(0, 0); }
+  to   { transform: translate(36px, 36px); }
 }

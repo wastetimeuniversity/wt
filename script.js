@@ -188,14 +188,34 @@ function showOthersTab(name) {
     if (el) el.textContent = v;
   };
 
-  setText('stat-active', fmt(stats.playing));
-  setText('stat-visits', fmt(stats.visits));
-  setText('stat-favorites', fmt(stats.favoritedCount));
-  setText('stat-likes', fmt(stats.likeCount));
+  setText('stat-active', stats.playing > 0 ? fmt(stats.playing) : '—');
+  setText('stat-visits', stats.visits > 0 ? fmt(stats.visits) : '—');
+  setText('stat-favorites', stats.favoritedCount > 0 ? fmt(stats.favoritedCount) : '—');
+  setText('stat-likes', stats.likeCount > 0 ? fmt(stats.likeCount) : '—');
   setText('stat-maxplayers', stats.maxPlayers ?? '-');
 
+  // Only show the live badge when there are real active players
   const badge = document.getElementById('live-badge');
-  if (badge) badge.style.display = 'inline-flex';
+  if (badge) badge.style.display = stats.playing > 0 ? 'inline-flex' : 'none';
+})();
+
+/* -- DYNAMIC CODES SECTION SUB-TEXT -- */
+(function updateCodesSectionSub() {
+  // Run after DOM is ready
+  function update() {
+    const activeRows = document.querySelectorAll('#tab-codes .styled-table tbody tr.activec').length;
+    const el = document.getElementById('codes-section-sub');
+    if (!el) return;
+    if (activeRows === 0) {
+      el.textContent = 'No active codes right now — check back soon!';
+    } else if (activeRows === 1) {
+      el.textContent = 'There is 1 active code right now. Redeem it before it expires!';
+    } else {
+      el.textContent = `There are ${activeRows} active codes right now. Redeem them before they expire!`;
+    }
+  }
+  // DOM is already parsed by defer, run immediately
+  update();
 })();
 
 /* -- TABS -- */
@@ -203,6 +223,8 @@ function showOthersTab(name) {
    Also scrolls the page to the top after switching tabs.
 */
 function showTab(n){
+  // Exit compare mode when navigating away from enhancements
+  if (n !== 'enhancements' && window.exitCompareMode) window.exitCompareMode();
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   const p=document.getElementById('tab-'+n); if(p) p.classList.add('active');
@@ -577,9 +599,9 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
 
 const TARGET_DATE = new Date("2026-05-17T03:15:00Z");
 
-/* ════════════════════════════════════════
+/* ========================================
    DO NOT EDIT BELOW THIS LINE
-   ════════════════════════════════════════ */
+   ======================================== */
 
 const targetTimestamp = TARGET_DATE.getTime();
 
@@ -644,10 +666,10 @@ function showLaunched() {
   elLaunched.classList.add('visible');
   elStatus.textContent = '';
 }
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 1 – TIER ROW HOVER GLOW
    Sets --tier-color on each row for the CSS glow to use
-   ══════════════════════════════════════════ */
+   ========================================== */
 (function(){
   const colorMap = {
     F:'rgba(34,196,94,0.45)', D:'rgba(74,222,128,0.45)', C:'rgba(190,242,100,0.45)',
@@ -664,10 +686,10 @@ function showLaunched() {
   });
 })();
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 2 – ANIMATED STAT COUNTERS
    Numbers count up when live stats are applied
-   ══════════════════════════════════════════ */
+   ========================================== */
 function animateCountUp(el, targetStr) {
   // Parse numeric value and suffix from formatted string like "1.2M", "45.6K"
   const suffixes = [
@@ -733,10 +755,10 @@ function animateCountUp(el, targetStr) {
   });
 })();
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 3 – PANEL BAR LOAD SHIMMER
    One-time sweep across panel bars when tab becomes visible
-   ══════════════════════════════════════════ */
+   ========================================== */
 (function(){
   // Fire shimmer on all visible panel bars on first tab show
   function shimmerBars(tabEl) {
@@ -763,9 +785,9 @@ function animateCountUp(el, targetStr) {
   }, 400);
 })();
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 5 – TIER COMPARISON MODE (user-toggled)
-   ══════════════════════════════════════════ */
+   ========================================== */
 (function(){
   const tierData = {
     F:   { c:'#22c45e', mult:1,     chance:18.78 },
@@ -783,135 +805,391 @@ function animateCountUp(el, targetStr) {
   let compareMode = false;
   let compareA = null, compareB = null;
 
-  // Expose toggle so the button in HTML can call it
-  window.toggleCompareMode = function() {
-    compareMode = !compareMode;
-    const btn  = document.getElementById('compare-toggle-btn');
-    const hint = document.getElementById('compare-hint');
-    const box  = document.getElementById('tier-compare-box');
-    const detailBox = document.getElementById('enh-tier-detail');
+  // ── Slot DOM helpers ──────────────────────────
+  function fillSlot(slot, tier, data) {
+    const isA = slot === 'a';
+    const elSlot   = document.getElementById('compare-slot-' + slot);
+    const elTier   = document.getElementById('slot-' + slot + '-tier');
+    const elMult   = document.getElementById('slot-' + slot + '-mult');
+    const elHint   = document.getElementById('slot-' + slot + '-hint');
+    if (!elSlot) return;
+    elTier.textContent  = tier;
+    elTier.style.color  = data.c;
+    elTier.style.textShadow = `0 0 12px ${data.c}88`;
+    elMult.textContent  = data.mult + '×  ·  ' + data.chance + '%';
+    elMult.style.display = 'block';
+    elMult.style.color = 'rgba(255,255,255,0.5)';
+    elHint.style.display = 'none';
+    elSlot.classList.add(isA ? 'slot-a-filled' : 'slot-b-filled');
+  }
 
-    if (compareMode) {
-      btn && btn.classList.add('active');
-      hint && (hint.style.display = 'block');
-      document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('active'));
+  function clearSlot(slot) {
+    const isA = slot === 'a';
+    const elSlot = document.getElementById('compare-slot-' + slot);
+    const elTier = document.getElementById('slot-' + slot + '-tier');
+    const elMult = document.getElementById('slot-' + slot + '-mult');
+    const elHint = document.getElementById('slot-' + slot + '-hint');
+    if (!elSlot) return;
+    elTier.textContent = '—';
+    elTier.style.color = '';
+    elTier.style.textShadow = '';
+    elMult.style.display = 'none';
+    elHint.style.display = 'block';
+    elSlot.classList.remove('slot-a-filled', 'slot-b-filled');
+  }
+
+  function updateStepHint() {
+    const hint = document.getElementById('compare-step-hint');
+    if (!hint) return;
+    if (!compareA) {
+      hint.textContent = '👇 Drag or tap any tier row to select Tier A';
+      hint.classList.remove('done');
+    } else if (!compareB) {
+      hint.textContent = '👇 Now drag or tap a second tier row for Tier B';
+      hint.classList.remove('done');
+    } else {
+      hint.textContent = '✓ Comparison ready — see results below';
+      hint.classList.add('done');
+    }
+  }
+
+  // ── Drag & Drop – shared drop handler ───────
+  function applyDropToSlot(slot, tier, row) {
+    const data     = tierData[tier];
+    const box      = document.getElementById('tier-compare-box');
+    const detailBox = document.getElementById('enh-tier-detail');
+    if (!data) return;
+    if (slot === 'a') {
+      if (compareA) compareA.row.classList.remove('compare-a');
+      compareA = { row, tier };
+      row.classList.add('compare-a');
+      fillSlot('a', tier, data);
       if (detailBox) {
         detailBox.classList.remove('open');
         setTimeout(() => { if (!detailBox.classList.contains('open')) detailBox.innerHTML = '<div class="enh-detail-inner"></div>'; }, 380);
       }
     } else {
+      if (compareB) compareB.row.classList.remove('compare-b');
+      compareB = { row, tier };
+      row.classList.add('compare-b');
+      fillSlot('b', tier, data);
+    }
+    updateStepHint();
+    if (compareA && compareB) renderComparison(compareA, compareB);
+  }
+
+  // ── Desktop HTML5 Drag & Drop ────────────────
+  let _draggedTier = null;
+  let _draggedRow  = null;
+
+  function initDesktopDragListeners() {
+    document.querySelectorAll('.tier-row').forEach(row => {
+      row.addEventListener('dragstart', e => {
+        if (!compareMode) { e.preventDefault(); return; }
+        const badge = row.querySelector('.tier-badge');
+        if (!badge) return;
+        _draggedTier = badge.textContent.trim();
+        _draggedRow  = row;
+        row.classList.add('is-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', _draggedTier);
+      });
+      row.addEventListener('dragend', () => {
+        row.classList.remove('is-dragging');
+        _draggedTier = null;
+        _draggedRow  = null;
+        document.querySelectorAll('.compare-slot').forEach(s => s.classList.remove('drag-over-a','drag-over-b'));
+      });
+    });
+
+    ['a','b'].forEach(slot => {
+      const el = document.getElementById('compare-slot-' + slot);
+      if (!el) return;
+      el.addEventListener('dragover', e => {
+        if (!compareMode || !_draggedTier) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        document.querySelectorAll('.compare-slot').forEach(s => s.classList.remove('drag-over-a','drag-over-b'));
+        el.classList.add('drag-over-' + slot);
+      });
+      el.addEventListener('dragleave', e => {
+        // Only remove if we're truly leaving the slot (not entering a child)
+        if (!el.contains(e.relatedTarget)) el.classList.remove('drag-over-a','drag-over-b');
+      });
+      el.addEventListener('drop', e => {
+        if (!compareMode || !_draggedTier) return;
+        e.preventDefault();
+        el.classList.remove('drag-over-a','drag-over-b');
+        applyDropToSlot(slot, _draggedTier, _draggedRow);
+      });
+    });
+  }
+
+  // ── Mobile Touch Drag & Drop ─────────────────
+  const _touchGhost = (() => {
+    const g = document.createElement('div');
+    g.id = 'compare-drag-ghost';
+    document.body.appendChild(g);
+    return g;
+  })();
+  let _touchTier = null;
+  let _touchRow  = null;
+
+  function initTouchDragListeners() {
+    document.querySelectorAll('.tier-row').forEach(row => {
+      row.addEventListener('touchstart', e => {
+        if (!compareMode) return;
+        const badge = row.querySelector('.tier-badge');
+        if (!badge) return;
+        _touchTier = badge.textContent.trim();
+        _touchRow  = row;
+        const data = tierData[_touchTier];
+        if (!data) return;
+
+        // Build ghost chip
+        _touchGhost.textContent  = _touchTier;
+        _touchGhost.style.color        = data.c;
+        _touchGhost.style.borderColor  = data.c;
+        _touchGhost.style.textShadow   = `0 0 14px ${data.c}`;
+        const touch = e.touches[0];
+        _touchGhost.style.left = touch.clientX + 'px';
+        _touchGhost.style.top  = touch.clientY + 'px';
+        _touchGhost.style.display = 'block';
+        row.classList.add('is-dragging');
+      }, { passive: true });
+
+      row.addEventListener('touchmove', e => {
+        if (!_touchTier) return;
+        e.preventDefault(); // prevent scroll during drag
+        const touch = e.touches[0];
+        _touchGhost.style.left = touch.clientX + 'px';
+        _touchGhost.style.top  = touch.clientY + 'px';
+
+        // Highlight whichever slot the finger is over
+        ['a','b'].forEach(slot => {
+          const slotEl = document.getElementById('compare-slot-' + slot);
+          if (!slotEl) return;
+          const r = slotEl.getBoundingClientRect();
+          const over = touch.clientX >= r.left && touch.clientX <= r.right &&
+                       touch.clientY >= r.top  && touch.clientY <= r.bottom;
+          slotEl.classList.toggle('drag-over-' + slot, over);
+        });
+      }, { passive: false });
+
+      row.addEventListener('touchend', e => {
+        if (!_touchTier) return;
+        _touchGhost.style.display = 'none';
+        row.classList.remove('is-dragging');
+
+        const touch = e.changedTouches[0];
+        let droppedSlot = null;
+        ['a','b'].forEach(slot => {
+          const slotEl = document.getElementById('compare-slot-' + slot);
+          if (!slotEl) return;
+          slotEl.classList.remove('drag-over-a','drag-over-b');
+          const r = slotEl.getBoundingClientRect();
+          if (touch.clientX >= r.left && touch.clientX <= r.right &&
+              touch.clientY >= r.top  && touch.clientY <= r.bottom) droppedSlot = slot;
+        });
+
+        if (droppedSlot) applyDropToSlot(droppedSlot, _touchTier, _touchRow);
+        _touchTier = null;
+        _touchRow  = null;
+      });
+    });
+  }
+
+  // ── Enable / disable draggable attribute on rows ──
+  function setDraggableRows(enable) {
+    document.querySelectorAll('.tier-row').forEach(row => {
+      if (enable) {
+        row.setAttribute('draggable', 'true');
+        row.classList.add('draggable-row');
+      } else {
+        row.removeAttribute('draggable');
+        row.classList.remove('draggable-row','is-dragging');
+      }
+    });
+  }
+
+  // Init listeners once (gated by compareMode flag at call time)
+  initDesktopDragListeners();
+  initTouchDragListeners();
+
+  // ── Public: reset slots ───────────────────────
+  // ── Result card renderer ──────────────────────
+  function renderComparison(aSel, bSel) {
+    const box = document.getElementById('tier-compare-box');
+    if (!aSel || !bSel || !box) return;
+    const a = tierData[aSel.tier];
+    const b = tierData[bSel.tier];
+    if (!a || !b) return;
+
+    const maxMult = Math.max(a.mult, b.mult);
+    const barA = Math.round((a.mult / maxMult) * 100);
+    const barB = Math.round((b.mult / maxMult) * 100);
+    const multRatio = (b.mult / a.mult).toFixed(2);
+    const multRatioRev = (a.mult / b.mult).toFixed(2);
+    const multDiff  = Math.abs(b.mult - a.mult).toFixed(2);
+    const better = b.mult >= a.mult;
+    const arrowCol  = better ? '#22c45e' : '#ef4444';
+    const arrowIcon = better ? '▲' : '▼';
+    const speedup = better
+      ? `${multRatio}× faster with ${bSel.tier}`
+      : `${multRatioRev}× faster with ${aSel.tier}`;
+
+    const chanceDiff = Math.abs(b.chance - a.chance).toFixed(2);
+    const chanceBetter = b.chance > a.chance;
+    const chancePillCol = chanceBetter ? 'rgba(34,196,94,0.2)' : 'rgba(220,50,50,0.2)';
+    const chancePillTxt = chanceBetter ? `+${chanceDiff}% easier to roll` : `-${chanceDiff}% harder to roll`;
+    const chancePillBorder = chanceBetter ? 'rgba(34,196,94,0.4)' : 'rgba(220,50,50,0.4)';
+    const chancePillColor  = chanceBetter ? '#22c45e' : '#ef4444';
+
+    box.innerHTML = `<div class="compare-inner">
+      <div style="font-size:0.62rem;font-weight:800;color:rgba(255,255,255,0.28);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;">Result</div>
+      <div class="compare-result-card">
+        <div class="compare-result-side">
+          <div class="compare-result-label">Tier A</div>
+          <div class="compare-result-tier-name" style="color:${a.c};text-shadow:0 0 14px ${a.c}88;">${aSel.tier}</div>
+          <div class="compare-result-mult">${a.mult}×</div>
+          <div class="compare-result-chance">${a.chance}% roll chance</div>
+          <div class="compare-result-bar-wrap"><div class="compare-result-bar" style="width:${barA}%;background:${a.c};box-shadow:0 0 6px ${a.c}88;"></div></div>
+        </div>
+        <div class="compare-result-center">
+          <div class="compare-result-diff-num" style="color:${arrowCol};">${arrowIcon} ${multDiff}×</div>
+          <div class="compare-result-speedup">${speedup}</div>
+          <div class="compare-chance-pill" style="background:${chancePillCol};border:1px solid ${chancePillBorder};color:${chancePillColor};">${chancePillTxt}</div>
+        </div>
+        <div class="compare-result-side">
+          <div class="compare-result-label">Tier B</div>
+          <div class="compare-result-tier-name" style="color:${b.c};text-shadow:0 0 14px ${b.c}88;">${bSel.tier}</div>
+          <div class="compare-result-mult">${b.mult}×</div>
+          <div class="compare-result-chance">${b.chance}% roll chance</div>
+          <div class="compare-result-bar-wrap"><div class="compare-result-bar" style="width:${barB}%;background:${b.c};box-shadow:0 0 6px ${b.c}88;"></div></div>
+        </div>
+      </div>
+    </div>`;
+    void box.offsetHeight;
+    box.classList.add('open');
+  }
+
+  // ── Public: reset slots ───────────────────────
+  window.resetCompareSlots = function() {
+    if (compareA) { compareA.row.classList.remove('compare-a'); compareA = null; }
+    if (compareB) { compareB.row.classList.remove('compare-b'); compareB = null; }
+    clearSlot('a'); clearSlot('b');
+    updateStepHint();
+    const box = document.getElementById('tier-compare-box');
+    if (box) box.classList.remove('open');
+  };
+
+  // ── Public: exit compare mode (called on tab switch) ──
+  window.exitCompareMode = function() {
+    if (!compareMode) return;
+    compareMode = false;
+    const btn  = document.getElementById('compare-toggle-btn');
+    const panel = document.getElementById('compare-slot-panel');
+    const box  = document.getElementById('tier-compare-box');
+    if (btn) btn.classList.remove('active');
+    if (panel) panel.classList.remove('visible');
+    setDraggableRows(false);
+    window.resetCompareSlots();
+    if (box) box.classList.remove('open');
+    document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('compare-a','compare-b'));
+  };
+
+  // ── Public: toggle ────────────────────────────
+  window.toggleCompareMode = function() {
+    compareMode = !compareMode;
+    const btn   = document.getElementById('compare-toggle-btn');
+    const panel = document.getElementById('compare-slot-panel');
+    const detailBox = document.getElementById('enh-tier-detail');
+
+    if (compareMode) {
+      btn && btn.classList.add('active');
+      panel && panel.classList.add('visible');
+      setDraggableRows(true);
+      // collapse any open detail panel
+      document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('active'));
+      if (detailBox) {
+        detailBox.classList.remove('open');
+        setTimeout(() => { if (!detailBox.classList.contains('open')) detailBox.innerHTML = '<div class="enh-detail-inner"></div>'; }, 380);
+      }
+      updateStepHint();
+    } else {
       btn && btn.classList.remove('active');
-      hint && (hint.style.display = 'none');
-      if (compareA) { compareA.row.classList.remove('compare-a'); compareA = null; }
-      if (compareB) { compareB.row.classList.remove('compare-b'); compareB = null; }
+      panel && panel.classList.remove('visible');
+      setDraggableRows(false);
+      window.resetCompareSlots();
+      const box = document.getElementById('tier-compare-box');
       if (box) box.classList.remove('open');
       document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('compare-a','compare-b'));
     }
   };
 
+  // ── Patch enhTierClick for compare mode ──────
   window.enhTierClick = (function(origFn){
     return function(row, tier) {
-      const box  = document.getElementById('tier-compare-box');
+      const box       = document.getElementById('tier-compare-box');
       const detailBox = document.getElementById('enh-tier-detail');
 
-      const clearCompareSelections = () => {
-        document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('compare-a','compare-b'));
-        compareA = null;
-        compareB = null;
-        if (box) box.classList.remove('open');
-      };
-
-      const closeDetailPanel = () => {
-        if (!detailBox) return;
-        detailBox.classList.remove('open');
-        setTimeout(() => {
-          if (!detailBox.classList.contains('open')) {
-            detailBox.innerHTML = '<div class="enh-detail-inner"></div>';
-          }
-        }, 380);
-      };
-
-      const renderComparison = (aSel, bSel) => {
-        if (!aSel || !bSel || !box) return;
-        const a = tierData[aSel.tier];
-        const b = tierData[bSel.tier];
-        if (!a || !b) return;
-
-        const multRatio = (b.mult / a.mult).toFixed(2);
-        const multDiff  = (b.mult - a.mult).toFixed(2);
-        const better    = b.mult > a.mult;
-        const arrowCol  = better ? '#22c45e' : '#ef4444';
-        const arrowIcon = better ? '▲' : '▼';
-        const speedup   = better
-          ? `${multRatio}× faster with ${bSel.tier}`
-          : `${(a.mult/b.mult).toFixed(2)}× faster with ${aSel.tier}`;
-
-        box.innerHTML = `<div class="compare-inner">
-          <div style="font-size:0.68rem;font-weight:800;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;">Tier Comparison</div>
-          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-            <div style="text-align:center;flex:1;">
-              <div style="font-family:'Lilita One',cursive;font-size:1.4rem;color:${a.c};text-shadow:0 0 12px ${a.c}88;">${aSel.tier}</div>
-              <div style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.45);margin-top:2px;">${a.mult}×</div>
-              <div style="font-size:0.65rem;color:rgba(255,255,255,0.3);">${a.chance}% chance</div>
-            </div>
-            <div style="text-align:center;padding:8px 14px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
-              <div style="font-family:'Lilita One',cursive;font-size:1.1rem;color:${arrowCol};">${arrowIcon} ${Math.abs(multDiff)}×</div>
-              <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.35);margin-top:3px;">${speedup}</div>
-            </div>
-            <div style="text-align:center;flex:1;">
-              <div style="font-family:'Lilita One',cursive;font-size:1.4rem;color:${b.c};text-shadow:0 0 12px ${b.c}88;">${bSel.tier}</div>
-              <div style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.45);margin-top:2px;">${b.mult}×</div>
-              <div style="font-size:0.65rem;color:rgba(255,255,255,0.3);">${b.chance}% chance</div>
-            </div>
-          </div>
-        </div>`;
-        void box.offsetHeight;
-        box.classList.add('open');
-      };
-
       if (!compareMode) {
-        clearCompareSelections();
-        closeDetailPanel();
+        // Normal mode: clear any leftover compare classes
+        document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('compare-a','compare-b'));
         origFn(row, tier);
         return;
       }
 
-      if (!compareA) {
-        compareA = { row, tier };
-        row.classList.add('compare-a');
-        closeDetailPanel();
-        return;
-      }
+      const data = tierData[tier];
+      if (!data) return;
 
-      if (compareA.tier === tier) {
+      // Clicking the already-selected A tier → deselect A
+      if (compareA && compareA.tier === tier) {
         compareA.row.classList.remove('compare-a');
         compareA = null;
-        compareB = null;
+        clearSlot('a');
+        updateStepHint();
         if (box) box.classList.remove('open');
         return;
       }
-
+      // Clicking the already-selected B tier → deselect B
       if (compareB && compareB.tier === tier) {
         compareB.row.classList.remove('compare-b');
         compareB = null;
+        clearSlot('b');
+        updateStepHint();
         if (box) box.classList.remove('open');
         return;
       }
 
-      if (compareB) {
-        compareB.row.classList.remove('compare-b');
+      // Fill slot A first
+      if (!compareA) {
+        compareA = { row, tier };
+        row.classList.add('compare-a');
+        fillSlot('a', tier, data);
+        // Close detail panel if open
+        if (detailBox) {
+          detailBox.classList.remove('open');
+          setTimeout(() => { if (!detailBox.classList.contains('open')) detailBox.innerHTML = '<div class="enh-detail-inner"></div>'; }, 380);
+        }
+        updateStepHint();
+        return;
       }
 
+      // Then fill slot B and render
       compareB = { row, tier };
       row.classList.add('compare-b');
+      fillSlot('b', tier, data);
+      updateStepHint();
       renderComparison(compareA, compareB);
     };
   })(window.enhTierClick);
+
 })();
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 6 – BACK TO TOP BUTTON
-   ══════════════════════════════════════════ */
+   ========================================== */
 (function(){
   const btn = document.getElementById('back-to-top');
   if (!btn) return;
@@ -929,10 +1207,10 @@ function animateCountUp(el, targetStr) {
   }, { passive: true });
 })();
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 7 – KEYBOARD SHORTCUTS
    H=Home, C=Chapters, E=Enhancements, O=Others, K=Codes, F=FAQ
-   ══════════════════════════════════════════ */
+   ========================================== */
 (function(){
   const keyMap = {
     h: 'home', c: 'chapters', e: 'enhancements',
@@ -943,10 +1221,12 @@ function animateCountUp(el, targetStr) {
     others: 'nav-others', codes: 'nav-codes', faq: 'nav-faq'
   };
   document.addEventListener('keydown', e => {
-    // Don't fire if typing in an input
+    // Ignore shortcuts while typing in an input or editing content.
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
-    // Don't fire if a modal is open
+    // Ignore when a modal is open.
     if (document.body.classList.contains('modal-open')) return;
+    // Only trigger navigation for plain key presses, not modifier combinations.
+    if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
     const tab = keyMap[e.key.toLowerCase()];
     if (!tab) return;
     e.preventDefault();
@@ -966,9 +1246,9 @@ function animateCountUp(el, targetStr) {
   });
 })();
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 8 – MILESTONE ACHIEVEMENT BADGES
-   ══════════════════════════════════════════ */
+   ========================================== */
 (function(){
   const milestones = [
     { secs: 60,  icon: '⏱️', title: 'Time Scholar',      sub: '1 minute on the Wiki!' },
@@ -1005,9 +1285,9 @@ function animateCountUp(el, targetStr) {
   }, 5000);
 })();
 
-/* ══════════════════════════════════════════
+/* ==========================================
    FEATURE 10 – CODES FILTER
-   ══════════════════════════════════════════ */
+   ========================================== */
 function filterCodes(filter, btn) {
   // Update active button state
   document.querySelectorAll('.codes-filter-btn').forEach(b => b.classList.remove('active'));
