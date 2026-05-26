@@ -494,7 +494,7 @@ body::before {
   isolation: isolate;
 }
 
-/* The travelling glow border - a conic-gradient that rotates around the perimeter */
+/* The travelling glow border — a conic-gradient that rotates around the perimeter */
 .hero-panel-outer::before {
   content: '';
   position: absolute;
@@ -550,7 +550,7 @@ body::before {
   position: relative;
   z-index: 2;
 }
-/* inner ambient colour wash - no border pseudo-element needed anymore */
+/* inner ambient colour wash — no border pseudo-element needed anymore */
 .hero-panel::after {
   content: '';
   position: absolute;
@@ -804,7 +804,7 @@ body::before {
 .rbt-bar-fill {
   height: 100%;
   border-radius: 3px;
-  transition: width .6s cubic-bezier(0.34, 1.3, 0.64, 1);
+  transition: width .55s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
 .rbt-pct-note {
@@ -825,15 +825,10 @@ body::before {
   display: flex; align-items: flex-start; gap: 6px;
 }
 
-/* Legacy compat - keep for table coloring */
+/* Legacy compat — keep for table coloring */
 .rank-boost-time      { color:#f5a623; }
 .rank-boost-grandtime { color:#40d0ff; }
 .rank-boost-frags     { color:#4ade80; }
-
-/* -- BAR FILL TRANSITION (desktop - smooth fill on open) -- */
-.rbt-bar-fill {
-  transition: width .55s cubic-bezier(0.34, 1.2, 0.64, 1);
-}
 
 /* -- RARITY CHIP: fixed uniform size so all chips look identical -- */
 .rank-detail-rarity-chip {
@@ -992,6 +987,18 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
   border: 1px solid rgba(255,255,255,0.07);
 }
 .sr-info-note strong { color: rgba(255,255,255,0.65); font-weight: 800; }
+
+.rank-badge-intro {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+  width: 100%;
+  padding: 4px 0 8px;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
 
 /* -- HOW TO EQUIP: numbered steps -- */
 .sr-steps {
@@ -1166,7 +1173,7 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 
 /* ---- Performance: kill CPU-heavy animations on low-end / mobile ---- */
 @media (max-width: 760px) {
-  /* Disable glow pulsing on rank badges - these run continuously and are the main FPS killer */
+  /* Disable glow pulsing on rank badges — these run continuously and are the main FPS killer */
   .rank-badge.rarity-legendary,
   .rank-badge.rarity-mythic,
   .rank-badge.rarity-exotic,
@@ -1176,7 +1183,7 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
   /* Disable the emblem star wobble in the sheet */
   .rank-detail-emblem-star { animation: none !important; }
 
-  /* Simpler sheet bg - no gradient repaint */
+  /* Simpler sheet bg — no gradient repaint */
   .rank-float-sheet { will-change: transform; }
 
   /* Disable bar fill spring bounce on mobile (simple linear is faster to paint) */
@@ -1197,15 +1204,14 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
   background: #13131a;
   border-top: 2px solid rgba(168,85,247,0.3);
   border-radius: 18px 18px 0 0;
-  padding: 0 16px 28px;
   box-shadow: 0 -8px 32px rgba(0,0,0,0.8);
-  /* Use transform only (GPU-composited) - no opacity animation to keep it light */
   transform: translateY(100%);
   transition: transform .28s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
-  /* Prevent content from exceeding viewport */
-  max-height: 72vh;
+  max-height: 80vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .rank-float-sheet.open {
@@ -1213,14 +1219,16 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
   pointer-events: all;
 }
 
-/* Top row: handle centred, close button to the right, both in the same flex row */
+/* Chrome bar: pill handle on left, close button on right, nicely padded */
 .rfs-top-row {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 10px 0 8px;
+  height: 56px;
   flex-shrink: 0;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .rfs-handle {
@@ -1231,36 +1239,41 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 
 .rfs-close {
   position: absolute;
-  right: 0; top: 50%;
+  right: 20px;
+  top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  color: rgba(255,255,255,0.45);
-  font-size: 0.82rem;
-  width: 28px; height: 28px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .15s, color .12s;
+  width: 30px; height: 30px; border-radius: 6px;
+  background: linear-gradient(180deg, #ff4a4a, #c00000);
+  border: 2px solid #8b0000;
+  box-shadow: 0 3px 0 #5a0000;
+  color: #fff; font-family: 'Lilita One', cursive; font-size: 1rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: filter .15s, transform .1s;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   line-height: 1;
 }
-.rfs-close:hover { background: rgba(220,50,50,0.22); color: #ff8080; }
+.rfs-close:hover  { filter: brightness(1.2); }
+.rfs-close:active { transform: translateY(calc(-50% + 2px)); box-shadow: 0 1px 0 #5a0000; }
 
-/* Body: no scrollbar, content just sits inside */
+/* Body: scrollable, with generous padding */
 .rfs-body {
   overflow: hidden;
-  padding-top: 4px;
+  padding: 18px 20px 36px;
+  flex: 1;
 }
 
-/* Compact tiles inside the sheet */
-.rfs-body .rank-boost-tiles { gap: 8px; }
-.rfs-body .rank-boost-tile  { padding: 9px 12px; }
-.rfs-body .rbt-value        { font-size: 1.15rem; margin-bottom: 4px; }
-.rfs-body .rank-detail-name-big { font-size: 1.2rem; }
-.rfs-body .rank-detail-header-row { margin-bottom: 10px; }
-.rfs-body .rank-passive-header-new { margin-bottom: 8px; padding-bottom: 8px; }
-.rfs-body .rank-detail-footer-note { margin-top: 8px; padding: 6px 10px; font-size: 0.68rem; }
-.rfs-body .rank-how-to-get { padding: 7px 10px; margin-bottom: 8px; font-size: 0.74rem; }
+/* Compact but breathable tiles inside the sheet */
+.rfs-body .rank-boost-tiles           { gap: 10px; }
+.rfs-body .rank-boost-tile            { padding: 11px 14px; }
+.rfs-body .rbt-value                  { font-size: 1.15rem; margin-bottom: 5px; }
+.rfs-body .rank-detail-name-big       { font-size: 1.2rem; }
+.rfs-body .rank-detail-header-row     { margin-bottom: 14px; }
+.rfs-body .rank-passive-header-new    { margin-bottom: 10px; padding-bottom: 10px; }
+.rfs-body .rank-detail-footer-note    { margin-top: 12px; padding: 8px 12px; font-size: 0.68rem; }
+.rfs-body .rank-how-to-get            { padding: 9px 12px; margin-bottom: 10px; font-size: 0.74rem; }
+.rfs-body .rank-unobtainable-banner   { padding: 10px 13px; margin-bottom: 10px; }
+.rfs-body .rank-detail-card-inner     { padding: 2px 0 4px; }
 
 /* On wide screens: floating sheet should NOT appear */
 @media (min-width: 761px) {
@@ -1294,14 +1307,11 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 
 /* -- MOBILE: rank layout (≤ 760px) -- */
 @media (max-width: 760px) {
-  /* On narrow: hide the sticky side panel entirely - use floating sheet instead */
+  /* On narrow: hide the sticky side panel entirely — use floating sheet instead */
   .rank-detail-sticky { display: none !important; }
 
   /* Full width for the badge list */
   .rank-layout { display: block !important; }
-
-  /* Show the tap hint */
-  #rank-mobile-hint { display: block; }
 
   /* Badges get a bit more padding for fat thumbs */
   .rank-badge { padding: 11px 20px; font-size: 1rem; }
@@ -1310,11 +1320,56 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 /* Hidden by default; shown only on mobile via media query */
 #rank-mobile-hint {
   display: none;
-  margin-top: 6px;
-  font-size: 0.74rem; font-weight: 700;
-  color: rgba(255,255,255,0.28);
-  text-align: center;
-  letter-spacing: 0.04em;
+  margin: 0 0 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(168,85,247,0.08);
+  border: 1px solid rgba(168,85,247,0.22);
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+
+#rank-mobile-hint .rmh-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  animation: rmhBounce 1.8s ease-in-out infinite;
+}
+
+#rank-mobile-hint .rmh-text {
+  font-size: 0.78rem; font-weight: 800;
+  color: rgba(200,160,255,0.75);
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+}
+
+#rank-mobile-hint .rmh-sub {
+  font-size: 0.68rem; font-weight: 700;
+  color: rgba(255,255,255,0.3);
+  margin-top: 1px;
+}
+
+@keyframes rmhBounce {
+  0%, 100% { transform: translateY(0);    }
+  40%       { transform: translateY(-4px); }
+  60%       { transform: translateY(-2px); }
+}
+
+/* On mobile, show a subtle chevron on each rank badge to signal it's tappable */
+@media (max-width: 760px) {
+  #rank-mobile-hint { display: flex; }
+
+  .rank-badge::after {
+    content: '›';
+    margin-left: auto;
+    font-size: 1rem;
+    opacity: 0.3;
+    transition: opacity .15s, transform .15s;
+  }
+  .rank-badge:active::after {
+    opacity: 0.7;
+    transform: translateX(3px);
+  }
 }
 
 /* rank table rarity badges */
@@ -1379,6 +1434,7 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 .codes-table-wrap {
   width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   margin: 0;
 }
@@ -1636,7 +1692,7 @@ a:active {
 
 /* -- CARD TILT -- */
 /* will-change is applied dynamically by JS on mouseover only */
-/* preserve-3d removed from .game-panel and .quick-stat - unnecessary compositing overhead */
+/* preserve-3d removed from .game-panel and .quick-stat — unnecessary compositing overhead */
 
 /* -- SKELETON LOADER -- */
 .skel {
@@ -1812,7 +1868,7 @@ a:active {
 
 /* -- MODAL OVERLAY -- */
 /* When a modal is open, collapse the nav out of the stacking context entirely.
-   Changing position alone isn't enough - backdrop-filter on the overlay creates
+   Changing position alone isn't enough — backdrop-filter on the overlay creates
    its own compositing layer, and any z-index on the nav can bleed through it in
    Chromium. Setting z-index: 0 (and position: relative) puts the nav definitively
    below the modal's z-index: 9999 layer. */
@@ -2073,7 +2129,7 @@ body.modal-open .site-header {
   background: rgba(255,255,255,0.05);
   border-color: rgba(255,255,255,0.18);
 }
-/* Glow pseudo-element - animating opacity is GPU-composited, no repaint */
+/* Glow pseudo-element — animating opacity is GPU-composited, no repaint */
 .tier-row::before {
   content: '';
   position: absolute;
@@ -2307,7 +2363,7 @@ body.modal-open .site-header {
   color: rgba(255,255,255,0.65);
 }
 
-/* Result card inside compare box - richer layout - inherits from existing rules, extra style below */
+/* Result card inside compare box - richer layout — inherits from existing rules, extra style below */
 .compare-result-card {
   display: flex;
   align-items: stretch;

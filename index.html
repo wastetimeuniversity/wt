@@ -776,6 +776,7 @@
         <div class="game-panel" data-no-tilt>
           <div class="panel-bar blue"><span>🏆 Special Ranks</span></div>
           <div class="panel-body" style="display:flex; flex-direction:column; gap:6px;" id="rank-badge-list">
+            <div class="rank-badge-intro">Click on a rank to see its details!</div>
 
             <!-- Secret -->
             <div class="rank-rarity-divider">
@@ -911,21 +912,22 @@
             <thead><tr><th>Code</th><th>Reward</th><th>Status</th></tr></thead>
             <tbody>
               <tr id="codes-empty-row" style="display:none;"><td colspan="3" style="text-align:center;padding:22px 16px;color:rgba(255,255,255,0.35);font-size:0.84rem;font-weight:700;letter-spacing:0.03em;">🎟️ No codes are active at the moment. Check back later.</td></tr>
+              <tr class="activec"><td class="codes"><span>SorryForDelayII</span><button class="code-copy-button" onclick="copyCode('SorryForDelayII', this)">Copy</button></td><td>🔒 10 locks</td><td><span class="status-badge active-badge">✅ Active</span></td></tr>
               <tr class="expired"><td class="codes"><span>ChapterIV</span><button class="code-copy-button" onclick="copyCode('ChapterIV', this)">Copy</button></td><td>🔒 10 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>ClansUPD</span><button class="code-copy-button" onclick="copyCode('ClansUPD', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>MoreTree</span><button class="code-copy-button" onclick="copyCode('MoreTree', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>sorryfordelay2</span><button class="code-copy-button" onclick="copyCode('sorryfordelay2', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>obby</span><button class="code-copy-button" onclick="copyCode('obby', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>QOL</span><button class="code-copy-button" onclick="copyCode('QOL', this)">Copy</button></td><td>🔒 3 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>dailyrewards</span><button class="code-copy-button" onclick="copyCode('dailyrewards', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>ruined</span><button class="code-copy-button" onclick="copyCode('ruined', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>easterevent</span><button class="code-copy-button" onclick="copyCode('easterevent', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>sorryfordelay</span><button class="code-copy-button" onclick="copyCode('sorryfordelay', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>wereback</span><button class="code-copy-button" onclick="copyCode('wereback', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>newpillar</span><button class="code-copy-button" onclick="copyCode('newpillar', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            <tr class="expired"><td class="codes"><span>etherealontop</span><button class="code-copy-button" onclick="copyCode('etherealontop', this)">Copy</button></td><td>🔒 25 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-          </tbody>
-        </table>
+              <tr class="expired"><td class="codes"><span>ClansUPD</span><button class="code-copy-button" onclick="copyCode('ClansUPD', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>MoreTree</span><button class="code-copy-button" onclick="copyCode('MoreTree', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>sorryfordelay2</span><button class="code-copy-button" onclick="copyCode('sorryfordelay2', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>obby</span><button class="code-copy-button" onclick="copyCode('obby', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>QOL</span><button class="code-copy-button" onclick="copyCode('QOL', this)">Copy</button></td><td>🔒 3 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>dailyrewards</span><button class="code-copy-button" onclick="copyCode('dailyrewards', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>ruined</span><button class="code-copy-button" onclick="copyCode('ruined', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>easterevent</span><button class="code-copy-button" onclick="copyCode('easterevent', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>sorryfordelay</span><button class="code-copy-button" onclick="copyCode('sorryfordelay', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>wereback</span><button class="code-copy-button" onclick="copyCode('wereback', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>newpillar</span><button class="code-copy-button" onclick="copyCode('newpillar', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+              <tr class="expired"><td class="codes"><span>etherealontop</span><button class="code-copy-button" onclick="copyCode('etherealontop', this)">Copy</button></td><td>🔒 25 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
