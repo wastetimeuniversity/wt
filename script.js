@@ -185,7 +185,7 @@ const SPECIAL_RANKS_DATA = {
   nitrogen:   { name: 'Nitrogen',   rarity: 'Exotic',    boosts: { Time: 0.60, GT: 0.30,  Fragments: 0.15  } },
   lord:       { name: 'Lord',       rarity: 'Mythic',    boosts: { Time: 0.50, GT: 0.25,  Fragments: 0.125 } },
   ethereal:   { name: 'Ethereal',   rarity: 'Legendary', boosts: { Time: 0.40, GT: 0.20,  Fragments: 0.10  },
-                trivia: '✦ First introduced during the Easter Egg event - still obtainable in the current event.' },
+                trivia: '✦ First introduced during the Easter Egg event — still obtainable in the current event.' },
   bejeweled:  { name: 'Bejeweled',  rarity: 'Epic',      boosts: { Time: 0.30, GT: 0.15,  Fragments: 0.075 } },
   devoted:    { name: 'Devoted',    rarity: 'Rare',      boosts: { Time: 0.20, GT: 0.10,  Fragments: 0.05  },
                 how: '🎁 Reach <strong>Day 7</strong> on the Daily Reward system' },
@@ -327,24 +327,41 @@ function showRankDetail(key) {
 
 /* ---- Floating rank detail sheet for narrow screens ---- */
 function _showRankFloatingSheet(innerHtml, barIdBase) {
+  // Create backdrop once
+  let backdrop = document.getElementById('rank-sheet-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'rank-sheet-backdrop';
+    backdrop.className = 'rank-sheet-backdrop';
+    backdrop.addEventListener('click', closeRankFloatingSheet);
+    document.body.appendChild(backdrop);
+  }
+
+  // Create sheet once
   let sheet = document.getElementById('rank-float-sheet');
   if (!sheet) {
     sheet = document.createElement('div');
     sheet.id = 'rank-float-sheet';
     sheet.className = 'rank-float-sheet';
     sheet.innerHTML = `
-      <div class="rfs-top-row">
-        <div class="rfs-handle"></div>
+      <div class="rfs-top-row" id="rfs-top-row">
+        <div class="rfs-handle" id="rfs-handle"></div>
         <button class="rfs-close" onclick="closeRankFloatingSheet()" aria-label="Close">✕</button>
       </div>
       <div class="rfs-body" id="rfs-body"></div>
     `;
     document.body.appendChild(sheet);
+    _initSheetDrag(sheet);
   }
+
   document.getElementById('rfs-body').innerHTML = innerHtml;
+
   requestAnimationFrame(() => {
+    backdrop.classList.add('open');
     sheet.classList.add('open');
-    // Animate bars after sheet slides in
+    // Reset any leftover drag transform
+    sheet.style.transform = '';
+    sheet.style.transition = '';
     setTimeout(() => {
       [barIdBase+'-t', barIdBase+'-g', barIdBase+'-fr'].forEach(id => {
         const el = document.getElementById(id);
@@ -356,7 +373,72 @@ function _showRankFloatingSheet(innerHtml, barIdBase) {
 
 function closeRankFloatingSheet() {
   const sheet = document.getElementById('rank-float-sheet');
-  if (sheet) sheet.classList.remove('open');
+  const backdrop = document.getElementById('rank-sheet-backdrop');
+  if (sheet) {
+    sheet.style.transition = 'transform .28s cubic-bezier(0.22, 1, 0.36, 1)';
+    sheet.style.transform = 'translateY(100%)';
+    // Remove .open after transition so it re-opens cleanly next time
+    sheet.addEventListener('transitionend', () => {
+      sheet.classList.remove('open');
+      sheet.style.transform = '';
+    }, { once: true });
+  }
+  if (backdrop) backdrop.classList.remove('open');
+}
+
+/* Drag-to-dismiss on the handle (and top-row) */
+function _initSheetDrag(sheet) {
+  const topRow = document.getElementById('rfs-top-row');
+  if (!topRow) return;
+
+  let startY = 0, currentY = 0, dragging = false, startTime = 0;
+  const DISMISS_THRESHOLD = 80;   // px dragged down to auto-dismiss
+  const VELOCITY_THRESHOLD = 0.5; // px/ms — fast flick always dismisses
+
+  function onStart(e) {
+    dragging = true;
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    currentY = startY;
+    startTime = Date.now();
+    // Remove CSS transition while dragging for instant follow
+    sheet.style.transition = 'none';
+  }
+
+  function onMove(e) {
+    if (!dragging) return;
+    currentY = e.touches ? e.touches[0].clientY : e.clientY;
+    const delta = Math.max(0, currentY - startY); // only allow dragging DOWN
+    sheet.style.transform = `translateY(${delta}px)`;
+    // Fade backdrop proportionally
+    const backdrop = document.getElementById('rank-sheet-backdrop');
+    if (backdrop) {
+      const progress = Math.min(delta / 200, 1);
+      backdrop.style.opacity = 1 - progress;
+    }
+  }
+
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    const delta = Math.max(0, currentY - startY);
+    const velocity = delta / (Date.now() - startTime);
+    if (delta > DISMISS_THRESHOLD || velocity > VELOCITY_THRESHOLD) {
+      closeRankFloatingSheet();
+    } else {
+      // Snap back
+      sheet.style.transition = 'transform .25s cubic-bezier(0.22, 1, 0.36, 1)';
+      sheet.style.transform = 'translateY(0)';
+      const backdrop = document.getElementById('rank-sheet-backdrop');
+      if (backdrop) backdrop.style.opacity = '';
+    }
+  }
+
+  topRow.addEventListener('touchstart', onStart, { passive: true });
+  topRow.addEventListener('touchmove',  onMove,  { passive: true });
+  topRow.addEventListener('touchend',   onEnd);
+  topRow.addEventListener('mousedown',  onStart);
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup',   onEnd);
 }
 
 /* Auto-close floating sheet when rank table scrolls into full view */
@@ -390,7 +472,7 @@ function closeRankFloatingSheet() {
     const tr = document.createElement('tr');
     if (rank.unobtainable) tr.classList.add('rank-row-legacy');
     tr.style.cursor = 'pointer';
-    tr.title = 'Click to view passive boosts';
+    tr.title = '';  // no native tooltip — we have the caption instead
     tr.onclick = () => {
       showOthersTab('special-ranks');
       showRankDetail(key);
@@ -444,10 +526,10 @@ function closeRankFloatingSheet() {
     if (el) el.textContent = v;
   };
 
-  setText('stat-active', stats.playing > 0 ? fmt(stats.playing) : '-');
-  setText('stat-visits', stats.visits > 0 ? fmt(stats.visits) : '-');
-  setText('stat-favorites', stats.favoritedCount > 0 ? fmt(stats.favoritedCount) : '-');
-  setText('stat-likes', stats.likeCount > 0 ? fmt(stats.likeCount) : '-');
+  setText('stat-active', stats.playing > 0 ? fmt(stats.playing) : '—');
+  setText('stat-visits', stats.visits > 0 ? fmt(stats.visits) : '—');
+  setText('stat-favorites', stats.favoritedCount > 0 ? fmt(stats.favoritedCount) : '—');
+  setText('stat-likes', stats.likeCount > 0 ? fmt(stats.likeCount) : '—');
   setText('stat-maxplayers', stats.maxPlayers ?? '-');
 
   // Only show the live badge when there are real active players
@@ -463,7 +545,7 @@ function closeRankFloatingSheet() {
     const el = document.getElementById('codes-section-sub');
     if (!el) return;
     if (activeRows === 0) {
-      el.textContent = 'No active codes right now - check back soon!';
+      el.textContent = 'No active codes right now — check back soon!';
     } else if (activeRows === 1) {
       el.textContent = 'There is 1 active code right now. Redeem it before it expires!';
     } else {
@@ -689,7 +771,7 @@ staggerPills('[id^="others-pill-"]');
 
   document.addEventListener('mousemove', e => {
     const now = performance.now();
-    if (now - lastTrail < 32) return; // ~30fps cap - no visual difference, huge perf gain
+    if (now - lastTrail < 32) return; // ~30fps cap — no visual difference, huge perf gain
     lastTrail = now;
 
     const slot = acquire();
@@ -1131,7 +1213,7 @@ function animateCountUp(el, targetStr) {
     const elMult = document.getElementById('slot-' + slot + '-mult');
     const elHint = document.getElementById('slot-' + slot + '-hint');
     if (!elSlot) return;
-    elTier.textContent = '-';
+    elTier.textContent = '—';
     elTier.style.color = '';
     elTier.style.textShadow = '';
     elMult.style.display = 'none';
@@ -1149,7 +1231,7 @@ function animateCountUp(el, targetStr) {
       hint.textContent = '👇 Now drag or tap a second tier row for Tier B';
       hint.classList.remove('done');
     } else {
-      hint.textContent = '✓ Comparison ready - see results below';
+      hint.textContent = '✓ Comparison ready — see results below';
       hint.classList.add('done');
     }
   }
@@ -1601,7 +1683,7 @@ function animateCountUp(el, targetStr) {
 (function(){
   const milestones = [
     { secs: 60,  icon: '⏱️', title: 'Time Scholar',      sub: '1 minute on the Wiki!' },
-    { secs: 300, icon: '🎲', title: 'Reroll Enthusiast', sub: '5 minutes - you deserve a P+ roll' },
+    { secs: 300, icon: '🎲', title: 'Reroll Enthusiast', sub: '5 minutes — you deserve a P+ roll' },
     { secs: 600, icon: '✦',  title: 'Waste Time Legend', sub: '10 minutes of dedication!' },
   ];
   const earned = new Set();

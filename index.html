@@ -324,21 +324,21 @@
           <div class="compare-slots-row">
             <div class="compare-slot" id="compare-slot-a">
               <div class="compare-slot-label">Tier A</div>
-              <div class="compare-slot-tier" id="slot-a-tier">-</div>
+              <div class="compare-slot-tier" id="slot-a-tier">—</div>
               <div class="compare-slot-mult" id="slot-a-mult" style="display:none;"></div>
               <div class="compare-slot-empty-hint" id="slot-a-hint">Drag or tap a tier row</div>
             </div>
             <div class="compare-vs-divider">VS</div>
             <div class="compare-slot" id="compare-slot-b">
               <div class="compare-slot-label">Tier B</div>
-              <div class="compare-slot-tier" id="slot-b-tier">-</div>
+              <div class="compare-slot-tier" id="slot-b-tier">—</div>
               <div class="compare-slot-mult" id="slot-b-mult" style="display:none;"></div>
               <div class="compare-slot-empty-hint" id="slot-b-hint">Drag or tap a tier row</div>
             </div>
           </div>
           <div class="compare-step-hint" id="compare-step-hint">👇 Drag or tap any tier row to select Tier A</div>
           <button class="compare-reset-btn" onclick="resetCompareSlots()">↺ Reset Selection</button>
-          <div class="compare-drag-hint"><span class="drag-icon">☰</span> Drag rows onto slots - works on mobile too</div>
+          <div class="compare-drag-hint"><span class="drag-icon">☰</span> Drag rows onto slots — works on mobile too</div>
         </div>
         <div class="tier-hint" id="tier-hint">👆 tap a row to see tips &amp; advice</div>
         <!-- Table header -->
@@ -690,7 +690,7 @@
           <div class="sr-hero-content">
             <div class="sr-hero-eyebrow">✦ Passive Bonuses</div>
             <div class="sr-hero-title">Special Ranks</div>
-            <div class="sr-hero-desc">Special Ranks are rare cosmetic titles earned through limited-time events and event crates. Each rank grants passive percentage boosts to Time, GrandTime, and Fragments - bonuses that remain active at all times, even when the rank isn't equipped.</div>
+            <div class="sr-hero-desc">Special Ranks are rare cosmetic titles earned through limited-time events and event crates. Each rank grants passive percentage boosts to Time, GrandTime, and Fragments — bonuses that remain active at all times, even when the rank isn't equipped.</div>
             <div class="sr-hero-pills">
               <div class="sr-pill sr-pill-gold">🏆 <span>Earn via Events</span></div>
               <div class="sr-pill sr-pill-blue">⚡ <span>Always-On Boosts</span></div>
@@ -703,9 +703,9 @@
 
       <!-- Current Event: Crates -->
       <div class="game-panel sr-info-panel" data-no-tilt style="margin-bottom:18px;">
-        <div class="panel-bar" style="background:linear-gradient(135deg,#1a0a40,#4a1a9a);"><span>🎟️ Current Event - Crates</span></div>
+        <div class="panel-bar" style="background:linear-gradient(135deg,#1a0a40,#4a1a9a);"><span>🎟️ Current Event — Crates</span></div>
         <div class="panel-body">
-          <p class="sr-info-text">The current event features a <strong>Crates system</strong> where you open crates of different rarities to win Special Ranks and other rewards. Crates come in <span class="sr-ct common">Common</span>, <span class="sr-ct rare">Rare</span>, <span class="sr-ct special">Special</span>, and <span class="sr-ct event">Event</span> tiers - each with a different pool of possible ranks.</p>
+          <p class="sr-info-text">The current event features a <strong>Crates system</strong> where you open crates of different rarities to win Special Ranks and other rewards. Crates come in <span class="sr-ct common">Common</span>, <span class="sr-ct rare">Rare</span>, <span class="sr-ct special">Special</span>, and <span class="sr-ct event">Event</span> tiers — each with a different pool of possible ranks.</p>
           <div class="sr-crates-grid sr-crates-grid-4">
             <div class="sr-crate-card sr-crate-common">
               <div class="sr-crate-icon">📦</div>
@@ -766,17 +766,24 @@
               </div>
             </div>
           </div>
-          <div class="sr-info-note" style="margin-top:14px;">⚡ Equipping a rank only changes your visible title - it does <strong>not</strong> affect your passive boosts in any way.</div>
+          <div class="sr-info-note" style="margin-top:14px;">⚡ Equipping a rank only changes your visible title — it does <strong>not</strong> affect your passive boosts in any way.</div>
         </div>
       </div>
 
       <div class="hero-2col rank-layout" style="margin-bottom:20px; align-items:start;">
 
-        <!-- LEFT: rank badge list - single column -->
+        <!-- LEFT: rank badge list — single column -->
         <div class="game-panel" data-no-tilt>
           <div class="panel-bar blue"><span>🏆 Special Ranks</span></div>
           <div class="panel-body" style="display:flex; flex-direction:column; gap:6px;" id="rank-badge-list">
-            <div class="rank-badge-intro">Click on a rank to see its details!</div>
+
+          <div id="rank-mobile-hint">
+            <div class="rmh-icon">👆</div>
+            <div>
+              <div class="rmh-text">Tap any rank to see its details</div>
+              <div class="rmh-sub">A details panel will slide up from the bottom</div>
+            </div>
+          </div>
 
             <!-- Secret -->
             <div class="rank-rarity-divider">
@@ -830,15 +837,14 @@
             <div class="rank-badge rarity-common rank-badge-legacy" onclick="showRankDetail('flame')">✦ Flame <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
 
           </div><!-- end rank-badge-list panel-body -->
-          <div id="rank-mobile-hint">👆 Tap a rank to see its details</div>
         </div>
         <div class="game-panel rank-detail-sticky" id="rank-detail-panel">
           <div class="panel-bar dark"><span>📋 Rank Details</span></div>
           <div class="panel-body rank-detail-body-fill" id="rank-detail-body">
             <!-- Empty on first load -->
-            <div id="rank-detail-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;height:100%;min-height:220px;color:rgba(255,255,255,0.22);text-align:center;">
-              <div style="font-size:2.6rem;opacity:0.3;">🏆</div>
-              <div style="font-size:0.82rem;font-weight:700;letter-spacing:0.05em;line-height:1.6;">Select a rank on the left<br>to view its passive boosts</div>
+            <div id="rank-detail-empty" class="rank-detail-empty">
+              <div class="rank-detail-empty-icon">🏆</div>
+              <div class="rank-detail-empty-text">Select a rank on the left<br>to view its passive boosts</div>
             </div>
             <!-- Populated by JS -->
             <div id="rank-detail-content" style="display:none;"></div>
@@ -853,6 +859,7 @@
         <div class="panel-body" style="padding:0;">
           <div class="codes-table-wrap">
           <table class="styled-table">
+            <caption class="rank-table-caption">👆 Click any row to view that rank's passive boosts</caption>
             <thead>
               <tr>
                 <th>#</th>
@@ -912,22 +919,21 @@
             <thead><tr><th>Code</th><th>Reward</th><th>Status</th></tr></thead>
             <tbody>
               <tr id="codes-empty-row" style="display:none;"><td colspan="3" style="text-align:center;padding:22px 16px;color:rgba(255,255,255,0.35);font-size:0.84rem;font-weight:700;letter-spacing:0.03em;">🎟️ No codes are active at the moment. Check back later.</td></tr>
-              <tr class="activec"><td class="codes"><span>SorryForDelayII</span><button class="code-copy-button" onclick="copyCode('SorryForDelayII', this)">Copy</button></td><td>🔒 10 locks</td><td><span class="status-badge active-badge">✅ Active</span></td></tr>
               <tr class="expired"><td class="codes"><span>ChapterIV</span><button class="code-copy-button" onclick="copyCode('ChapterIV', this)">Copy</button></td><td>🔒 10 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>ClansUPD</span><button class="code-copy-button" onclick="copyCode('ClansUPD', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>MoreTree</span><button class="code-copy-button" onclick="copyCode('MoreTree', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>sorryfordelay2</span><button class="code-copy-button" onclick="copyCode('sorryfordelay2', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>obby</span><button class="code-copy-button" onclick="copyCode('obby', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>QOL</span><button class="code-copy-button" onclick="copyCode('QOL', this)">Copy</button></td><td>🔒 3 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>dailyrewards</span><button class="code-copy-button" onclick="copyCode('dailyrewards', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>ruined</span><button class="code-copy-button" onclick="copyCode('ruined', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>easterevent</span><button class="code-copy-button" onclick="copyCode('easterevent', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>sorryfordelay</span><button class="code-copy-button" onclick="copyCode('sorryfordelay', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>wereback</span><button class="code-copy-button" onclick="copyCode('wereback', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>newpillar</span><button class="code-copy-button" onclick="copyCode('newpillar', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>etherealontop</span><button class="code-copy-button" onclick="copyCode('etherealontop', this)">Copy</button></td><td>🔒 25 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            </tbody>
-          </table>
+            <tr class="expired"><td class="codes"><span>ClansUPD</span><button class="code-copy-button" onclick="copyCode('ClansUPD', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>MoreTree</span><button class="code-copy-button" onclick="copyCode('MoreTree', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>sorryfordelay2</span><button class="code-copy-button" onclick="copyCode('sorryfordelay2', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>obby</span><button class="code-copy-button" onclick="copyCode('obby', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>QOL</span><button class="code-copy-button" onclick="copyCode('QOL', this)">Copy</button></td><td>🔒 3 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>dailyrewards</span><button class="code-copy-button" onclick="copyCode('dailyrewards', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>ruined</span><button class="code-copy-button" onclick="copyCode('ruined', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>easterevent</span><button class="code-copy-button" onclick="copyCode('easterevent', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>sorryfordelay</span><button class="code-copy-button" onclick="copyCode('sorryfordelay', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>wereback</span><button class="code-copy-button" onclick="copyCode('wereback', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>newpillar</span><button class="code-copy-button" onclick="copyCode('newpillar', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>etherealontop</span><button class="code-copy-button" onclick="copyCode('etherealontop', this)">Copy</button></td><td>🔒 25 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+          </tbody>
+        </table>
         </div>
       </div>
     </div>
@@ -936,7 +942,7 @@
   <!-- FAQ -->
   <div id="tab-faq" class="tab-panel">
     <div class="section-title">FAQ</div>
-    <div class="section-sub">- Questions incoming -</div>
+    <div class="section-sub">— Questions incoming —</div>
     <div class="coming-soon" style="margin-top:12px;">
       <span class="coming-soon-icon">❓</span>
       <h3>FAQ Coming Soon</h3>
@@ -1032,9 +1038,9 @@
 
 <!-- Bottom-right UI stack: BtT + achievement always stacked, never overlapping -->
 <div id="ui-stack-br">
-  <!-- Back to top button - listed first so column-reverse places it at the bottom -->
+  <!-- Back to top button — listed first so column-reverse places it at the bottom -->
   <button id="back-to-top" title="Back to top" aria-label="Back to top"></button>
-  <!-- Achievement popup container - listed second so column-reverse floats it above BtT -->
+  <!-- Achievement popup container — listed second so column-reverse floats it above BtT -->
   <div id="achievement-popup" class="achievement-popup">
     <div class="achievement-icon" id="ach-icon">🏆</div>
     <div class="achievement-text-wrap">

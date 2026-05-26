@@ -988,18 +988,6 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 }
 .sr-info-note strong { color: rgba(255,255,255,0.65); font-weight: 800; }
 
-.rank-badge-intro {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.45);
-  text-align: center;
-  width: 100%;
-  padding: 4px 0 8px;
-  line-height: 1.5;
-  margin-bottom: 4px;
-}
-
 /* -- HOW TO EQUIP: numbered steps -- */
 .sr-steps {
   display: flex;
@@ -1064,7 +1052,40 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 .rank-how-to-get strong { color: rgba(255,255,255,0.8); font-weight: 800; }
 .rank-how-icon { flex-shrink: 0; }
 
-/* -- RANK BADGE NOTE chip (e.g. "Day 7", "Event") -- */
+/* -- RANK TABLE CAPTION -- */
+.rank-table-caption {
+  caption-side: bottom;
+  padding: 10px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.72rem; font-weight: 800;
+  letter-spacing: 0.07em;
+  color: rgba(255,255,255,0.22);
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* -- RANK DETAIL EMPTY STATE -- */
+.rank-detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100%;
+  min-height: 220px;
+  text-align: center;
+}
+.rank-detail-empty-icon {
+  font-size: 2.6rem;
+  opacity: 0.18;
+}
+.rank-detail-empty-text {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.22);
+}
 .rank-badge-note {
   display: inline-block;
   font-size: 0.55rem; font-weight: 800;
@@ -1278,7 +1299,32 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 /* On wide screens: floating sheet should NOT appear */
 @media (min-width: 761px) {
   .rank-float-sheet { display: none !important; }
+  .rank-sheet-backdrop { display: none !important; }
 }
+
+/* Backdrop — dims the page behind the sheet */
+.rank-sheet-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 8999;
+  background: rgba(0,0,0,0.55);
+  opacity: 0;
+  transition: opacity .25s ease;
+  pointer-events: none;
+}
+.rank-sheet-backdrop.open {
+  display: block;
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Drag affordance — cursor hint on the handle row */
+.rfs-top-row {
+  cursor: grab;
+  user-select: none;
+}
+.rfs-top-row:active { cursor: grabbing; }
 
 /* -- RANK DETAIL PANEL: sticky fill-height on desktop -- */
 .rank-detail-sticky {
@@ -1434,7 +1480,6 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 .codes-table-wrap {
   width: 100%;
   overflow-x: auto;
-  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   margin: 0;
 }
