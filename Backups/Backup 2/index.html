@@ -324,21 +324,21 @@
           <div class="compare-slots-row">
             <div class="compare-slot" id="compare-slot-a">
               <div class="compare-slot-label">Tier A</div>
-              <div class="compare-slot-tier" id="slot-a-tier">-</div>
+              <div class="compare-slot-tier" id="slot-a-tier">—</div>
               <div class="compare-slot-mult" id="slot-a-mult" style="display:none;"></div>
               <div class="compare-slot-empty-hint" id="slot-a-hint">Drag or tap a tier row</div>
             </div>
             <div class="compare-vs-divider">VS</div>
             <div class="compare-slot" id="compare-slot-b">
               <div class="compare-slot-label">Tier B</div>
-              <div class="compare-slot-tier" id="slot-b-tier">-</div>
+              <div class="compare-slot-tier" id="slot-b-tier">—</div>
               <div class="compare-slot-mult" id="slot-b-mult" style="display:none;"></div>
               <div class="compare-slot-empty-hint" id="slot-b-hint">Drag or tap a tier row</div>
             </div>
           </div>
           <div class="compare-step-hint" id="compare-step-hint">👇 Drag or tap any tier row to select Tier A</div>
           <button class="compare-reset-btn" onclick="resetCompareSlots()">↺ Reset Selection</button>
-          <div class="compare-drag-hint"><span class="drag-icon">☰</span> Drag rows onto slots - works on mobile too</div>
+          <div class="compare-drag-hint"><span class="drag-icon">☰</span> Drag rows onto slots — works on mobile too</div>
         </div>
         <div class="tier-hint" id="tier-hint">👆 tap a row to see tips &amp; advice</div>
         <!-- Table header -->
@@ -555,20 +555,6 @@
           </div>
         </div>
         <div class="method-card">
-          <div class="method-icon">🎁</div>
-          <div>
-            <div class="method-title">Daily Rewards &nbsp;<span style="font-size:0.63rem;background:rgba(46,168,232,0.2);color:#2ea8e8;padding:2px 8px;border-radius:5px;font-weight:800;">CONSISTENT</span></div>
-            <div class="method-desc">Logging in each day and collecting your <span style="color:#2ea8e8;font-weight:800;">Daily Reward</span> grants Locks and Rerolls among its rotating drops. Streak bonuses on later days (such as Day 7) increase yields significantly.</div>
-          </div>
-        </div>
-        <div class="method-card">
-          <div class="method-icon">⏱️</div>
-          <div>
-            <div class="method-title">Playtime Rewards &nbsp;<span style="font-size:0.63rem;background:rgba(74,222,128,0.2);color:#4ade80;padding:2px 8px;border-radius:5px;font-weight:800;">PASSIVE</span></div>
-            <div class="method-desc">The <span style="color:#4ade80;font-weight:800;">Playtime Rewards</span> system grants bundles of Locks, Rerolls, and other items as you accumulate time in-game. Check it regularly to claim milestones as they unlock.</div>
-          </div>
-        </div>
-        <div class="method-card">
           <div class="method-icon">📺</div>
           <div>
             <div class="method-title">Watch Ad - Free Rewards</div>
@@ -682,195 +668,41 @@
 
     <!-- Special Ranks sub-tab -->
     <div id="others-special-ranks" class="others-subtab">
-
-      <!-- Special Ranks Hero Panel -->
-      <div class="sr-hero-outer" style="margin-bottom:22px;">
-        <div class="sr-hero-panel">
-          <div class="hero-grid-bg"></div>
-          <div class="sr-hero-content">
-            <div class="sr-hero-eyebrow">✦ Passive Bonuses</div>
-            <div class="sr-hero-title">Special Ranks</div>
-            <div class="sr-hero-desc">Special Ranks are rare cosmetic titles earned through limited-time events and event crates. Each rank grants passive percentage boosts to Time, GrandTime, and Fragments - bonuses that remain active at all times, even when the rank isn't equipped.</div>
-            <div class="sr-hero-pills">
-              <div class="sr-pill sr-pill-gold">🏆 <span>Earn via Events</span></div>
-              <div class="sr-pill sr-pill-blue">⚡ <span>Always-On Boosts</span></div>
-              <div class="sr-pill sr-pill-purple">✦ <span>Stack with Each Other</span></div>
-              <div class="sr-pill sr-pill-green">🎟️ <span>Event Crates</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Current Event: Crates -->
-      <div class="game-panel sr-info-panel" data-no-tilt style="margin-bottom:18px;">
-        <div class="panel-bar" style="background:linear-gradient(135deg,#1a0a40,#4a1a9a);"><span>🎟️ Current Event - Crates</span></div>
-        <div class="panel-body">
-          <p class="sr-info-text">The current event features a <strong>Crates system</strong> where you open crates of different rarities to win Special Ranks and other rewards. Crates come in <span class="sr-ct common">Common</span>, <span class="sr-ct rare">Rare</span>, <span class="sr-ct special">Special</span>, and <span class="sr-ct event">Event</span> tiers - each with a different pool of possible ranks.</p>
-          <div class="sr-crates-grid sr-crates-grid-4">
-            <div class="sr-crate-card sr-crate-common">
-              <div class="sr-crate-icon">📦</div>
-              <div class="sr-crate-name">Common Crate</div>
-              <div class="sr-crate-sub">Lower rarity ranks</div>
-            </div>
-            <div class="sr-crate-card sr-crate-rare">
-              <div class="sr-crate-icon">💠</div>
-              <div class="sr-crate-name">Rare Crate</div>
-              <div class="sr-crate-sub">Mid-tier ranks</div>
-            </div>
-            <div class="sr-crate-card sr-crate-special">
-              <div class="sr-crate-icon">✨</div>
-              <div class="sr-crate-name">Special Crate</div>
-              <div class="sr-crate-sub">High-rarity ranks</div>
-            </div>
-            <div class="sr-crate-card sr-crate-event">
-              <div class="sr-crate-icon">🎟️</div>
-              <div class="sr-crate-name">Event Crate</div>
-              <div class="sr-crate-sub">Exclusive event ranks</div>
-            </div>
-          </div>
-          <div class="sr-info-coming-soon">
-            <span class="sr-cs-icon">⏳</span>
-            <div>
-              <div class="sr-cs-title">Drop Rates Coming Soon</div>
-              <div class="sr-cs-sub">Exact percentage chances per crate type are being gathered and will be added here shortly.</div>
-            </div>
-          </div>
-          <div class="sr-info-note">💡 You can also obtain extra crates and rewards from the <strong>Playtime Rewards</strong> section in-game.</div>
-        </div>
-      </div>
-
-      <!-- How to Use / Equip Special Ranks -->
-      <div class="game-panel sr-info-panel" data-no-tilt style="margin-bottom:22px;">
-        <div class="panel-bar" style="background:linear-gradient(135deg,#0a2a20,#0d7a4a);"><span>📖 How to Obtain &amp; Equip Special Ranks</span></div>
-        <div class="panel-body">
-          <div class="sr-steps">
-            <div class="sr-step">
-              <div class="sr-step-num">1</div>
-              <div class="sr-step-body">
-                <div class="sr-step-title">Open Crates</div>
-                <div class="sr-step-desc">Earn crates through the active event or from the <strong>Playtime Rewards</strong> section. Tap the <strong>More</strong> button in-game, then open the <strong>Storage</strong> icon and open your crates. You may receive a Special Rank as a reward.</div>
-              </div>
-            </div>
-            <div class="sr-step">
-              <div class="sr-step-num">2</div>
-              <div class="sr-step-body">
-                <div class="sr-step-title">Equip the Rank</div>
-                <div class="sr-step-desc">After receiving a Special Rank, return to <strong>Storage</strong>, locate the rank, and tap it. Select <strong>Equip</strong> to wear it as your displayed title.</div>
-              </div>
-            </div>
-            <div class="sr-step">
-              <div class="sr-step-num">3</div>
-              <div class="sr-step-body">
-                <div class="sr-step-title">Boosts Are Always Active</div>
-                <div class="sr-step-desc">You do <strong>not</strong> need to equip a rank for its boosts to apply. <strong>All passive boosts are active at all times</strong>, regardless of which rank (if any) is currently displayed.</div>
-              </div>
-            </div>
-          </div>
-          <div class="sr-info-note" style="margin-top:14px;">⚡ Equipping a rank only changes your visible title - it does <strong>not</strong> affect your passive boosts in any way.</div>
-        </div>
-      </div>
-
-      <div class="hero-2col rank-layout" style="margin-bottom:20px; align-items:start;">
-
-        <!-- LEFT: rank badge list - single column -->
+      <div class="section-sub" style="margin-bottom:16px;">Special ranks available in Waste Time - each with unique passive bonuses.</div>
+      <div class="hero-2col" style="margin-bottom:20px; align-items:start;">
         <div class="game-panel" data-no-tilt>
           <div class="panel-bar blue"><span>🏆 Special Ranks</span></div>
-          <div class="panel-body" style="display:flex; flex-direction:column; gap:6px;" id="rank-badge-list">
-
-            <!-- Secret -->
-            <div class="rank-rarity-divider">
-              <span class="rank-rarity-label rarity-secret">✦ Secret</span>
-            </div>
-            <div class="rank-badge rarity-secret" onclick="showRankDetail('???')">✦ ???</div>
-
-            <!-- Exotic -->
-            <div class="rank-rarity-divider">
-              <span class="rank-rarity-label rarity-exotic">✦ Exotic</span>
-            </div>
-            <div class="rank-badge rarity-exotic rank-badge-legacy" onclick="showRankDetail('cupid')">✦ Cupid <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
-            <div class="rank-badge rarity-exotic" onclick="showRankDetail('nitrogen')">✦ Nitrogen</div>
-            <div class="rank-badge rarity-exotic" onclick="showRankDetail('accretion')">✦ Accretion <span class="rank-badge-note">Event Crate</span></div>
-
-            <!-- Mythic -->
-            <div class="rank-rarity-divider">
-              <span class="rank-rarity-label rarity-mythic">✦ Mythic</span>
-            </div>
-            <div class="rank-badge rarity-mythic rank-badge-legacy" onclick="showRankDetail('fourleaf')">✦ Four Leaf <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
-            <div class="rank-badge rarity-mythic rank-badge-legacy" onclick="showRankDetail('chronos')">✦ Chronos <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
-            <div class="rank-badge rarity-mythic" onclick="showRankDetail('lord')">✦ Lord</div>
-
-            <!-- Legendary -->
-            <div class="rank-rarity-divider">
-              <span class="rank-rarity-label rarity-legendary">✦ Legendary</span>
-            </div>
-            <div class="rank-badge rarity-legendary" onclick="showRankDetail('ethereal')">✦ Ethereal</div>
-            <div class="rank-badge rarity-legendary rank-badge-legacy" onclick="showRankDetail('valentine')">✦ Valentine <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
-
-            <!-- Epic -->
-            <div class="rank-rarity-divider">
-              <span class="rank-rarity-label rarity-epic">✦ Epic</span>
-            </div>
-            <div class="rank-badge rarity-epic rank-badge-legacy" onclick="showRankDetail('heart')">✦ Heart <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
-            <div class="rank-badge rarity-epic rank-badge-legacy" onclick="showRankDetail('goldcoin')">✦ Gold Coin <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
-            <div class="rank-badge rarity-epic" onclick="showRankDetail('bejeweled')">✦ Bejeweled</div>
-
-            <!-- Rare -->
-            <div class="rank-rarity-divider">
-              <span class="rank-rarity-label rarity-rare">✦ Rare</span>
-            </div>
-            <div class="rank-badge rarity-rare rank-badge-legacy" onclick="showRankDetail('lucky')">✦ Lucky <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
-            <div class="rank-badge rarity-rare rank-badge-legacy" onclick="showRankDetail('poseidon')">✦ Poseidon <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
-            <div class="rank-badge rarity-rare" onclick="showRankDetail('devoted')">✦ Devoted <span class="rank-badge-note">Day 7</span></div>
-
-            <!-- Common -->
-            <div class="rank-rarity-divider">
-              <span class="rank-rarity-label rarity-common">✦ Common</span>
-            </div>
-            <div class="rank-badge rarity-common rank-badge-legacy" onclick="showRankDetail('flame')">✦ Flame <span class="rank-badge-note rank-badge-note-legacy">Legacy</span></div>
-
-          </div><!-- end rank-badge-list panel-body -->
-          <div id="rank-mobile-hint">👆 Tap a rank to see its details</div>
-        </div>
-        <div class="game-panel rank-detail-sticky" id="rank-detail-panel">
-          <div class="panel-bar dark"><span>📋 Rank Details</span></div>
-          <div class="panel-body rank-detail-body-fill" id="rank-detail-body">
-            <!-- Empty on first load -->
-            <div id="rank-detail-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;height:100%;min-height:220px;color:rgba(255,255,255,0.22);text-align:center;">
-              <div style="font-size:2.6rem;opacity:0.3;">🏆</div>
-              <div style="font-size:0.82rem;font-weight:700;letter-spacing:0.05em;line-height:1.6;">Select a rank on the left<br>to view its passive boosts</div>
-            </div>
-            <!-- Populated by JS -->
-            <div id="rank-detail-content" style="display:none;"></div>
+          <div class="panel-body" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="rank-badge ethereal">✦ ETHEREAL</div>
+            <div class="rank-badge gold-coin">✦ Gold Coin</div>
+            <div class="rank-badge lucky">✦ Lucky</div>
+            <div class="rank-badge flame">✦ Flame</div>
+            <div class="rank-badge generic">- More ranks incoming -</div>
           </div>
         </div>
-
-      </div><!-- end hero-2col -->
-
-      <!-- Full Rank Table -->
+        <div class="game-panel">
+          <div class="panel-bar dark"><span>📋 Rank Details</span></div>
+          <div class="panel-body">
+            <div class="card-label pink">Passive Boosts</div>
+            <div class="card-body">- Data incoming -</div>
+          </div>
+        </div>
+      </div>
       <div class="game-panel" data-no-tilt>
         <div class="panel-bar dark"><span>📊 Full Rank Table</span></div>
         <div class="panel-body" style="padding:0;">
-          <div class="codes-table-wrap">
           <table class="styled-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Rank Name</th>
-                <th>Rarity</th>
-                <th style="text-align:center;">+% Time</th>
-                <th style="text-align:center;">+% GrandTime</th>
-                <th style="text-align:center;">+% Fragments</th>
-                <th>Availability</th>
-              </tr>
-            </thead>
-            <tbody id="rank-table-body">
-              <!-- Populated by JS -->
+            <thead><tr><th>#</th><th>Rank Name</th><th>Requirement</th><th>Perks</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>-</td><td>-</td><td>-</td></tr>
+              <tr><td>2</td><td>-</td><td>-</td><td>-</td></tr>
+              <tr><td>3</td><td>-</td><td>-</td><td>-</td></tr>
+              <tr><td>4</td><td>-</td><td>-</td><td>-</td></tr>
+              <tr><td>5</td><td>-</td><td>-</td><td>-</td></tr>
             </tbody>
           </table>
-          </div>
         </div>
       </div>
-
     </div>
 
     <!-- Gamepasses sub-tab -->
@@ -934,7 +766,7 @@
   <!-- FAQ -->
   <div id="tab-faq" class="tab-panel">
     <div class="section-title">FAQ</div>
-    <div class="section-sub">- Questions incoming -</div>
+    <div class="section-sub">— Questions incoming —</div>
     <div class="coming-soon" style="margin-top:12px;">
       <span class="coming-soon-icon">❓</span>
       <h3>FAQ Coming Soon</h3>
@@ -958,13 +790,7 @@
     <div class="modal-scroll">
       <div class="card-title" style="font-size:1.15rem;margin-bottom:10px;">Chapter 4 Expansion!</div>
       <div class="card-body" style="margin-bottom:18px;">A new chapter is coming soon with exciting content and features! <a href="https://www.roblox.com/events/8559186972063302292">Join the event</a> to get notified when it drops. See the sneak peeks for a hint at what's to come!</div>
-      <div class="modal-img-hero" onerror="this.style.display='none'">
-        <img src="img/Chapter 4 Teaser.png" alt="Chapter 4 Teaser" onerror="this.closest('.modal-img-hero').style.display='none'">
-        <div class="modal-img-caption">
-          <span class="modal-img-tag">✦ Sneak Peek</span>
-          <span class="modal-img-title">Chapter 4 Expansion</span>
-        </div>
-      </div>
+      <img src="img/Chapter 4 Teaser.png" alt="Chapter 4 Teaser" style="width:100%;border-radius:8px;box-shadow:0 0 18px rgba(168,85,247,0.3);margin-bottom:20px;" onerror="this.style.display='none'">
       <div class="countdown-wrapper" style="max-width:100%;">
         <div class="countdown-label-top">CHAPTER 4 EXPANSION DROPS IN</div>
         <div class="countdown-display" id="countdownDisplay">
@@ -1030,9 +856,9 @@
 
 <!-- Bottom-right UI stack: BtT + achievement always stacked, never overlapping -->
 <div id="ui-stack-br">
-  <!-- Back to top button - listed first so column-reverse places it at the bottom -->
+  <!-- Back to top button — listed first so column-reverse places it at the bottom -->
   <button id="back-to-top" title="Back to top" aria-label="Back to top"></button>
-  <!-- Achievement popup container - listed second so column-reverse floats it above BtT -->
+  <!-- Achievement popup container — listed second so column-reverse floats it above BtT -->
   <div id="achievement-popup" class="achievement-popup">
     <div class="achievement-icon" id="ach-icon">🏆</div>
     <div class="achievement-text-wrap">

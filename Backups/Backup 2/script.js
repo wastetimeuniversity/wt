@@ -2,42 +2,47 @@
 (function(){
   const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
   let W,H; const rsz=()=>{W=c.width=innerWidth;H=c.height=innerHeight}; rsz(); addEventListener('resize',rsz);
-
-  // Mobile/low-power: fewer particles, throttled frame rate
-  const isMobile = window.matchMedia('(max-width: 768px)').matches || navigator.maxTouchPoints > 0;
-  const PARTICLE_COUNT = isMobile ? 22 : 55;
-  const FRAME_MS = isMobile ? 50 : 0; // ~20fps on mobile, unlocked on desktop
-
-  // tiny white particles
-  const pts=Array.from({length:PARTICLE_COUNT},()=>({
+  // tiny white particles - very low alpha, slow drift
+  const pts=Array.from({length:55},()=>({
     x:Math.random()*3000,y:Math.random()*2000,
     r:.3+Math.random()*.8,
     vx:(Math.random()-.5)*.04,vy:-.008-.04*Math.random(),
     a:.02+Math.random()*.05,
     tp:Math.random()*Math.PI*2,ts:.002+Math.random()*.004
   }));
-  // cursor position tracked for bg glow - starts off-screen, only on desktop
+  // cursor position tracked for bg glow - starts off-screen
   let mx=-9999,my=-9999;
-  if (!isMobile) {
-    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-  }
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 
-  // Slow-drifting ambient blobs
+  // Slow-drifting ambient blobs - each has a phase offset so they move independently
+  // These are the page-level gradient washes, drawn on the full-screen canvas
   const blobs = [
-    { col: '217,70,180', alpha: 0.13, bx: 0.18, by: 0.28, r: 0.38, phase: 0, speed: 0.00018, ax: 0.07, ay: 0.05 },
-    { col: '46,168,232', alpha: 0.11, bx: 0.82, by: 0.72, r: 0.34, phase: Math.PI * 0.66, speed: 0.00022, ax: 0.06, ay: 0.07 },
-    { col: '168,85,247', alpha: 0.09, bx: 0.50, by: 0.48, r: 0.30, phase: Math.PI * 1.33, speed: 0.00015, ax: 0.08, ay: 0.06 },
+    { // pink - top-left drift
+      col: '217,70,180', alpha: 0.13,
+      bx: 0.18, by: 0.28, r: 0.38,
+      phase: 0, speed: 0.00018, ax: 0.07, ay: 0.05
+    },
+    { // blue - bottom-right drift
+      col: '46,168,232', alpha: 0.11,
+      bx: 0.82, by: 0.72, r: 0.34,
+      phase: Math.PI * 0.66, speed: 0.00022, ax: 0.06, ay: 0.07
+    },
+    { // purple - centre drift
+      col: '168,85,247', alpha: 0.09,
+      bx: 0.50, by: 0.48, r: 0.30,
+      phase: Math.PI * 1.33, speed: 0.00015, ax: 0.08, ay: 0.06
+    },
   ];
 
-  let t = 0, _rafId = null, _animPaused = false, _lastFrame = 0;
+  let t = 0;
+  let _rafId = null;
+  let _animPaused = false;
 
-  function loop(ts){
+  function loop(){
     if (_animPaused) { _rafId = null; return; }
-    // Throttle on mobile
-    if (FRAME_MS > 0 && ts - _lastFrame < FRAME_MS) { _rafId = requestAnimationFrame(loop); return; }
-    _lastFrame = ts;
     t++; ctx.clearRect(0,0,W,H);
 
+    // --- Full-page ambient colour blobs ---
     blobs.forEach(b => {
       b.phase += b.speed * (Math.PI * 2);
       const cx = (b.bx + Math.sin(b.phase)           * b.ax) * W;
@@ -51,8 +56,8 @@
       ctx.fillRect(0, 0, W, H);
     });
 
-    // cursor glow - desktop only
-    if(!isMobile && mx>-9999){
+    // cursor glow - subtle brightness on the background only
+    if(mx>-9999){
       const cg=ctx.createRadialGradient(mx,my,0,mx,my,220);
       cg.addColorStop(0,'rgba(255,255,255,0.045)');
       cg.addColorStop(1,'transparent');
@@ -69,6 +74,7 @@
     _rafId = requestAnimationFrame(loop);
   }
 
+  // Pause when the tab is backgrounded, resume when it returns
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       _animPaused = true;
@@ -110,11 +116,12 @@ function enhTierClick(row, tier) {
   };
   const d = map[tier]; if (!d) return;
 
-  // Populate inner content then open in next animation frame (no forced reflow)
+  // Populate inner content then animate open
   box.style.borderColor = d.c + '55';
   box.innerHTML = `<div class="enh-detail-inner"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-family:'Lilita One',cursive;font-size:1.15rem;color:${d.c};text-shadow:0 0 10px ${d.c}88;">${tier}</span><span style="font-size:0.78rem;font-weight:800;color:rgba(255,255,255,0.5);">- Selected Tier</span></div><p style="font-size:0.84rem;font-weight:600;color:rgba(255,255,255,0.62);line-height:1.65;margin-bottom:10px;">${d.desc}</p><div style="padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.04);border-left:3px solid ${d.c};font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.5);"><span style="color:${d.c};font-weight:800;">💡 </span>${d.tip}</div></div>`;
-  // Use rAF to let the browser process the innerHTML change before adding the class
-  requestAnimationFrame(() => box.classList.add('open'));
+  // Force reflow then open
+  void box.offsetHeight;
+  box.classList.add('open');
 }
 
 /* -- MODAL SYSTEM -- */
@@ -176,251 +183,6 @@ function showOthersTab(name) {
   try { localStorage.setItem('wt_others_subtab', name); } catch(_){}
 }
 
-/* -- SPECIAL RANKS DATA + INTERACTION -- */
-const SPECIAL_RANKS_DATA = {
-  // ── Currently obtainable ──
-  '???':      { name: '???',        rarity: 'Secret',    boosts: { Time: 0.70, GT: 0.35,  Fragments: 0.20  } },
-  accretion:  { name: 'Accretion',  rarity: 'Exotic',    boosts: { Time: 0.60, GT: 0.30,  Fragments: 0.15  },
-                how: '🎟️ Available via <strong>Event Crates</strong> during limited-time events (e.g. Admin Abuse)' },
-  nitrogen:   { name: 'Nitrogen',   rarity: 'Exotic',    boosts: { Time: 0.60, GT: 0.30,  Fragments: 0.15  } },
-  lord:       { name: 'Lord',       rarity: 'Mythic',    boosts: { Time: 0.50, GT: 0.25,  Fragments: 0.125 } },
-  ethereal:   { name: 'Ethereal',   rarity: 'Legendary', boosts: { Time: 0.40, GT: 0.20,  Fragments: 0.10  },
-                trivia: '✦ First introduced during the Easter Egg event - still obtainable in the current event.' },
-  bejeweled:  { name: 'Bejeweled',  rarity: 'Epic',      boosts: { Time: 0.30, GT: 0.15,  Fragments: 0.075 } },
-  devoted:    { name: 'Devoted',    rarity: 'Rare',      boosts: { Time: 0.20, GT: 0.10,  Fragments: 0.05  },
-                how: '🎁 Reach <strong>Day 7</strong> on the Daily Reward system' },
-
-  // ── Past-event only (unobtainable) ──
-  cupid:      { name: 'Cupid',      rarity: 'Exotic',    boosts: { Time: 0.60, GT: 0.30,  Fragments: 0.15  },
-                unobtainable: true, event: "Valentine's Event" },
-  fourleaf:   { name: 'Four Leaf',  rarity: 'Mythic',    boosts: { Time: 0.50, GT: 0.25,  Fragments: 0.125 },
-                unobtainable: true, event: "St. Patrick's Event" },
-  chronos:    { name: 'Chronos',    rarity: 'Mythic',    boosts: { Time: 0.50, GT: 0.25,  Fragments: 0.125 },
-                unobtainable: true, event: 'Easter Egg Event' },
-  valentine:  { name: 'Valentine',  rarity: 'Legendary', boosts: { Time: 0.40, GT: 0.20,  Fragments: 0.10  },
-                unobtainable: true, event: "Valentine's Event" },
-  heart:      { name: 'Heart',      rarity: 'Epic',      boosts: { Time: 0.30, GT: 0.15,  Fragments: 0.075 },
-                unobtainable: true, event: "Valentine's Event" },
-  goldcoin:   { name: 'Gold Coin',  rarity: 'Epic',      boosts: { Time: 0.30, GT: 0.15,  Fragments: 0.075 },
-                unobtainable: true, event: "St. Patrick's Event" },
-  lucky:      { name: 'Lucky',      rarity: 'Rare',      boosts: { Time: 0.20, GT: 0.10,  Fragments: 0.05  },
-                unobtainable: true, event: "St. Patrick's Event" },
-  poseidon:   { name: 'Poseidon',   rarity: 'Rare',      boosts: { Time: 0.20, GT: 0.10,  Fragments: 0.05  },
-                unobtainable: true, event: 'Easter Egg Event' },
-  flame:      { name: 'Flame',      rarity: 'Common',    boosts: { Time: 0.10, GT: 0.05,  Fragments: 0.025 },
-                unobtainable: true, event: 'Easter Egg Event' },
-};
-
-const RARITY_SLUG = r => r.toLowerCase().replace(/\s+/g, '-');
-
-function showRankDetail(key) {
-  const rank = SPECIAL_RANKS_DATA[key];
-  if (!rank) return;
-
-  // Highlight active badge
-  document.querySelectorAll('#rank-badge-list .rank-badge').forEach(b => b.classList.remove('active-rank'));
-  const clickedBadge = [...document.querySelectorAll('#rank-badge-list .rank-badge')]
-    .find(b => b.getAttribute('onclick') === `showRankDetail('${key}')`);
-  if (clickedBadge) clickedBadge.classList.add('active-rank');
-
-  const rarityClass = 'rarity-' + RARITY_SLUG(rank.rarity);
-  const toPercent = v => '+' + (v * 100).toFixed(v * 100 % 1 === 0 ? 0 : 1) + '%';
-
-  const rarityColors = {
-    'rarity-common':    { main: '#c8c8c8', glow: 'rgba(200,200,200,0.3)',  bg: 'rgba(80,80,80,0.18)' },
-    'rarity-rare':      { main: '#7cc8ff', glow: 'rgba(80,180,255,0.35)',  bg: 'rgba(10,60,130,0.22)' },
-    'rarity-epic':      { main: '#d4a0ff', glow: 'rgba(180,100,255,0.35)', bg: 'rgba(80,10,160,0.22)' },
-    'rarity-legendary': { main: '#ffe066', glow: 'rgba(255,200,50,0.38)',  bg: 'rgba(140,70,0,0.22)' },
-    'rarity-mythic':    { main: '#ff7a9a', glow: 'rgba(255,80,110,0.35)',  bg: 'rgba(140,5,40,0.25)' },
-    'rarity-exotic':    { main: '#40f0e0', glow: 'rgba(40,240,210,0.38)',  bg: 'rgba(0,80,80,0.25)' },
-    'rarity-secret':    { main: '#e0b8ff', glow: 'rgba(200,120,255,0.42)', bg: 'rgba(60,0,120,0.28)' },
-  };
-  const rc = rarityColors[rarityClass] || rarityColors['rarity-common'];
-
-  const maxBoosts = { Time: 0.70, GT: 0.35, Fragments: 0.20 };
-
-  // Build tile with bar starting at 0 (animated to real value after paint)
-  const boostTile = (id, icon, label, value, barColor, bgColor, maxVal) => {
-    const percent = Math.round((value / maxVal) * 100);
-    return `<div class="rank-boost-tile" style="--tile-accent:${barColor};--tile-bg:${bgColor};">
-        <div class="rbt-icon">${icon}</div>
-        <div class="rbt-body">
-          <div class="rbt-label">${label}</div>
-          <div class="rbt-value" style="color:${barColor};">${toPercent(value)}</div>
-          <div class="rbt-bar-track"><div class="rbt-bar-fill" id="${id}" data-pct="${percent}" style="width:0%;background:${barColor};"></div></div>
-          <div class="rbt-pct-note">${percent}% of max boost</div>
-        </div>
-      </div>`;
-  };
-
-  const howHtml = rank.how
-    ? `<div class="rank-how-to-get" style="border-color:${rc.main}33;"><span class="rank-how-icon">📍</span><span>${rank.how}</span></div>`
-    : '';
-
-  const unobtainableHtml = rank.unobtainable
-    ? `<div class="rank-unobtainable-banner"><span class="rank-unob-icon">🔒</span><div><div class="rank-unob-title">No Longer Obtainable</div><div class="rank-unob-sub">This rank was exclusive to the <strong>${rank.event}</strong> and is no longer available.</div></div></div>`
-    : '';
-
-  const triviaHtml = rank.trivia
-    ? `<div class="rank-trivia-note"><span>💡</span><span>${rank.trivia}</span></div>`
-    : '';
-
-  const barIdBase = 'rbt-bar-' + key;
-
-  const html = `<div class="rank-detail-card-inner">
-      <div class="rank-detail-header-row">
-        <div class="rank-detail-name-block">
-          <div class="rank-detail-name-big" style="color:${rc.main};">${rank.name}</div>
-          <div class="rank-detail-rarity-chip ${rarityClass}">${rank.rarity}</div>
-        </div>
-        <div class="rank-detail-emblem" style="background:${rc.bg};border-color:${rc.main}33;">
-          <span class="rank-detail-emblem-star" style="color:${rc.main};">✦</span>
-        </div>
-      </div>
-      ${unobtainableHtml}
-      ${howHtml}
-      <div class="rank-passive-header-new" style="border-color:${rc.main}33;">
-        <span style="color:${rc.main};">⚡</span> Passive Boosts
-        <span class="rank-always-on">Always Active</span>
-      </div>
-      <div class="rank-boost-tiles">
-        ${boostTile(barIdBase+'-t',  '⏱️', 'Time',      rank.boosts.Time,      '#f5a623', 'rgba(245,166,35,0.07)', maxBoosts.Time)}
-        ${boostTile(barIdBase+'-g',  '⌛', 'GrandTime', rank.boosts.GT,        '#40d0ff', 'rgba(64,208,255,0.07)', maxBoosts.GT)}
-        ${boostTile(barIdBase+'-fr', '💎', 'Fragments', rank.boosts.Fragments, '#4ade80', 'rgba(74,222,128,0.07)', maxBoosts.Fragments)}
-      </div>
-      ${triviaHtml}
-      <div class="rank-detail-footer-note">
-        <span style="color:${rc.main};opacity:0.6;">✦</span>
-        Boosts are passive and apply even when this rank isn't equipped
-      </div>
-    </div>`;
-
-  document.getElementById('rank-detail-empty').style.display = 'none';
-  const content = document.getElementById('rank-detail-content');
-  content.style.opacity = '0';
-  content.innerHTML = html;
-  content.style.display = 'block';
-
-  // Animate in: fade + slide
-  requestAnimationFrame(() => {
-    content.style.transition = 'opacity .18s ease, transform .18s ease';
-    content.style.transform = 'translateY(6px)';
-    requestAnimationFrame(() => {
-      content.style.opacity = '1';
-      content.style.transform = 'translateY(0)';
-      // Animate progress bars after a tiny delay so they "fill in"
-      setTimeout(() => {
-        [barIdBase+'-t', barIdBase+'-g', barIdBase+'-fr'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.style.width = el.dataset.pct + '%';
-        });
-      }, 60);
-    });
-  });
-
-  if (window.matchMedia('(max-width: 760px)').matches) {
-    _showRankFloatingSheet(html, barIdBase);
-    const hint = document.getElementById('rank-mobile-hint');
-    if (hint) hint.style.display = 'none';
-  }
-}
-
-/* ---- Floating rank detail sheet for narrow screens ---- */
-function _showRankFloatingSheet(innerHtml, barIdBase) {
-  let sheet = document.getElementById('rank-float-sheet');
-  if (!sheet) {
-    sheet = document.createElement('div');
-    sheet.id = 'rank-float-sheet';
-    sheet.className = 'rank-float-sheet';
-    sheet.innerHTML = `
-      <div class="rfs-top-row">
-        <div class="rfs-handle"></div>
-        <button class="rfs-close" onclick="closeRankFloatingSheet()" aria-label="Close">✕</button>
-      </div>
-      <div class="rfs-body" id="rfs-body"></div>
-    `;
-    document.body.appendChild(sheet);
-  }
-  document.getElementById('rfs-body').innerHTML = innerHtml;
-  requestAnimationFrame(() => {
-    sheet.classList.add('open');
-    // Animate bars after sheet slides in
-    setTimeout(() => {
-      [barIdBase+'-t', barIdBase+'-g', barIdBase+'-fr'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.width = el.dataset.pct + '%';
-      });
-    }, 120);
-  });
-}
-
-function closeRankFloatingSheet() {
-  const sheet = document.getElementById('rank-float-sheet');
-  if (sheet) sheet.classList.remove('open');
-}
-
-/* Auto-close floating sheet when rank table scrolls into full view */
-(function setupRankTableObserver() {
-  document.addEventListener('DOMContentLoaded', () => {
-    const rankTablePanel = document.querySelector('#others-special-ranks .game-panel:last-of-type');
-    if (!rankTablePanel) return;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.35) {
-          const sheet = document.getElementById('rank-float-sheet');
-          if (sheet) sheet.classList.remove('open');
-        }
-      });
-    }, { threshold: 0.35 });
-    observer.observe(rankTablePanel);
-  });
-})();
-
-/* Build the rank table on page load */
-(function buildRankTable() {
-  const rarityOrder = ['Secret','Exotic','Mythic','Legendary','Epic','Rare','Common'];
-  const sorted = Object.entries(SPECIAL_RANKS_DATA).sort((a, b) => {
-    return rarityOrder.indexOf(a[1].rarity) - rarityOrder.indexOf(b[1].rarity);
-  });
-  const tbody = document.getElementById('rank-table-body');
-  if (!tbody) return;
-  const toPercent = v => '+' + (v * 100).toFixed(v * 100 % 1 === 0 ? 0 : 1) + '%';
-  sorted.forEach(([key, rank], i) => {
-    const rarityClass = 'rarity-' + RARITY_SLUG(rank.rarity);
-    const tr = document.createElement('tr');
-    if (rank.unobtainable) tr.classList.add('rank-row-legacy');
-    tr.style.cursor = 'pointer';
-    tr.title = 'Click to view passive boosts';
-    tr.onclick = () => {
-      showOthersTab('special-ranks');
-      showRankDetail(key);
-      document.getElementById('rank-detail-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    };
-
-    let availHtml;
-    if (rank.unobtainable) {
-      availHtml = `<span class="rt-avail rt-avail-legacy" title="${rank.event}">🔒 Legacy</span>`;
-    } else if (key === 'accretion') {
-      availHtml = `<span class="rt-avail rt-avail-event">🎟️ Event Crate</span>`;
-    } else if (rank.how && rank.how.includes('Day 7')) {
-      availHtml = `<span class="rt-avail rt-avail-daily">🎁 Daily Reward</span>`;
-    } else {
-      availHtml = `<span class="rt-avail rt-avail-active">✅ Active Event</span>`;
-    }
-
-    tr.innerHTML = `
-      <td>${i + 1}</td>
-      <td style="font-weight:800;">${rank.name}</td>
-      <td><span class="rt-rarity ${rarityClass}">${rank.rarity}</span></td>
-      <td style="text-align:center;color:#f5a623;font-weight:800;">${toPercent(rank.boosts.Time)}</td>
-      <td style="text-align:center;color:#40d0ff;font-weight:800;">${toPercent(rank.boosts.GT)}</td>
-      <td style="text-align:center;color:#4ade80;font-weight:800;">${toPercent(rank.boosts.Fragments)}</td>
-      <td>${availHtml}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-})();
-
 /* -- ROBLOX LIVE STATS (hardcoded values only) -- */
 (function loadHardcodedRobloxStats() {
   const stats = {
@@ -444,10 +206,10 @@ function closeRankFloatingSheet() {
     if (el) el.textContent = v;
   };
 
-  setText('stat-active', stats.playing > 0 ? fmt(stats.playing) : '-');
-  setText('stat-visits', stats.visits > 0 ? fmt(stats.visits) : '-');
-  setText('stat-favorites', stats.favoritedCount > 0 ? fmt(stats.favoritedCount) : '-');
-  setText('stat-likes', stats.likeCount > 0 ? fmt(stats.likeCount) : '-');
+  setText('stat-active', stats.playing > 0 ? fmt(stats.playing) : '—');
+  setText('stat-visits', stats.visits > 0 ? fmt(stats.visits) : '—');
+  setText('stat-favorites', stats.favoritedCount > 0 ? fmt(stats.favoritedCount) : '—');
+  setText('stat-likes', stats.likeCount > 0 ? fmt(stats.likeCount) : '—');
   setText('stat-maxplayers', stats.maxPlayers ?? '-');
 
   // Only show the live badge when there are real active players
@@ -463,7 +225,7 @@ function closeRankFloatingSheet() {
     const el = document.getElementById('codes-section-sub');
     if (!el) return;
     if (activeRows === 0) {
-      el.textContent = 'No active codes right now - check back soon!';
+      el.textContent = 'No active codes right now — check back soon!';
     } else if (activeRows === 1) {
       el.textContent = 'There is 1 active code right now. Redeem it before it expires!';
     } else {
@@ -665,11 +427,8 @@ staggerPills('[id^="others-pill-"]');
   });
 })();
 
-/* -- ENHANCED MOUSE TRAIL - desktop only, pooled + throttled -- */
+/* -- ENHANCED MOUSE TRAIL - pooled + throttled, alternates pink/blue/gold -- */
 (function(){
-  // Skip entirely on touch devices - no cursor, no benefit
-  if (navigator.maxTouchPoints > 0 || window.matchMedia('(max-width: 768px)').matches) return;
-
   const COLS = ['rgba(217,70,180,0.7)','rgba(46,168,232,0.7)','rgba(245,166,35,0.6)','rgba(168,85,247,0.7)'];
   const POOL_SIZE = 24;
   const pool = [];
@@ -689,7 +448,7 @@ staggerPills('[id^="others-pill-"]');
 
   document.addEventListener('mousemove', e => {
     const now = performance.now();
-    if (now - lastTrail < 32) return; // ~30fps cap - no visual difference, huge perf gain
+    if (now - lastTrail < 32) return; // ~30fps cap — no visual difference, huge perf gain
     lastTrail = now;
 
     const slot = acquire();
@@ -708,8 +467,8 @@ staggerPills('[id^="others-pill-"]');
   }, { passive: true });
 })();
 
-/* -- NAV SPARKLES -- desktop only -- */
-if (!navigator.maxTouchPoints) document.querySelectorAll('.nav-btn').forEach(btn=>{
+/* -- NAV SPARKLES -- */
+document.querySelectorAll('.nav-btn').forEach(btn=>{
   btn.addEventListener('mouseenter',()=>{
     for(let i=0;i<3;i++){
       const s=document.createElement('div'),r=btn.getBoundingClientRect();
@@ -720,11 +479,8 @@ if (!navigator.maxTouchPoints) document.querySelectorAll('.nav-btn').forEach(btn
   });
 });
 
-/* -- CLICK BURST - desktop only, pooled -- */
+/* -- CLICK BURST - pooled, suppressed on interactive elements -- */
 (function(){
-  // Skip on touch devices - the 80 pooled elements waste memory and DOM events are different
-  if (navigator.maxTouchPoints > 0 || window.matchMedia('(max-width: 768px)').matches) return;
-
   const BURST_COLS = ['#d946b4','#2ea8e8','#f5a623','#a855f7','#22c45e','#ffffff'];
   const SHAPES = ['●','✦','★','◆','✸','⬡'];
   const SUPPRESS_TAGS = new Set(['BUTTON','A','INPUT','TEXTAREA','SELECT']);
@@ -856,7 +612,6 @@ if (!navigator.maxTouchPoints) document.querySelectorAll('.nav-btn').forEach(btn
 (function(){
   const MAX = 6;
   function tiltOn(e){
-    this.style.willChange = 'transform';
     // Override the .sr transition so tilt is instant, not 0.6s delayed
     this.style.transition = 'box-shadow .2s, transform 0.04s ease';
     const r = this.getBoundingClientRect();
@@ -870,9 +625,6 @@ if (!navigator.maxTouchPoints) document.querySelectorAll('.nav-btn').forEach(btn
     this.style.transition = 'box-shadow .2s, transform .35s ease';
     this.style.transform = '';
     this.style.boxShadow = '';
-    // Remove will-change after transition settles
-    const el = this;
-    setTimeout(() => { el.style.willChange = ''; }, 400);
   }
   document.querySelectorAll('.game-panel:not([data-no-tilt]),.quick-stat:not([data-no-tilt])').forEach(el => {
     el.addEventListener('mousemove', tiltOn);
@@ -1131,7 +883,7 @@ function animateCountUp(el, targetStr) {
     const elMult = document.getElementById('slot-' + slot + '-mult');
     const elHint = document.getElementById('slot-' + slot + '-hint');
     if (!elSlot) return;
-    elTier.textContent = '-';
+    elTier.textContent = '—';
     elTier.style.color = '';
     elTier.style.textShadow = '';
     elMult.style.display = 'none';
@@ -1149,7 +901,7 @@ function animateCountUp(el, targetStr) {
       hint.textContent = '👇 Now drag or tap a second tier row for Tier B';
       hint.classList.remove('done');
     } else {
-      hint.textContent = '✓ Comparison ready - see results below';
+      hint.textContent = '✓ Comparison ready — see results below';
       hint.classList.add('done');
     }
   }
@@ -1601,7 +1353,7 @@ function animateCountUp(el, targetStr) {
 (function(){
   const milestones = [
     { secs: 60,  icon: '⏱️', title: 'Time Scholar',      sub: '1 minute on the Wiki!' },
-    { secs: 300, icon: '🎲', title: 'Reroll Enthusiast', sub: '5 minutes - you deserve a P+ roll' },
+    { secs: 300, icon: '🎲', title: 'Reroll Enthusiast', sub: '5 minutes — you deserve a P+ roll' },
     { secs: 600, icon: '✦',  title: 'Waste Time Legend', sub: '10 minutes of dedication!' },
   ];
   const earned = new Set();

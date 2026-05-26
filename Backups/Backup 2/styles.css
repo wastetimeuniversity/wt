@@ -54,19 +54,13 @@ body {
   font-size: 15px;
   min-height: 100vh;
   overflow-x: hidden;
-}
-/* Grid texture via a fixed pseudo-element avoids per-scroll repaint */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
+  /* grid + faint halftone texture */
   background-image:
     linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px),
     radial-gradient(circle, rgba(255,255,255,0.018) 1px, transparent 1px);
   background-size: 48px 48px, 48px 48px, 18px 18px;
+  background-attachment: fixed;
 }
 
 #bg-canvas {
@@ -209,7 +203,9 @@ body::before {
    - Optional colored border
 ============================================= */
 .game-panel {
-  background: rgba(15,15,20,0.92);
+  background: rgba(15,15,20,0.60);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-radius: 12px;
   overflow: hidden;
   box-shadow:
@@ -494,7 +490,7 @@ body::before {
   isolation: isolate;
 }
 
-/* The travelling glow border - a conic-gradient that rotates around the perimeter */
+/* The travelling glow border — a conic-gradient that rotates around the perimeter */
 .hero-panel-outer::before {
   content: '';
   position: absolute;
@@ -550,7 +546,7 @@ body::before {
   position: relative;
   z-index: 2;
 }
-/* inner ambient colour wash - no border pseudo-element needed anymore */
+/* inner ambient colour wash — no border pseudo-element needed anymore */
 .hero-panel::after {
   content: '';
   position: absolute;
@@ -611,721 +607,6 @@ body::before {
 .rank-badge.flame    { color:#ffaa60; border-color:#f06010; background:linear-gradient(135deg,rgba(180,60,0,0.3),rgba(249,115,22,0.15)); text-shadow:0 0 12px rgba(255,140,50,0.7); box-shadow:0 0 14px rgba(249,115,22,0.3), 0 3px 0 rgba(100,30,0,0.8); }
 .rank-badge.generic  { color:#fff; border-color:rgba(255,255,255,0.25); background:rgba(255,255,255,0.07); }
 @keyframes etherealPulse { 0%,100%{box-shadow:0 0 18px rgba(168,85,247,0.35),0 3px 0 rgba(60,10,120,0.8)} 50%{box-shadow:0 0 32px rgba(200,120,255,0.6),0 3px 0 rgba(60,10,120,0.8)} }
-
-/* -- RARITY-BASED RANK BADGES -- */
-.rank-badge { cursor:pointer; display:block; width:100%; text-align:left; }
-.rank-badge.active-rank { transform:scale(1.03); outline:2px solid rgba(255,255,255,0.25); }
-
-/* Common */
-.rank-badge.rarity-common { color:#c8c8c8; border-color:#707070; background:linear-gradient(135deg,rgba(80,80,80,0.3),rgba(160,160,160,0.12)); text-shadow:0 0 8px rgba(200,200,200,0.5); box-shadow:0 0 10px rgba(130,130,130,0.2), 0 3px 0 rgba(40,40,40,0.8); }
-/* Rare */
-.rank-badge.rarity-rare { color:#7cc8ff; border-color:#2277cc; background:linear-gradient(135deg,rgba(10,60,130,0.3),rgba(46,168,232,0.15)); text-shadow:0 0 12px rgba(80,180,255,0.7); box-shadow:0 0 14px rgba(46,168,232,0.28), 0 3px 0 rgba(8,40,90,0.8); }
-/* Epic */
-.rank-badge.rarity-epic { color:#d4a0ff; border-color:#8830e0; background:linear-gradient(135deg,rgba(80,10,160,0.3),rgba(168,85,247,0.18)); text-shadow:0 0 12px rgba(180,100,255,0.7); box-shadow:0 0 14px rgba(168,85,247,0.3), 0 3px 0 rgba(50,5,100,0.8); }
-/* Legendary */
-.rank-badge.rarity-legendary { color:#ffe066; border-color:#d48800; background:linear-gradient(135deg,rgba(140,70,0,0.3),rgba(245,166,35,0.18)); text-shadow:0 0 14px rgba(255,200,50,0.8), 0 0 28px rgba(245,166,35,0.4); box-shadow:0 0 18px rgba(245,166,35,0.35), 0 3px 0 rgba(90,45,0,0.8); animation:legendaryPulse 3s ease-in-out infinite; }
-@keyframes legendaryPulse { 0%,100%{box-shadow:0 0 14px rgba(245,166,35,0.3),0 3px 0 rgba(90,45,0,0.8)} 50%{box-shadow:0 0 28px rgba(255,200,50,0.55),0 3px 0 rgba(90,45,0,0.8)} }
-/* Mythic */
-.rank-badge.rarity-mythic { color:#ff7a9a; border-color:#c0103a; background:linear-gradient(135deg,rgba(140,5,40,0.35),rgba(224,50,80,0.18)); text-shadow:0 0 12px rgba(255,80,110,0.75); box-shadow:0 0 16px rgba(220,40,70,0.35), 0 3px 0 rgba(80,0,20,0.8); animation:mythicPulse 2.8s ease-in-out infinite; }
-@keyframes mythicPulse { 0%,100%{box-shadow:0 0 14px rgba(220,40,70,0.3),0 3px 0 rgba(80,0,20,0.8)} 50%{box-shadow:0 0 30px rgba(255,80,110,0.55),0 3px 0 rgba(80,0,20,0.8)} }
-/* Exotic */
-.rank-badge.rarity-exotic { color:#40f0e0; border-color:#009980; background:linear-gradient(135deg,rgba(0,80,80,0.35),rgba(6,182,212,0.18)); text-shadow:0 0 14px rgba(40,240,210,0.8), 0 0 28px rgba(6,182,212,0.4); box-shadow:0 0 18px rgba(6,182,212,0.35), 0 3px 0 rgba(0,50,50,0.8); animation:exoticPulse 2.4s ease-in-out infinite; }
-@keyframes exoticPulse { 0%,100%{box-shadow:0 0 16px rgba(6,182,212,0.32),0 3px 0 rgba(0,50,50,0.8)} 50%{box-shadow:0 0 32px rgba(40,240,210,0.6),0 3px 0 rgba(0,50,50,0.8)} }
-/* Secret */
-.rank-badge.rarity-secret { color:#fff; border-color:rgba(255,255,255,0.4); background:linear-gradient(135deg,rgba(60,0,120,0.4),rgba(180,0,120,0.2),rgba(0,80,180,0.2)); text-shadow:0 0 12px rgba(255,255,255,0.9), 0 0 28px rgba(200,100,255,0.6); box-shadow:0 0 22px rgba(180,80,255,0.4), 0 3px 0 rgba(20,0,50,0.9); animation:secretPulse 1.8s ease-in-out infinite; background-size:200% 200%; }
-@keyframes secretPulse { 0%{box-shadow:0 0 18px rgba(180,80,255,0.4),0 3px 0 rgba(20,0,50,0.9);filter:hue-rotate(0deg)} 50%{box-shadow:0 0 36px rgba(80,200,255,0.55),0 3px 0 rgba(20,0,50,0.9);filter:hue-rotate(120deg)} 100%{box-shadow:0 0 18px rgba(255,80,180,0.4),0 3px 0 rgba(20,0,50,0.9);filter:hue-rotate(240deg)} }
-
-/* -- RANK RARITY DIVIDERS -- */
-.rank-rarity-divider { display:flex; align-items:center; gap:8px; margin:8px 0 4px; }
-.rank-rarity-divider::before, .rank-rarity-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.07); }
-.rank-rarity-label { font-size:0.62rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; white-space:nowrap; padding:0 4px; }
-.rank-rarity-label.rarity-common   { color:#a0a0a0; }
-.rank-rarity-label.rarity-rare     { color:#7cc8ff; }
-.rank-rarity-label.rarity-epic     { color:#c084fc; }
-.rank-rarity-label.rarity-legendary{ color:#ffe066; }
-.rank-rarity-label.rarity-mythic   { color:#ff7a9a; }
-.rank-rarity-label.rarity-exotic   { color:#40f0e0; }
-.rank-rarity-label.rarity-secret   { color:#e0b8ff; }
-
-/* -- RANK DETAIL PANEL -- */
-.rank-detail-rarity-chip {
-  display:inline-block;
-  font-size:0.62rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase;
-  padding:3px 10px; border-radius:20px; border:1.5px solid transparent;
-  margin-bottom:0;
-}
-.rank-detail-rarity-chip.rarity-common    { color:#c8c8c8; border-color:#707070; background:rgba(80,80,80,0.25); }
-.rank-detail-rarity-chip.rarity-rare      { color:#7cc8ff; border-color:#2277cc; background:rgba(10,60,130,0.25); }
-.rank-detail-rarity-chip.rarity-epic      { color:#d4a0ff; border-color:#8830e0; background:rgba(80,10,160,0.25); }
-.rank-detail-rarity-chip.rarity-legendary { color:#ffe066; border-color:#d48800; background:rgba(140,70,0,0.25); }
-.rank-detail-rarity-chip.rarity-mythic    { color:#ff7a9a; border-color:#c0103a; background:rgba(140,5,40,0.28); }
-.rank-detail-rarity-chip.rarity-exotic    { color:#40f0e0; border-color:#009980; background:rgba(0,80,80,0.28); }
-.rank-detail-rarity-chip.rarity-secret    { color:#e0b8ff; border-color:rgba(200,120,255,0.5); background:rgba(60,0,120,0.3); }
-
-/* -- RANK DETAIL CARD INNER LAYOUT -- */
-.rank-detail-card-inner {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 0;
-  padding: 2px 0;
-}
-
-.rank-detail-header-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.rank-detail-name-block {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
-.rank-detail-name-big {
-  font-family: 'Lilita One', cursive;
-  font-size: clamp(1.3rem, 3vw, 1.75rem);
-  letter-spacing: 0.04em;
-  line-height: 1.1;
-}
-
-.rank-detail-emblem {
-  flex-shrink: 0;
-  width: 52px; height: 52px;
-  border-radius: 12px;
-  border: 1.5px solid transparent;
-  display: flex; align-items: center; justify-content: center;
-  transition: box-shadow .3s;
-}
-
-.rank-detail-emblem-star {
-  font-size: 1.8rem;
-  display: block;
-  animation: rankStarSpin 6s linear infinite;
-}
-
-@keyframes rankStarSpin {
-  0%,100% { transform: scale(1) rotate(0deg); }
-  25%      { transform: scale(1.12) rotate(8deg); }
-  75%      { transform: scale(0.92) rotate(-8deg); }
-}
-
-.rank-passive-header-new {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.72rem; font-weight: 800;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
-  display: flex; align-items: center; gap: 8px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid transparent;
-  margin-bottom: 12px;
-}
-
-.rank-always-on {
-  margin-left: auto;
-  font-size: 0.6rem; font-weight: 800;
-  letter-spacing: 0.1em;
-  padding: 2px 8px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.3);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-/* -- BOOST TILES -- */
-.rank-boost-tiles {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
-
-.rank-boost-tile {
-  background: var(--tile-bg, rgba(255,255,255,0.04));
-  border: 1px solid rgba(255,255,255,0.07);
-  border-left: 3px solid var(--tile-accent, rgba(255,255,255,0.2));
-  border-radius: 10px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: border-color .2s, box-shadow .2s, transform .15s;
-  flex: 1;
-  min-height: 0;
-}
-
-.rank-boost-tile:hover {
-  border-color: var(--tile-accent, rgba(255,255,255,0.2));
-  transform: translateX(2px);
-}
-
-.rbt-icon {
-  font-size: 1.4rem;
-  flex-shrink: 0;
-  width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.04);
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.07);
-}
-
-.rbt-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.rbt-label {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.68rem; font-weight: 800;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-  margin-bottom: 2px;
-}
-
-.rbt-value {
-  font-family: 'Lilita One', cursive;
-  font-size: 1.35rem;
-  line-height: 1.1;
-  margin-bottom: 6px;
-}
-
-.rbt-bar-track {
-  height: 5px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-bottom: 4px;
-}
-
-.rbt-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width .6s cubic-bezier(0.34, 1.3, 0.64, 1);
-}
-
-.rbt-pct-note {
-  font-size: 0.6rem; font-weight: 800;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.22);
-}
-
-.rank-detail-footer-note {
-  margin-top: 12px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.025);
-  border: 1px solid rgba(255,255,255,0.06);
-  font-size: 0.72rem; font-weight: 700; font-style: italic;
-  color: rgba(255,255,255,0.32);
-  line-height: 1.5;
-  display: flex; align-items: flex-start; gap: 6px;
-}
-
-/* Legacy compat - keep for table coloring */
-.rank-boost-time      { color:#f5a623; }
-.rank-boost-grandtime { color:#40d0ff; }
-.rank-boost-frags     { color:#4ade80; }
-
-/* -- BAR FILL TRANSITION (desktop - smooth fill on open) -- */
-.rbt-bar-fill {
-  transition: width .55s cubic-bezier(0.34, 1.2, 0.64, 1);
-}
-
-/* -- RARITY CHIP: fixed uniform size so all chips look identical -- */
-.rank-detail-rarity-chip {
-  min-width: 88px;
-  text-align: center;
-}
-
-/* -- TABLE: availability pills -- */
-.rt-avail {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 0.68rem; font-weight: 800;
-  letter-spacing: 0.06em;
-  padding: 3px 9px;
-  border-radius: 20px;
-  border: 1px solid transparent;
-  white-space: nowrap;
-}
-.rt-avail-active  { background:rgba(34,196,94,0.12);  border-color:rgba(34,196,94,0.3);  color:#4ade80; }
-.rt-avail-event   { background:rgba(168,85,247,0.12); border-color:rgba(168,85,247,0.3); color:#c084fc; }
-.rt-avail-daily   { background:rgba(46,168,232,0.12); border-color:rgba(46,168,232,0.3); color:#60c8ff; }
-.rt-avail-legacy  { background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.12);color:rgba(255,255,255,0.3); }
-
-/* -- TABLE: legacy rows are dimmed -- */
-tr.rank-row-legacy td { opacity: 0.45; }
-tr.rank-row-legacy:hover td { opacity: 0.75; }
-
-/* -- BADGE: legacy style -- */
-.rank-badge-legacy { opacity: 0.5; }
-.rank-badge-legacy:hover { opacity: 0.8; }
-
-.rank-badge-note-legacy {
-  background: rgba(255,255,255,0.06) !important;
-  color: rgba(255,255,255,0.3) !important;
-  border-color: rgba(255,255,255,0.1) !important;
-}
-
-/* -- UNOBTAINABLE BANNER in rank detail -- */
-.rank-unobtainable-banner {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 13px;
-  border-radius: 9px;
-  background: rgba(255,60,60,0.07);
-  border: 1px solid rgba(255,80,80,0.22);
-  margin-bottom: 12px;
-}
-.rank-unob-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
-.rank-unob-title {
-  font-size: 0.78rem; font-weight: 900;
-  color: rgba(255,140,140,0.9);
-  letter-spacing: 0.04em;
-  margin-bottom: 2px;
-}
-.rank-unob-sub {
-  font-size: 0.72rem; font-weight: 700;
-  color: rgba(255,255,255,0.4);
-  line-height: 1.5;
-}
-.rank-unob-sub strong { color: rgba(255,200,200,0.7); font-weight: 800; }
-
-/* -- TRIVIA NOTE in rank detail -- */
-.rank-trivia-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 7px;
-  padding: 7px 11px;
-  border-radius: 8px;
-  background: rgba(255,220,80,0.05);
-  border: 1px solid rgba(255,220,80,0.18);
-  font-size: 0.73rem; font-weight: 700;
-  color: rgba(255,220,100,0.6);
-  line-height: 1.5;
-  margin-top: 10px;
-}
-
-/* -- CRATES SECTION -- */
-
-.sr-info-text {
-  font-size: 0.84rem; font-weight: 600;
-  color: rgba(255,255,255,0.55);
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-.sr-info-text strong { color: rgba(255,255,255,0.8); font-weight: 800; }
-
-.sr-ct { font-weight: 800; }
-.sr-ct.common  { color: #c8c8c8; }
-.sr-ct.rare    { color: #7cc8ff; }
-.sr-ct.special { color: #d4a0ff; }
-
-.sr-crates-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.sr-crate-card {
-  border-radius: 10px;
-  padding: 14px 12px 12px;
-  border: 1.5px solid transparent;
-  text-align: center;
-  transition: transform .15s;
-}
-.sr-crate-card:hover { transform: translateY(-2px); }
-
-.sr-crate-common  { background:rgba(200,200,200,0.05); border-color:rgba(200,200,200,0.18); }
-.sr-crate-rare    { background:rgba(80,180,255,0.06);  border-color:rgba(80,180,255,0.25); }
-.sr-crate-special { background:rgba(180,100,255,0.07); border-color:rgba(180,100,255,0.28); }
-
-.sr-crate-icon { font-size: 1.6rem; margin-bottom: 6px; }
-.sr-crate-name {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.78rem; font-weight: 900;
-  letter-spacing: 0.04em;
-  margin-bottom: 3px;
-}
-.sr-crate-common  .sr-crate-name { color: #c8c8c8; }
-.sr-crate-rare    .sr-crate-name { color: #7cc8ff; }
-.sr-crate-special .sr-crate-name { color: #d4a0ff; }
-.sr-crate-sub {
-  font-size: 0.68rem; font-weight: 700;
-  color: rgba(255,255,255,0.3);
-}
-
-.sr-info-coming-soon {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 13px;
-  border-radius: 9px;
-  background: rgba(245,166,35,0.06);
-  border: 1px solid rgba(245,166,35,0.2);
-  margin-bottom: 12px;
-}
-.sr-cs-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
-.sr-cs-title {
-  font-size: 0.8rem; font-weight: 900;
-  color: rgba(245,190,60,0.85);
-  margin-bottom: 2px;
-}
-.sr-cs-sub {
-  font-size: 0.72rem; font-weight: 700;
-  color: rgba(255,255,255,0.38);
-  line-height: 1.5;
-}
-
-.sr-info-note {
-  font-size: 0.76rem; font-weight: 700;
-  color: rgba(255,255,255,0.38);
-  line-height: 1.6;
-  padding: 8px 12px;
-  border-radius: 7px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-}
-.sr-info-note strong { color: rgba(255,255,255,0.65); font-weight: 800; }
-
-/* -- HOW TO EQUIP: numbered steps -- */
-.sr-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 4px;
-}
-.sr-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 13px;
-}
-.sr-step-num {
-  flex-shrink: 0;
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: rgba(46,168,232,0.15);
-  border: 1.5px solid rgba(46,168,232,0.35);
-  color: #60c8ff;
-  font-family: 'Lilita One', cursive;
-  font-size: 0.9rem;
-  display: flex; align-items: center; justify-content: center;
-}
-.sr-step-title {
-  font-size: 0.82rem; font-weight: 900;
-  color: rgba(255,255,255,0.75);
-  margin-bottom: 3px;
-  letter-spacing: 0.02em;
-}
-.sr-step-desc {
-  font-size: 0.78rem; font-weight: 600;
-  color: rgba(255,255,255,0.42);
-  line-height: 1.65;
-}
-.sr-step-desc strong { color: rgba(255,255,255,0.7); font-weight: 800; }
-
-.sr-crate-event   { background:rgba(245,166,35,0.07);  border-color:rgba(245,166,35,0.28); }
-.sr-crate-event   .sr-crate-name { color: #ffc84a; }
-
-.sr-ct.event { color: #ffc84a; font-weight: 800; }
-
-.sr-crates-grid-4 { grid-template-columns: repeat(4, 1fr); }
-
-@media (max-width: 560px) {
-  .sr-crates-grid, .sr-crates-grid-4 { grid-template-columns: 1fr 1fr; }
-}
-
-/* -- HOW TO GET note in rank detail card -- */
-.rank-how-to-get {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid transparent;
-  font-size: 0.78rem; font-weight: 700;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.5;
-  margin-bottom: 12px;
-}
-.rank-how-to-get strong { color: rgba(255,255,255,0.8); font-weight: 800; }
-.rank-how-icon { flex-shrink: 0; }
-
-/* -- RANK BADGE NOTE chip (e.g. "Day 7", "Event") -- */
-.rank-badge-note {
-  display: inline-block;
-  font-size: 0.55rem; font-weight: 800;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  padding: 1px 6px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.45);
-  border: 1px solid rgba(255,255,255,0.14);
-  margin-left: 6px;
-  vertical-align: middle;
-  font-family: 'Nunito', sans-serif;
-  pointer-events: none;
-}
-
-/* =============================================
-   SPECIAL RANKS HERO PANEL
-   ============================================= */
-.sr-hero-outer {
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1.5px solid rgba(245,166,35,0.2);
-  box-shadow: 0 0 32px rgba(245,166,35,0.08), 0 12px 40px rgba(0,0,0,0.65);
-}
-
-.sr-hero-panel {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  padding: 26px 22px 22px;
-  background: rgba(9, 10, 18, 0.95);
-}
-
-/* Reuse the same animated grid as the home hero */
-.sr-hero-panel .hero-grid-bg { border-radius: 12px; }
-
-.sr-hero-panel::after {
-  content: '';
-  position: absolute;
-  inset: -18%;
-  border-radius: 40%;
-  background:
-    radial-gradient(circle at 12% 35%, rgba(245,166,35,0.12), transparent 28%),
-    radial-gradient(circle at 82% 20%, rgba(168,85,247,0.10), transparent 25%),
-    radial-gradient(circle at 50% 80%, rgba(46,168,232,0.08), transparent 22%);
-  mix-blend-mode: screen;
-  opacity: 0.8;
-  animation: heroPanelColorShift 20s ease-in-out infinite;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.sr-hero-content {
-  position: relative;
-  z-index: 2;
-}
-
-.sr-hero-eyebrow {
-  font-size: 0.62rem; font-weight: 800;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 6px;
-  text-shadow: 0 0 12px rgba(245,166,35,0.5);
-}
-
-.sr-hero-title {
-  font-family: 'Lilita One', cursive;
-  font-size: clamp(1.4rem, 4vw, 2rem);
-  letter-spacing: 0.03em;
-  background: linear-gradient(135deg, #ffffff 0%, #ffe8a0 40%, #ffd060 80%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 2px 6px rgba(245,166,35,0.3));
-  margin-bottom: 10px;
-  line-height: 1.1;
-}
-
-.sr-hero-desc {
-  font-size: 0.86rem; font-weight: 600;
-  color: rgba(255,255,255,0.55);
-  line-height: 1.7;
-  max-width: 640px;
-  margin-bottom: 16px;
-}
-
-.sr-hero-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.sr-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 13px;
-  border-radius: 20px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.74rem; font-weight: 800;
-  letter-spacing: 0.04em;
-  border: 1.5px solid transparent;
-}
-
-.sr-pill-gold   { background: rgba(245,166,35,0.1);  border-color: rgba(245,166,35,0.3);  color: #ffc84a; }
-.sr-pill-blue   { background: rgba(46,168,232,0.1);  border-color: rgba(46,168,232,0.3);  color: #60c8ff; }
-.sr-pill-purple { background: rgba(168,85,247,0.1);  border-color: rgba(168,85,247,0.3);  color: #c084fc; }
-.sr-pill-green  { background: rgba(34,196,94,0.1);   border-color: rgba(34,196,94,0.3);   color: #4ade80; }
-
-/* ---- Performance: kill CPU-heavy animations on low-end / mobile ---- */
-@media (max-width: 760px) {
-  /* Disable glow pulsing on rank badges - these run continuously and are the main FPS killer */
-  .rank-badge.rarity-legendary,
-  .rank-badge.rarity-mythic,
-  .rank-badge.rarity-exotic,
-  .rank-badge.rarity-secret,
-  .rank-badge.rarity-legendary { animation: none !important; }
-
-  /* Disable the emblem star wobble in the sheet */
-  .rank-detail-emblem-star { animation: none !important; }
-
-  /* Simpler sheet bg - no gradient repaint */
-  .rank-float-sheet { will-change: transform; }
-
-  /* Disable bar fill spring bounce on mobile (simple linear is faster to paint) */
-  .rbt-bar-fill { transition: width .3s linear; }
-
-  /* Disable tile hover transform on touch (no hover state anyway, but belt-and-suspenders) */
-  .rank-boost-tile { transition: none; }
-}
-
-/* =============================================
-   FLOATING RANK DETAIL SHEET (narrow screens)
-   ============================================= */
-.rank-float-sheet {
-  display: block;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  z-index: 9000;
-  background: #13131a;
-  border-top: 2px solid rgba(168,85,247,0.3);
-  border-radius: 18px 18px 0 0;
-  padding: 0 16px 28px;
-  box-shadow: 0 -8px 32px rgba(0,0,0,0.8);
-  /* Use transform only (GPU-composited) - no opacity animation to keep it light */
-  transform: translateY(100%);
-  transition: transform .28s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-  /* Prevent content from exceeding viewport */
-  max-height: 72vh;
-  overflow: hidden;
-}
-
-.rank-float-sheet.open {
-  transform: translateY(0);
-  pointer-events: all;
-}
-
-/* Top row: handle centred, close button to the right, both in the same flex row */
-.rfs-top-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 10px 0 8px;
-  flex-shrink: 0;
-}
-
-.rfs-handle {
-  width: 36px; height: 4px;
-  background: rgba(255,255,255,0.14);
-  border-radius: 2px;
-}
-
-.rfs-close {
-  position: absolute;
-  right: 0; top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  color: rgba(255,255,255,0.45);
-  font-size: 0.82rem;
-  width: 28px; height: 28px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .15s, color .12s;
-  line-height: 1;
-}
-.rfs-close:hover { background: rgba(220,50,50,0.22); color: #ff8080; }
-
-/* Body: no scrollbar, content just sits inside */
-.rfs-body {
-  overflow: hidden;
-  padding-top: 4px;
-}
-
-/* Compact tiles inside the sheet */
-.rfs-body .rank-boost-tiles { gap: 8px; }
-.rfs-body .rank-boost-tile  { padding: 9px 12px; }
-.rfs-body .rbt-value        { font-size: 1.15rem; margin-bottom: 4px; }
-.rfs-body .rank-detail-name-big { font-size: 1.2rem; }
-.rfs-body .rank-detail-header-row { margin-bottom: 10px; }
-.rfs-body .rank-passive-header-new { margin-bottom: 8px; padding-bottom: 8px; }
-.rfs-body .rank-detail-footer-note { margin-top: 8px; padding: 6px 10px; font-size: 0.68rem; }
-.rfs-body .rank-how-to-get { padding: 7px 10px; margin-bottom: 8px; font-size: 0.74rem; }
-
-/* On wide screens: floating sheet should NOT appear */
-@media (min-width: 761px) {
-  .rank-float-sheet { display: none !important; }
-}
-
-/* -- RANK DETAIL PANEL: sticky fill-height on desktop -- */
-.rank-detail-sticky {
-  position: sticky;
-  top: 120px;
-  /* Fill available viewport minus the sticky offset and some breathing room */
-  height: calc(100vh - 148px);
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-}
-/* The panel-bar is fixed height; the body stretches to fill the rest */
-.rank-detail-body-fill {
-  flex: 1;
-  min-height: 0;            /* lets flex shrink below content size */
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-/* Centre the empty-state placeholder vertically inside the stretchy body */
-#rank-detail-empty {
-  flex: 1;
-}
-/* rank detail content padding top */
-#rank-detail-content { padding-top: 2px; }
-
-/* -- MOBILE: rank layout (≤ 760px) -- */
-@media (max-width: 760px) {
-  /* On narrow: hide the sticky side panel entirely - use floating sheet instead */
-  .rank-detail-sticky { display: none !important; }
-
-  /* Full width for the badge list */
-  .rank-layout { display: block !important; }
-
-  /* Show the tap hint */
-  #rank-mobile-hint { display: block; }
-
-  /* Badges get a bit more padding for fat thumbs */
-  .rank-badge { padding: 11px 20px; font-size: 1rem; }
-}
-
-/* Hidden by default; shown only on mobile via media query */
-#rank-mobile-hint {
-  display: none;
-  margin-top: 6px;
-  font-size: 0.74rem; font-weight: 700;
-  color: rgba(255,255,255,0.28);
-  text-align: center;
-  letter-spacing: 0.04em;
-}
-
-/* rank table rarity badges */
-.rt-rarity { display:inline-block; font-size:0.68rem; font-weight:800; letter-spacing:0.08em; padding:2px 8px; border-radius:12px; border:1.5px solid transparent; }
-.rt-rarity.rarity-common    { color:#c8c8c8; border-color:#707070; background:rgba(80,80,80,0.2); }
-.rt-rarity.rarity-rare      { color:#7cc8ff; border-color:#2277cc; background:rgba(10,60,130,0.2); }
-.rt-rarity.rarity-epic      { color:#d4a0ff; border-color:#8830e0; background:rgba(80,10,160,0.2); }
-.rt-rarity.rarity-legendary { color:#ffe066; border-color:#d48800; background:rgba(140,70,0,0.2); }
-.rt-rarity.rarity-mythic    { color:#ff7a9a; border-color:#c0103a; background:rgba(140,5,40,0.2); }
-.rt-rarity.rarity-exotic    { color:#40f0e0; border-color:#009980; background:rgba(0,80,80,0.2); }
-.rt-rarity.rarity-secret    { color:#e0b8ff; border-color:rgba(200,120,255,0.4); background:rgba(60,0,120,0.22); }
 
 /* -- STAT ROWS -- */
 .stat-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
@@ -1458,7 +739,9 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 /* -- HOME QUICK STATS -- */
 .quick-stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:12px; }
 .quick-stat {
-  background: rgba(18,18,24,0.92);
+  background: rgba(18,18,24,0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 10px; padding:14px 10px; text-align:center;
   transition: border-color .2s, box-shadow .2s, transform .15s; cursor:default;
@@ -1475,7 +758,7 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 .quick-stat-label { font-size:0.62rem; font-weight:800; color:var(--text-dim); letter-spacing:0.08em; text-transform:uppercase; margin-top:3px; display:block; }
 
 .hero-2col { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-@media(max-width:760px) { .hero-2col{grid-template-columns:1fr} }
+@media(max-width:660px) { .hero-2col{grid-template-columns:1fr} }
 
 /* -- GAME BUTTON STYLES -- */
 /* Used for in-page call-to-action buttons inside cards and navigation panels. */
@@ -1635,8 +918,10 @@ a:active {
 }
 
 /* -- CARD TILT -- */
-/* will-change is applied dynamically by JS on mouseover only */
-/* preserve-3d removed from .game-panel and .quick-stat - unnecessary compositing overhead */
+.game-panel, .quick-stat {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
 
 /* -- SKELETON LOADER -- */
 .skel {
@@ -1812,7 +1097,7 @@ a:active {
 
 /* -- MODAL OVERLAY -- */
 /* When a modal is open, collapse the nav out of the stacking context entirely.
-   Changing position alone isn't enough - backdrop-filter on the overlay creates
+   Changing position alone isn't enough — backdrop-filter on the overlay creates
    its own compositing layer, and any z-index on the nav can bleed through it in
    Chromium. Setting z-index: 0 (and position: relative) puts the nav definitively
    below the modal's z-index: 9999 layer. */
@@ -1825,11 +1110,15 @@ body.modal-open .site-header {
   position: fixed; inset: 0; z-index: 9999;
   display: flex; align-items: center; justify-content: center;
   background: rgba(0,0,0,0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
   pointer-events: none;
-  transition: background 0.28s ease;
+  transition: background 0.32s ease, backdrop-filter 0.32s ease;
 }
 .modal-overlay.open {
-  background: rgba(0,0,0,0.72);
+  background: rgba(0,0,0,0.62);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   pointer-events: all;
 }
 .modal-box {
@@ -1939,79 +1228,6 @@ body.modal-open .site-header {
   letter-spacing: 0.04em;
 }
 
-/* -- MODAL IMAGE HERO -- */
-.modal-img-hero {
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 22px;
-  border: 1.5px solid rgba(168,85,247,0.35);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04),
-    0 4px 24px rgba(0,0,0,0.7),
-    0 0 48px rgba(168,85,247,0.15);
-}
-.modal-img-hero img {
-  width: 100%;
-  display: block;
-  aspect-ratio: 16/7;
-  object-fit: cover;
-  object-position: center 25%;
-  filter: saturate(1.2) brightness(0.88);
-  transition: transform 0.6s ease, filter 0.6s ease;
-  transform-origin: center center;
-}
-.modal-img-hero:hover img {
-  transform: scale(1.04);
-  filter: saturate(1.35) brightness(0.95);
-}
-/* Bottom gradient fade over the image */
-.modal-img-hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(8,6,18,0.82) 0%,
-    rgba(8,6,18,0.35) 35%,
-    transparent 65%
-  );
-  pointer-events: none;
-}
-/* Caption tag positioned at bottom-left */
-.modal-img-caption {
-  position: absolute;
-  bottom: 13px;
-  left: 14px;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  pointer-events: none;
-}
-.modal-img-title {
-  font-family: 'Lilita One', cursive;
-  font-size: 1.05rem;
-  color: #fff;
-  text-shadow: 0 0 20px rgba(168,85,247,0.9), 0 2px 6px rgba(0,0,0,0.9);
-  letter-spacing: 0.03em;
-}
-.modal-img-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 9px;
-  border-radius: 20px;
-  background: rgba(168,85,247,0.25);
-  border: 1px solid rgba(168,85,247,0.55);
-  font-size: 0.6rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  color: #e0aaff;
-  text-transform: uppercase;
-  backdrop-filter: blur(4px);
-}
-
 /* Improved animation for .tab-panel */
 @keyframes fadeUp {
   from { opacity:0; transform:translateY(18px); }
@@ -2052,10 +1268,12 @@ body.modal-open .site-header {
   margin-bottom: 5px;
   border: 1.5px solid transparent;
   cursor: pointer;
+  /* only transition properties that don't conflict with tierGlowPulse animation */
   transition: background .18s, border-color .18s;
   position: relative;
   background: rgba(255,255,255,0.02);
   overflow: hidden;
+  will-change: box-shadow;
 }
 .tier-row::after {
   content: '';
@@ -2068,25 +1286,12 @@ body.modal-open .site-header {
   transition: opacity .18s;
 }
 .tier-row:hover::after { opacity: 0.22; }
-/* hover: background + border via transition, glow via a composited pseudo-element */
+/* hover: background + border via transition, glow via animation — no !important needed */
 .tier-row:hover {
   background: rgba(255,255,255,0.05);
   border-color: rgba(255,255,255,0.18);
+  animation: tierGlowPulse 1.2s ease-in-out infinite;
 }
-/* Glow pseudo-element - animating opacity is GPU-composited, no repaint */
-.tier-row::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 8px;
-  box-shadow: 0 0 22px var(--tier-color, rgba(255,255,255,0.2)),
-              inset 0 0 8px var(--tier-color, rgba(255,255,255,0.06));
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-  z-index: 0;
-}
-.tier-row:hover::before { opacity: 1; }
 .tier-row.active {
   background: rgba(255,255,255,0.06);
   border-color: rgba(255,255,255,0.15);
@@ -2130,7 +1335,19 @@ body.modal-open .site-header {
 /* ==========================================
    FEATURE 1 – TIER ROW HOVER GLOW (pulsing)
    ========================================== */
-/* tier-row glow now handled by ::before pseudo-element opacity (see above) */
+@keyframes tierGlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--tier-color, rgba(255,255,255,0.16)),
+                0 0 18px rgba(255,255,255,0.06),
+                inset 0 0 4px var(--tier-color, rgba(255,255,255,0.06));
+  }
+  50% {
+    box-shadow: 0 0 22px var(--tier-color, rgba(255,255,255,0.35)),
+                0 0 36px var(--tier-color, rgba(255,255,255,0.14)),
+                inset 0 0 10px var(--tier-color, rgba(255,255,255,0.10));
+  }
+}
+/* tier-row hover glow animation keyframes */
 
 /* ── Compare toggle button ── */
 .compare-toggle-btn {
@@ -2307,7 +1524,10 @@ body.modal-open .site-header {
   color: rgba(255,255,255,0.65);
 }
 
-/* Result card inside compare box - richer layout - inherits from existing rules, extra style below */
+/* Result card inside compare box - richer layout */
+#tier-compare-box .compare-inner {
+  /* Inherits from existing rules - extra style below */
+}
 .compare-result-card {
   display: flex;
   align-items: stretch;
