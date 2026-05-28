@@ -324,21 +324,21 @@
           <div class="compare-slots-row">
             <div class="compare-slot" id="compare-slot-a">
               <div class="compare-slot-label">Tier A</div>
-              <div class="compare-slot-tier" id="slot-a-tier">-</div>
+              <div class="compare-slot-tier" id="slot-a-tier">—</div>
               <div class="compare-slot-mult" id="slot-a-mult" style="display:none;"></div>
               <div class="compare-slot-empty-hint" id="slot-a-hint">Drag or tap a tier row</div>
             </div>
             <div class="compare-vs-divider">VS</div>
             <div class="compare-slot" id="compare-slot-b">
               <div class="compare-slot-label">Tier B</div>
-              <div class="compare-slot-tier" id="slot-b-tier">-</div>
+              <div class="compare-slot-tier" id="slot-b-tier">—</div>
               <div class="compare-slot-mult" id="slot-b-mult" style="display:none;"></div>
               <div class="compare-slot-empty-hint" id="slot-b-hint">Drag or tap a tier row</div>
             </div>
           </div>
           <div class="compare-step-hint" id="compare-step-hint">👇 Drag or tap any tier row to select Tier A</div>
           <button class="compare-reset-btn" onclick="resetCompareSlots()">↺ Reset Selection</button>
-          <div class="compare-drag-hint"><span class="drag-icon">☰</span> Drag rows onto slots - works on mobile too</div>
+          <div class="compare-drag-hint"><span class="drag-icon">☰</span> Drag rows onto slots — works on mobile too</div>
         </div>
         <div class="tier-hint" id="tier-hint">👆 tap a row to see tips &amp; advice</div>
         <!-- Table header -->
@@ -683,95 +683,29 @@
     <!-- Special Ranks sub-tab -->
     <div id="others-special-ranks" class="others-subtab">
 
-      <div class="section-title">🏆 Special Ranks</div>
-      <div class="section-sub">Rare cosmetic titles earned through limited-time events - each granting always-on passive boosts to your core currencies.</div>
-
-      <!-- Updated pill -->
-      <div class="updated-pill"><span class="blink-dot"></span>Last Updated: 18 May 2026, 5:30 PM (UTC)</div>
-
-      <!-- Banner -->
-      <div class="enh-screenshot-wrap">
-        <div class="enh-screenshot" style="min-height:160px;background:linear-gradient(135deg,rgba(168,85,247,0.18) 0%,rgba(46,168,232,0.10) 50%,rgba(245,166,35,0.12) 100%);display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;padding:32px 24px;">
-          <span style="font-size:2.8rem;filter:drop-shadow(0 0 18px rgba(168,85,247,0.7));">✦</span>
-          <div style="text-align:center;">
-            <div style="font-family:'Lilita One',cursive;font-size:1.6rem;color:#fff;letter-spacing:0.04em;text-shadow:0 0 24px rgba(168,85,247,0.8);">Special Ranks</div>
-            <div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.5);margin-top:4px;letter-spacing:0.08em;text-transform:uppercase;">Passive Boosts · Always Active · Stack Together</div>
-          </div>
-          <span style="font-size:2.8rem;filter:drop-shadow(0 0 18px rgba(245,166,35,0.7));">✦</span>
-        </div>
-        <div class="enh-screenshot-overlay">
-          <span class="enh-screenshot-tag">✦ Special Ranks System</span>
-        </div>
-      </div>
-
-      <!-- Intro paragraph -->
-      <div style="padding:16px 18px;border-radius:10px;background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.07);margin-bottom:22px;font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.62);line-height:1.75;">
-        <strong style="color:#fff;font-size:0.95rem;">Special Ranks</strong> are rare cosmetic titles earned through <span style="color:var(--gold);font-weight:800;">limited-time events</span> and <span style="color:#a855f7;font-weight:800;">event crates</span> in Waste Time. Unlike regular ranks, each Special Rank carries <span style="color:#22c45e;font-weight:800;">permanent passive percentage boosts</span> to Time, GrandTime, and Fragments - bonuses that are <span style="color:#2ea8e8;font-weight:800;">always active</span>, even when the rank isn't equipped as your displayed title. Crucially, boosts from <strong style="color:#fff;">all ranks you own stack additively</strong> with each other, making every new rank a meaningful upgrade regardless of which one you have equipped. Older ranks obtained during past events are marked as <span style="color:rgba(255,200,80,0.9);font-weight:800;">Legacy</span> and can no longer be obtained through normal means.
-      </div>
-
-      <!-- Pill row -->
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px;">
-        <span class="enh-pill gold">🏆 Earned via Limited Events</span>
-        <span class="enh-pill blue">⚡ Always-On Passive Boosts</span>
-        <span class="enh-pill purple">✦ All Owned Ranks Stack</span>
-        <span class="enh-pill green">🎟️ Obtained from Event Crates</span>
-      </div>
-
-      <!-- Row 1: What Are They + Why They Matter -->
-      <div class="hero-2col" style="margin-bottom:16px;align-items:start;">
-
-        <div class="game-panel">
-          <div class="panel-bar purple"><span>✦ What Are Special Ranks?</span></div>
-          <div class="panel-body" style="display:flex;flex-direction:column;gap:8px;">
-            <div class="method-card">
-              <div class="method-icon">🎟️</div>
-              <div>
-                <div class="method-title">Earned Through Events</div>
-                <div class="method-desc">Special Ranks drop from <span style="color:#a855f7;font-weight:800;">Event Crates</span> during limited-time events. Crates come in Common, Rare, Special, and Event tiers - each with a different pool of possible ranks.</div>
-              </div>
-            </div>
-            <div class="method-card">
-              <div class="method-icon">⚡</div>
-              <div>
-                <div class="method-title">Always-Active Boosts</div>
-                <div class="method-desc">Every rank you own applies its <span style="color:#22c45e;font-weight:800;">passive % boosts</span> to Time, GrandTime, and Fragments <strong>at all times</strong> - no equipping required. Equipping only changes your visible title.</div>
-              </div>
-            </div>
-            <div class="method-card">
-              <div class="method-icon">✦</div>
-              <div>
-                <div class="method-title">Stacking Bonuses</div>
-                <div class="method-desc">Boosts from all owned ranks <span style="color:#2ea8e8;font-weight:800;">stack additively</span>. Owning multiple ranks compounds your passive income - every rank you earn is a permanent upgrade.</div>
-              </div>
+      <!-- Special Ranks Hero Panel -->
+      <div class="sr-hero-outer" style="margin-bottom:22px;">
+        <div class="sr-hero-panel">
+          <div class="hero-grid-bg"></div>
+          <div class="sr-hero-content">
+            <div class="sr-hero-eyebrow">✦ Passive Bonuses</div>
+            <div class="sr-hero-title">Special Ranks</div>
+            <div class="sr-hero-desc">Special Ranks are rare cosmetic titles earned through limited-time events and event crates. Each rank grants passive percentage boosts to Time, GrandTime, and Fragments — bonuses that remain active at all times, even when the rank isn't equipped.</div>
+            <div class="sr-hero-pills">
+              <div class="sr-pill sr-pill-gold">🏆 <span>Earn via Events</span></div>
+              <div class="sr-pill sr-pill-blue">⚡ <span>Always-On Boosts</span></div>
+              <div class="sr-pill sr-pill-purple">✦ <span>Stack with Each Other</span></div>
+              <div class="sr-pill sr-pill-green">🎟️ <span>Event Crates</span></div>
             </div>
           </div>
         </div>
-
-        <div class="game-panel">
-          <div class="panel-bar gold"><span>⚡ Why Special Ranks Matter</span></div>
-          <div class="panel-body">
-            <div class="stat-row"><div class="stat-label">Boost currencies</div><div class="stat-value" style="color:#2ea8e8;">Time, GrandTime, Fragments</div></div>
-            <div class="stat-row"><div class="stat-label">Boost type</div><div class="stat-value" style="color:#22c45e;">Additive (all ranks stack)</div></div>
-            <div class="stat-row"><div class="stat-label">Equip requirement</div><div class="stat-value" style="color:#a855f7;">None - always active</div></div>
-            <div class="stat-row"><div class="stat-label">Obtained via</div><div class="stat-value" style="color:var(--gold);">Limited events &amp; crates</div></div>
-            <div style="margin-top:14px;padding:12px;border-radius:8px;background:rgba(245,166,35,0.08);border:1.5px solid rgba(245,166,35,0.3);">
-              <div style="font-size:0.75rem;font-weight:800;color:var(--gold);margin-bottom:5px;">⚠️ Time-Limited System</div>
-              <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.6);line-height:1.6;">Special Ranks are only available during <span style="color:var(--gold);font-weight:800;">active events</span>. Legacy ranks from past events <span style="color:#ef4444;font-weight:800;">cannot be re-obtained</span> - if you missed them, they're gone. Participating in every new event is strongly recommended.</div>
-            </div>
-            <div style="margin-top:10px;padding:12px;border-radius:8px;background:rgba(168,85,247,0.08);border:1.5px solid rgba(168,85,247,0.3);">
-              <div style="font-size:0.75rem;font-weight:800;color:#c084fc;margin-bottom:5px;">💡 Stacking Strategy</div>
-              <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.6);line-height:1.6;">Since all rank boosts <span style="color:#a855f7;font-weight:800;">stack additively</span>, collecting every rank you can - even low-rarity ones - adds up meaningfully over time. Prioritise higher-rarity ranks for bigger individual gains, but never skip a free rank.</div>
-            </div>
-          </div>
-        </div>
-
       </div>
 
       <!-- Current Event: Crates -->
       <div class="game-panel sr-info-panel" data-no-tilt style="margin-bottom:18px;">
-        <div class="panel-bar" style="background:linear-gradient(135deg,#6b10c8,#b040ff,#8020e0);box-shadow:0 3px 0 #38088a,0 0 24px rgba(168,85,247,0.5);"><span>🎟️ Current Event - Crates</span></div>
+        <div class="panel-bar" style="background:linear-gradient(135deg,#1a0a40,#4a1a9a);"><span>🎟️ Current Event — Crates</span></div>
         <div class="panel-body">
-          <p class="sr-info-text">The current event features a <strong>Crates system</strong> where you open crates of different rarities to win Special Ranks and other rewards. Crates come in <span class="sr-ct common">Common</span>, <span class="sr-ct rare">Rare</span>, <span class="sr-ct special">Special</span>, and <span class="sr-ct event">Event</span> tiers - each with a different pool of possible ranks.</p>
+          <p class="sr-info-text">The current event features a <strong>Crates system</strong> where you open crates of different rarities to win Special Ranks and other rewards. Crates come in <span class="sr-ct common">Common</span>, <span class="sr-ct rare">Rare</span>, <span class="sr-ct special">Special</span>, and <span class="sr-ct event">Event</span> tiers — each with a different pool of possible ranks.</p>
           <div class="sr-crates-grid sr-crates-grid-4">
             <div class="sr-crate-card sr-crate-common">
               <div class="sr-crate-icon">📦</div>
@@ -807,7 +741,7 @@
 
       <!-- How to Use / Equip Special Ranks -->
       <div class="game-panel sr-info-panel" data-no-tilt style="margin-bottom:22px;">
-        <div class="panel-bar" style="background:linear-gradient(135deg,#0c7830,#18e85a,#10a040);box-shadow:0 3px 0 #064018,0 0 24px rgba(34,196,94,0.5);"><span>📖 How to Obtain &amp; Equip Special Ranks</span></div>
+        <div class="panel-bar" style="background:linear-gradient(135deg,#0a2a20,#0d7a4a);"><span>📖 How to Obtain &amp; Equip Special Ranks</span></div>
         <div class="panel-body">
           <div class="sr-steps">
             <div class="sr-step">
@@ -832,28 +766,15 @@
               </div>
             </div>
           </div>
-          <div class="sr-info-note" style="margin-top:14px;">⚡ Equipping a rank only changes your visible title - it does <strong>not</strong> affect your passive boosts in any way.</div>
+          <div class="sr-info-note" style="margin-top:14px;">⚡ Equipping a rank only changes your visible title — it does <strong>not</strong> affect your passive boosts in any way.</div>
         </div>
       </div>
 
       <div class="hero-2col rank-layout" style="margin-bottom:20px; align-items:start;">
 
-        <!-- LEFT: rank badge list - single column -->
+        <!-- LEFT: rank badge list — single column -->
         <div class="game-panel" data-no-tilt>
           <div class="panel-bar blue"><span>🏆 Special Ranks</span></div>
-          <!-- Filter pills -->
-          <div class="sr-filter-bar-wrap">
-            <div class="sr-filter-bar" id="sr-filter-bar">
-              <button class="sr-filter-pill active" data-rarity="all"       onclick="filterRanks('all',this)">All</button>
-              <button class="sr-filter-pill"        data-rarity="Secret"    onclick="filterRanks('Secret',this)">✦ Secret</button>
-              <button class="sr-filter-pill"        data-rarity="Exotic"    onclick="filterRanks('Exotic',this)">✦ Exotic</button>
-              <button class="sr-filter-pill"        data-rarity="Mythic"    onclick="filterRanks('Mythic',this)">✦ Mythic</button>
-              <button class="sr-filter-pill"        data-rarity="Legendary" onclick="filterRanks('Legendary',this)">✦ Legendary</button>
-              <button class="sr-filter-pill"        data-rarity="Epic"      onclick="filterRanks('Epic',this)">✦ Epic</button>
-              <button class="sr-filter-pill"        data-rarity="Rare"      onclick="filterRanks('Rare',this)">✦ Rare</button>
-              <button class="sr-filter-pill"        data-rarity="Common"    onclick="filterRanks('Common',this)">✦ Common</button>
-            </div>
-          </div>
           <div class="panel-body" style="display:flex; flex-direction:column; gap:6px;" id="rank-badge-list">
 
           <div id="rank-mobile-hint">
@@ -918,7 +839,7 @@
           </div><!-- end rank-badge-list panel-body -->
         </div>
         <div class="game-panel rank-detail-sticky" id="rank-detail-panel">
-          <div class="panel-bar purple"><span>📋 Rank Details</span></div>
+          <div class="panel-bar dark"><span>📋 Rank Details</span></div>
           <div class="panel-body rank-detail-body-fill" id="rank-detail-body">
             <!-- Empty on first load -->
             <div id="rank-detail-empty" class="rank-detail-empty">
@@ -933,8 +854,8 @@
       </div><!-- end hero-2col -->
 
       <!-- Full Rank Table -->
-      <div class="game-panel" id="rank-full-table-panel" data-no-tilt>
-        <div class="panel-bar blue"><span>📊 Full Rank Table</span></div>
+      <div class="game-panel" data-no-tilt>
+        <div class="panel-bar dark"><span>📊 Full Rank Table</span></div>
         <div class="panel-body" style="padding:0;">
           <div class="codes-table-wrap">
           <table class="styled-table">
@@ -962,460 +883,8 @@
 
     <!-- Gamepasses sub-tab -->
     <div id="others-gamepasses" class="others-subtab" style="display:none;">
-      <div class="section-title">🎮 Gamepasses</div>
-      <div class="section-sub" style="margin-bottom:16px;">Permanent perks, quality-of-life upgrades, and chapter-specific multipliers - all purchased once with Robux.</div>
-
-      <!-- Regional pricing warning -->
-      <div class="gp-warning-box">
-        <div class="gp-warning-icon">⚠️</div>
-        <div class="gp-warning-body">
-          <div class="gp-warning-title">Regional Pricing Notice</div>
-          <div class="gp-warning-text">Gamepass prices shown use <span style="color:var(--gold);font-weight:800;">⬡ Robux</span> values as listed in-game. Actual costs may be <strong>higher or lower</strong> for some of the gamepasses depending on your region and platform due to regional pricing being enabled. We have added a warning icon to indicate when this is the case.</div>
-        </div>
-      </div>
-
-      <div class="gp-warning-box">
-        <div class="gp-warning-icon">🎲</div>
-        <div class="gp-warning-body">
-          <div class="gp-warning-title">Exclusion of Locks and Rerolls</div>
-          <div class="gp-warning-text">Gamepasses related to <span style="color:var(--purple);font-weight:800;">🔒 Locks</span> and <span style="color:var(--purple);font-weight:800;">🎲 Rerolls</span> have been excluded from this section due to comparative irrelevance in the scope of the larger in-game mechanics. Refer to the "Shop and Game Passes" section of the <strong>Enhancement</strong> tab for information regarding these.</div>
-        </div>
-      </div>
-
-      <!-- Filter bar -->
-      <div class="gp-filter-bar">
-        <button class="gp-filter-btn active" onclick="filterGamepasses('all', this)">📋 All</button>
-        <button class="gp-filter-btn" onclick="filterGamepasses('misc', this)">⚙️ Miscellaneous</button>
-        <button class="gp-filter-btn" onclick="filterGamepasses('chest', this)">📦 Chests</button>
-        <button class="gp-filter-btn" onclick="filterGamepasses('ch1', this)">📖 Ch1</button>
-        <button class="gp-filter-btn" onclick="filterGamepasses('ch2', this)">📖 Ch2</button>
-        <button class="gp-filter-btn" onclick="filterGamepasses('ch3', this)">📖 Ch3</button>
-        <button class="gp-filter-btn" onclick="filterGamepasses('ch4', this)">📖 Ch4</button>
-      </div>
-
-      <!-- -- MISCELLANEOUS -- -->
-      <div class="gp-section game-panel" data-gp-category="misc" data-no-tilt>
-        <div class="panel-bar purple"><span>⚙️ Miscellaneous Gamepasses</span></div>
-        <div class="panel-body gp-cards-body">
-        <div class="gp-card-grid">
-
-          <div class="gp-card" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">👑</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">Admin Commands</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 319</div>
-              </div>
-            </div>
-            <div class="gp-card-tags">
-              <span class="gp-perm-tag">PERMANENT</span>
-            </div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">
-              <p style="margin-bottom:12px;">Gives you <strong>10 unique commands</strong> - some boost your progress, others let you troll other players.</p>
-              <p style="margin-bottom:12px;">The admin commands available are as follows:</p>
-              <div class="admin-cmd-grid">
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">👟</span><span class="admin-cmd-name">!speed</span></div>
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">🔄</span><span class="admin-cmd-name">!spin</span></div>
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">🏛️</span><span class="admin-cmd-name">!jail</span></div>
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">🧊</span><span class="admin-cmd-name">!freeze</span></div>
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">🔽</span><span class="admin-cmd-name">!tiny</span></div>
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">🌀</span><span class="admin-cmd-name">!gravity</span></div>
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">👁️</span><span class="admin-cmd-name">!nightvision</span></div>
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">⬛</span><span class="admin-cmd-name">!fat</span></div>
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">🧩</span><span class="admin-cmd-name">!neon</span></div>
-                <div class="admin-cmd-tile"><span class="admin-cmd-icon">🪙</span><span class="admin-cmd-name">!gold</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="gp-card gp-card-recommended" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">✈️</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">Fast Travel</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 39</div>
-              </div>
-            </div>
-            <div class="gp-card-tags">
-              <span class="gp-perm-tag">PERMANENT</span>
-              <span class="gp-recommended-tag">⭐ Recommended</span>
-            </div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">
-              <p style="margin-bottom:12px;">This gamepass allows you to <span style="color:var(--blue); font-weight:800;">quickly teleport between the zones and other miscellaneous locations</span> within a chapter, making the grinding workflow significantly faster, as it removes the time and manual movement required to move from one area to another. Most essential and useful in <span style="color:var(--gold); font-weight:800;">Chapter 3 dark fragments grinding</span>, either with or without the use of macros. </p>
-              <p>One of the best gamepasses available. Helps you in <strong>every chapter</strong> and is thus strongly recommended to purchase.</p>
-            </div>
-          </div>
-
-          <div class="gp-card" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">💎</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">VIP</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 35</div>
-              </div>
-            </div>
-            <div class="gp-card-tags">
-              <span class="gp-perm-tag">PERMANENT</span>
-            </div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">
-              <p style="margin-bottom:12px;">This gamepass is more of a cosmetic / status upgrade rather than an utilitarian one. Perks include:</p>
-              <p style="margin-bottom:2px;">>  A <span style="color:var(--purple); font-weight:800;">+10% time</span> and <span style="color:var(--purple); font-weight:800;">+10% eon</span> boost.</p>
-              <p style="margin-bottom:2px;">>  The <span style="color:var(--gold); font-weight:800;">"VIP" rank</span> in the "No time at all" group.</p>
-              <p style="margin-bottom:2px;">>  The <span style="color:var(--gold); font-weight:800;">[👑VIP ]</span> tag in the chat.</p>
-            </div>
-          </div>
-
-        </div>
-        </div>
-      </div>
-
-      <!-- -- CHEST GAMEPASSES -- -->
-      <div class="gp-section game-panel" data-gp-category="chest" data-no-tilt>
-        <div class="panel-bar" style="background:linear-gradient(135deg,#2a2840,#7068b0,#3c3870);box-shadow:0 3px 0 #181628,0 0 24px rgba(112,104,176,0.4);"><span>📦 Chest Gamepasses</span></div>
-        <div class="panel-body gp-cards-body">
-        <div class="gp-card-grid gp-card-grid-chests">
-
-          <!-- Common Chest -->
-          <div class="gp-chest-card gp-chest-common">
-            <div class="gp-chest-header">
-              <span class="gp-chest-icon">📦</span>
-              <span class="gp-chest-name">Common Chest</span>
-            </div>
-            <div class="gp-chest-body">
-              <div class="gp-roll-pool-label">Roll Pool</div>
-              <div class="gp-roll-pool">
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:45%;background:rgba(200,200,200,0.5);"></div></div>
-                  <span class="gp-roll-pct">45%</span>
-                  <span class="gp-roll-reward">+3–5 Locks</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:45%;background:rgba(168,85,247,0.6);"></div></div>
-                  <span class="gp-roll-pct">45%</span>
-                  <span class="gp-roll-reward">+5–10 Rerolls</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:9%;background:rgba(46,168,232,0.7);"></div></div>
-                  <span class="gp-roll-pct">9%</span>
-                  <span class="gp-roll-reward">Rare Chest Spawn</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:1%;background:rgba(245,166,35,0.9);min-width:4px;"></div></div>
-                  <span class="gp-roll-pct gp-roll-rare">1%</span>
-                  <span class="gp-roll-reward gp-roll-rare">Bejeweled</span>
-                </div>
-              </div>
-              <div class="gp-chest-pricing">
-                <div class="gp-chest-price-row"><span class="gp-chest-qty">1×</span><span class="gp-chest-cost"><span class="robux-sym">⬡</span> 19</span></div>
-                <div class="gp-chest-price-row"><span class="gp-chest-qty">3×</span><span class="gp-chest-cost"><span class="robux-sym">⬡</span> 39</span></div>
-                <div class="gp-chest-price-row"><span class="gp-chest-qty">8×</span><span class="gp-chest-cost"><span class="robux-sym">⬡</span> 99</span></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Rare Chest -->
-          <div class="gp-chest-card gp-chest-rare">
-            <div class="gp-chest-header">
-              <span class="gp-chest-icon">💠</span>
-              <span class="gp-chest-name">Rare Chest</span>
-            </div>
-            <div class="gp-chest-body">
-              <div class="gp-roll-pool-label">Roll Pool</div>
-              <div class="gp-roll-pool">
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:25%;background:rgba(200,200,200,0.5);"></div></div>
-                  <span class="gp-roll-pct">25%</span>
-                  <span class="gp-roll-reward">+5–10 Locks</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:25%;background:rgba(168,85,247,0.6);"></div></div>
-                  <span class="gp-roll-pct">25%</span>
-                  <span class="gp-roll-reward">+10–20 Rerolls</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:25%;background:rgba(245,166,35,0.7);"></div></div>
-                  <span class="gp-roll-pct">25%</span>
-                  <span class="gp-roll-reward">Bejeweled</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:20%;background:rgba(46,168,232,0.7);"></div></div>
-                  <span class="gp-roll-pct">20%</span>
-                  <span class="gp-roll-reward">Ethereal</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:5%;background:rgba(180,100,255,0.9);"></div></div>
-                  <span class="gp-roll-pct gp-roll-rare">5%</span>
-                  <span class="gp-roll-reward gp-roll-rare">Special Chest Spawn</span>
-                </div>
-              </div>
-              <div class="gp-chest-pricing">
-                <div class="gp-chest-price-row"><span class="gp-chest-qty">1×</span><span class="gp-chest-cost"><span class="robux-sym">⬡</span> 39</span></div>
-                <div class="gp-chest-price-row"><span class="gp-chest-qty">3×</span><span class="gp-chest-cost"><span class="robux-sym">⬡</span> 115</span></div>
-                <div class="gp-chest-price-row"><span class="gp-chest-qty">8×</span><span class="gp-chest-cost"><span class="robux-sym">⬡</span> 279</span></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Special Chest -->
-          <div class="gp-chest-card gp-chest-special">
-            <div class="gp-chest-header">
-              <span class="gp-chest-icon">✨</span>
-              <span class="gp-chest-name">Special Chest</span>
-            </div>
-            <div class="gp-chest-body">
-              <div class="gp-roll-pool-label">Roll Pool</div>
-              <div class="gp-roll-pool">
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:35%;background:rgba(245,166,35,0.7);"></div></div>
-                  <span class="gp-roll-pct">35%</span>
-                  <span class="gp-roll-reward">Bejeweled</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:35%;background:rgba(46,168,232,0.7);"></div></div>
-                  <span class="gp-roll-pct">35%</span>
-                  <span class="gp-roll-reward">Ethereal</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:25%;background:rgba(255,100,100,0.7);"></div></div>
-                  <span class="gp-roll-pct">25%</span>
-                  <span class="gp-roll-reward">Lord</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:9%;background:rgba(40,240,210,0.7);"></div></div>
-                  <span class="gp-roll-pct gp-roll-rare">9%</span>
-                  <span class="gp-roll-reward gp-roll-rare">Nitrogen</span>
-                </div>
-                <div class="gp-roll-row">
-                  <div class="gp-roll-bar-wrap"><div class="gp-roll-bar" style="width:1%;background:rgba(255,255,255,0.9);min-width:4px;"></div></div>
-                  <span class="gp-roll-pct gp-roll-secret">1%</span>
-                  <span class="gp-roll-reward gp-roll-secret">???</span>
-                </div>
-              </div>
-              <div class="gp-chest-pricing">
-                <div class="gp-chest-price-row"><span class="gp-chest-qty">1×</span><span class="gp-chest-cost"><span class="robux-sym">⬡</span> 115</span></div>
-                <div class="gp-chest-price-row"><span class="gp-chest-qty">3×</span><span class="gp-chest-cost"><span class="robux-sym">⬡</span> 279</span></div>
-                <div class="gp-chest-price-row"><span class="gp-chest-qty">8×</span><span class="gp-chest-cost"><span class="robux-sym">⬡</span> 679</span></div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        </div>
-      </div>
-
-      <!-- -- CH1 SPECIAL GAMEPASSES -- -->
-      <div class="gp-section game-panel" data-gp-category="ch1" data-no-tilt>
-        <div class="panel-bar pink"><span>📖 Chapter 1 Special Gamepasses</span></div>
-        <div class="panel-body gp-cards-body">
-        <div class="gp-card-grid">
-
-          <div class="gp-card gp-card-ch1" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">⏱️</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Time</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 39</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles your <strong>Time gain rate</strong> permanently.</div>
-          </div>
-
-          <div class="gp-card gp-card-ch1" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">🌌</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Universes</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 39</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles the amount of <strong>Universes</strong> you receive per reset permanently.</div>
-          </div>
-
-          <div class="gp-card gp-card-ch1" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">⭐</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Stars</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 55</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles your <strong>Star gain rate</strong> permanently.</div>
-          </div>
-
-        </div>
-        </div>
-      </div>
-
-      <!-- -- CH2 SPECIAL GAMEPASSES -- -->
-      <div class="gp-section game-panel" data-gp-category="ch2" data-no-tilt>
-        <div class="panel-bar blue"><span>📖 Chapter 2 Special Gamepasses</span></div>
-        <div class="panel-body gp-cards-body">
-        <div class="gp-card-grid">
-
-          <div class="gp-card gp-card-ch2" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">⏳</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Grand Time</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 99</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles the amount of <strong>Grand Time</strong> you gain permanently.</div>
-          </div>
-
-          <div class="gp-card gp-card-ch2" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">🖱️</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Clicks</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 79</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles the number of <strong>Clicks</strong> you get for "The Button" permanently.</div>
-          </div>
-
-          <div class="gp-card gp-card-ch2" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">🍊</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Fruits</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 99</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">
-              <p style="margin-bottom:12px;">Doubles the amount of <strong>Fruits</strong> you gain across <strong>Chapters 2 and 3</strong>.</p>
-              <p>Applies to:</p>
-              <div class="gp-fruit-tags">
-                <span class="gp-fruit-tag gp-fruit-ch2">CH2: Click %, Tangerines, Oranges, Lemons, Limes, Melons</span>
-                <span class="gp-fruit-tag gp-fruit-ch3">CH3: Withered Apples, Withered Berries</span>
-                <span class="gp-fruit-tag gp-fruit-na">CH4: N/A</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        </div>
-      </div>
-
-      <!-- -- CH3 SPECIAL GAMEPASSES -- -->
-      <div class="gp-section game-panel" data-gp-category="ch3" data-no-tilt>
-        <div class="panel-bar green"><span>📖 Chapter 3 Special Gamepasses</span></div>
-        <div class="panel-body gp-cards-body">
-        <div class="gp-card-grid">
-
-          <div class="gp-card gp-card-ch3" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">🪨</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Mercury</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 99</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles the amount of <strong>Mercury</strong> you gain permanently.</div>
-          </div>
-
-          <div class="gp-card gp-card-ch3" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">💎</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Fragments</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 99</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles the amount of <strong>Fragments</strong> you gain permanently.</div>
-          </div>
-
-          <div class="gp-card gp-card-ch3" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">🖤</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Dark Fragments</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 99</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles the amount of <strong>Dark Fragments</strong> you gain permanently - applies to <span style="color:var(--red); font-weight:800;">passive income only</span>.</div>
-          </div>
-
-          <div class="gp-card gp-card-ch3" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">✦</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Dark Stars</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 99</div>
-              </div>
-            </div>
-            <div class="gp-card-tags"><span class="gp-perm-tag">PERMANENT</span></div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles the amount of <strong>Dark Stars</strong> you gain permanently.</div>
-          </div>
-
-        </div>
-        </div>
-      </div>
-
-      <!-- -- CH4 GAMEPASSES -- -->
-      <div class="gp-section game-panel" data-gp-category="ch4" data-no-tilt>
-        <div class="panel-bar gold"><span>📖 Chapter 4 Special Gamepasses <span style="font-size:0.72rem;font-weight:700;opacity:0.65;">(So Far)</span></span></div>
-        <div class="panel-body gp-cards-body">
-        <div class="gp-card-grid">
-
-          <div class="gp-card gp-card-ch4" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">💭</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Memories</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 99</div>
-              </div>
-            </div>
-            <div class="gp-card-tags">
-              <span class="gp-perm-tag">PERMANENT</span>
-              <span class="gp-recommended-tag">⚠️ Regional Pricing enabled</span>
-            </div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles the amount of <strong>Memories</strong> you gain permanently.</div>
-          </div>
-
-          <div class="gp-card gp-card-ch4" onclick="toggleGpCard(this)">
-            <div class="gp-card-top">
-              <div class="gp-card-icon">📚</div>
-              <div class="gp-card-info">
-                <div class="gp-card-name">2× Archives</div>
-                <div class="gp-card-price"><span class="robux-sym">⬡</span> 99</div>
-              </div>
-            </div>
-            <div class="gp-card-tags">
-              <span class="gp-perm-tag">PERMANENT</span>
-              <span class="gp-recommended-tag">⚠️ Regional Pricing enabled</span>
-            </div>
-            <div class="gp-card-expand-hint">TAP TO EXPAND <span class="gp-card-chevron">▾</span></div>
-            <div class="gp-card-desc">Doubles the amount of <strong>Archives</strong> you gain permanently.</div>
-          </div>
-
-        </div>
-        </div>
-      </div>
-
+      <div class="section-sub" style="margin-bottom:16px;">Gamepasses that unlock permanent perks and quality-of-life features.</div>
+      <div class="coming-soon"><span class="coming-soon-icon">🎮</span><h3>Gamepasses Data Incoming</h3><p>Details on all available Gamepasses will be added here soon.</p></div>
     </div>
   </div>
 
@@ -1450,22 +919,21 @@
             <thead><tr><th>Code</th><th>Reward</th><th>Status</th></tr></thead>
             <tbody>
               <tr id="codes-empty-row" style="display:none;"><td colspan="3" style="text-align:center;padding:22px 16px;color:rgba(255,255,255,0.35);font-size:0.84rem;font-weight:700;letter-spacing:0.03em;">🎟️ No codes are active at the moment. Check back later.</td></tr>
-              <tr class="activec"><td class="codes"><span>SorryForDelayII</span><button class="code-copy-button" onclick="copyCode('SorryForDelayII', this)">Copy</button></td><td>🔒 10 locks</td><td><span class="status-badge active-badge">✅ Active</span></td></tr>
               <tr class="expired"><td class="codes"><span>ChapterIV</span><button class="code-copy-button" onclick="copyCode('ChapterIV', this)">Copy</button></td><td>🔒 10 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>ClansUPD</span><button class="code-copy-button" onclick="copyCode('ClansUPD', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>MoreTree</span><button class="code-copy-button" onclick="copyCode('MoreTree', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>sorryfordelay2</span><button class="code-copy-button" onclick="copyCode('sorryfordelay2', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>obby</span><button class="code-copy-button" onclick="copyCode('obby', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>QOL</span><button class="code-copy-button" onclick="copyCode('QOL', this)">Copy</button></td><td>🔒 3 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>dailyrewards</span><button class="code-copy-button" onclick="copyCode('dailyrewards', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>ruined</span><button class="code-copy-button" onclick="copyCode('ruined', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>easterevent</span><button class="code-copy-button" onclick="copyCode('easterevent', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>sorryfordelay</span><button class="code-copy-button" onclick="copyCode('sorryfordelay', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>wereback</span><button class="code-copy-button" onclick="copyCode('wereback', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>newpillar</span><button class="code-copy-button" onclick="copyCode('newpillar', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-              <tr class="expired"><td class="codes"><span>etherealontop</span><button class="code-copy-button" onclick="copyCode('etherealontop', this)">Copy</button></td><td>🔒 25 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
-            </tbody>
-          </table>
+            <tr class="expired"><td class="codes"><span>ClansUPD</span><button class="code-copy-button" onclick="copyCode('ClansUPD', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>MoreTree</span><button class="code-copy-button" onclick="copyCode('MoreTree', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>sorryfordelay2</span><button class="code-copy-button" onclick="copyCode('sorryfordelay2', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>obby</span><button class="code-copy-button" onclick="copyCode('obby', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>QOL</span><button class="code-copy-button" onclick="copyCode('QOL', this)">Copy</button></td><td>🔒 3 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>dailyrewards</span><button class="code-copy-button" onclick="copyCode('dailyrewards', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>ruined</span><button class="code-copy-button" onclick="copyCode('ruined', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>easterevent</span><button class="code-copy-button" onclick="copyCode('easterevent', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>sorryfordelay</span><button class="code-copy-button" onclick="copyCode('sorryfordelay', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>wereback</span><button class="code-copy-button" onclick="copyCode('wereback', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>newpillar</span><button class="code-copy-button" onclick="copyCode('newpillar', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>etherealontop</span><button class="code-copy-button" onclick="copyCode('etherealontop', this)">Copy</button></td><td>🔒 25 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+          </tbody>
+        </table>
         </div>
       </div>
     </div>
@@ -1474,7 +942,7 @@
   <!-- FAQ -->
   <div id="tab-faq" class="tab-panel">
     <div class="section-title">FAQ</div>
-    <div class="section-sub">- Questions incoming -</div>
+    <div class="section-sub">— Questions incoming —</div>
     <div class="coming-soon" style="margin-top:12px;">
       <span class="coming-soon-icon">❓</span>
       <h3>FAQ Coming Soon</h3>
@@ -1550,17 +1018,17 @@
 </main>
 
 <footer>
-  <div class="footer-links">
-    <a href="https://discord.gg/pJ8R7uJJtn" class="footer-link footer-link-discord">
-      <img src="img/discordlogo.svg" alt="Discord" width="16" height="16"/>
+  <div style="display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-bottom:10px;">
+    <a href="https://discord.gg/pJ8R7uJJtn" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;background:rgba(88,101,242,0.15);border:1.5px solid rgba(88,101,242,0.4);color:#a5b4fc;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:0.04em;text-decoration:none;transition:background .2s,box-shadow .2s;" onmouseover="this.style.background='rgba(88,101,242,0.28)';this.style.boxShadow='0 0 16px rgba(88,101,242,0.3)'" onmouseout="this.style.background='rgba(88,101,242,0.15)';this.style.boxShadow=''">
+      <img src="img/discordlogo.svg" alt="Discord" width="16" height="16" style="display:block;"/>
       Waste Time University
     </a>
-    <a href="https://www.roblox.com/games/129548273770183/Waste-Time" class="footer-link footer-link-roblox">
-      <img src="img/robloxlogo.png" alt="Roblox" width="16" height="16"/>
+    <a href="https://www.roblox.com/games/129548273770183/Waste-Time" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;background:rgba(34,196,94,0.1);border:1.5px solid rgba(34,196,94,0.3);color:#4ade80;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:0.04em;text-decoration:none;transition:background .2s,box-shadow .2s;" onmouseover="this.style.background='rgba(34,196,94,0.2)';this.style.boxShadow='0 0 16px rgba(34,196,94,0.25)'" onmouseout="this.style.background='rgba(34,196,94,0.1)';this.style.boxShadow=''">
+      <img src="img/robloxlogo.png" alt="Roblox" width="16" height="16" style="display:block;"/>
       Play on Roblox
     </a>
   </div>
-  <div class="footer-copy">
+  <div style="font-family:'Nunito',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.14em;color:var(--text-dim);text-transform:uppercase;">
     WASTE TIME ULTIMATE GUIDE &nbsp;✦&nbsp; CREATED AND MAINTAINED BY WASTE TIME UNIVERSITY &nbsp;✦&nbsp; OFFICIALLY AFFILIATED TO WASTE TIME
   </div>
 </footer>
@@ -1570,9 +1038,9 @@
 
 <!-- Bottom-right UI stack: BtT + achievement always stacked, never overlapping -->
 <div id="ui-stack-br">
-  <!-- Back to top button - listed first so column-reverse places it at the bottom -->
+  <!-- Back to top button — listed first so column-reverse places it at the bottom -->
   <button id="back-to-top" title="Back to top" aria-label="Back to top"></button>
-  <!-- Achievement popup container - listed second so column-reverse floats it above BtT -->
+  <!-- Achievement popup container — listed second so column-reverse floats it above BtT -->
   <div id="achievement-popup" class="achievement-popup">
     <div class="achievement-icon" id="ach-icon">🏆</div>
     <div class="achievement-text-wrap">

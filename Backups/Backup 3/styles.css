@@ -42,29 +42,6 @@
   --border-purple:  rgba(124, 60, 250, 0.4);
   --font-display:   'Oxanium', sans-serif;
   --font-body:      'Rajdhani', sans-serif;
-
-  /* -- Rarity colour tokens -- */
-  --rarity-common-col:    #c8c8c8;
-  --rarity-common-glow:   rgba(200,200,200,0.30);
-  --rarity-common-bg:     rgba(80,80,80,0.18);
-  --rarity-rare-col:      #7cc8ff;
-  --rarity-rare-glow:     rgba(80,180,255,0.35);
-  --rarity-rare-bg:       rgba(10,60,130,0.22);
-  --rarity-epic-col:      #d4a0ff;
-  --rarity-epic-glow:     rgba(180,100,255,0.35);
-  --rarity-epic-bg:       rgba(80,10,160,0.22);
-  --rarity-legendary-col: #ffe066;
-  --rarity-legendary-glow:rgba(255,200,50,0.38);
-  --rarity-legendary-bg:  rgba(140,70,0,0.22);
-  --rarity-mythic-col:    #ff7a9a;
-  --rarity-mythic-glow:   rgba(255,80,110,0.35);
-  --rarity-mythic-bg:     rgba(140,5,40,0.25);
-  --rarity-exotic-col:    #40f0e0;
-  --rarity-exotic-glow:   rgba(40,240,210,0.38);
-  --rarity-exotic-bg:     rgba(0,80,80,0.25);
-  --rarity-secret-col:    #e0b8ff;
-  --rarity-secret-glow:   rgba(200,120,255,0.42);
-  --rarity-secret-bg:     rgba(60,0,120,0.28);
 }
 
 *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -220,8 +197,9 @@ body::before {
   padding:32px 20px 80px;
 }
 
-.tab-panel { display:none; }
+.tab-panel { display:none; animation:fadeUp .3s ease; }
 .tab-panel.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
 /* =============================================
    GAME-PANEL CARD COMPONENT
@@ -276,18 +254,17 @@ body::before {
   background-size: 100% 100%, 10px 10px;
   pointer-events:none; z-index:1;
 }
-/* sheen sweep - slides across on hover via GPU-composited transform */
+/* sheen sweep - slides across on hover */
 .panel-bar::before {
   content:''; position:absolute;
-  top:0; left:0; width:45%; height:100%;
+  top:0; left:-80%; width:45%; height:100%;
   background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.32) 50%, transparent 80%);
   pointer-events:none; z-index:2;
-  transform: translateX(-180%);
-  transition: transform 0s;
+  transition: left 0s;
 }
 .panel-bar:hover::before {
-  transform: translateX(340%);
-  transition: transform 0.45s ease;
+  left: 150%;
+  transition: left 0.45s ease;
 }
 
 .panel-body { padding: 18px 18px; }
@@ -507,7 +484,7 @@ body::before {
 }
 .section-sub { font-size:0.85rem; font-weight:700; color:rgba(255,255,255,0.55); margin-bottom:22px; }
 .section-block { margin-bottom:42px; }
-/* -- HERO PANEL -- */
+/* ── HERO PANEL ── */
 .hero-panel-outer {
   position: relative;
   border-radius: 14px;
@@ -517,7 +494,7 @@ body::before {
   isolation: isolate;
 }
 
-/* The travelling glow border - a conic-gradient that rotates around the perimeter */
+/* The travelling glow border — a conic-gradient that rotates around the perimeter */
 .hero-panel-outer::before {
   content: '';
   position: absolute;
@@ -573,7 +550,7 @@ body::before {
   position: relative;
   z-index: 2;
 }
-/* inner ambient colour wash - no border pseudo-element needed anymore */
+/* inner ambient colour wash — no border pseudo-element needed anymore */
 .hero-panel::after {
   content: '';
   position: absolute;
@@ -662,13 +639,13 @@ body::before {
 .rank-rarity-divider { display:flex; align-items:center; gap:8px; margin:8px 0 4px; }
 .rank-rarity-divider::before, .rank-rarity-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.07); }
 .rank-rarity-label { font-size:0.62rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; white-space:nowrap; padding:0 4px; }
-.rank-rarity-label.rarity-common   { color: var(--rarity-common-col); }
-.rank-rarity-label.rarity-rare     { color: var(--rarity-rare-col); }
-.rank-rarity-label.rarity-epic     { color: var(--rarity-epic-col); }
-.rank-rarity-label.rarity-legendary{ color: var(--rarity-legendary-col); }
-.rank-rarity-label.rarity-mythic   { color: var(--rarity-mythic-col); }
-.rank-rarity-label.rarity-exotic   { color: var(--rarity-exotic-col); }
-.rank-rarity-label.rarity-secret   { color: var(--rarity-secret-col); }
+.rank-rarity-label.rarity-common   { color:#a0a0a0; }
+.rank-rarity-label.rarity-rare     { color:#7cc8ff; }
+.rank-rarity-label.rarity-epic     { color:#c084fc; }
+.rank-rarity-label.rarity-legendary{ color:#ffe066; }
+.rank-rarity-label.rarity-mythic   { color:#ff7a9a; }
+.rank-rarity-label.rarity-exotic   { color:#40f0e0; }
+.rank-rarity-label.rarity-secret   { color:#e0b8ff; }
 
 /* -- RANK DETAIL PANEL -- */
 .rank-detail-rarity-chip {
@@ -848,7 +825,7 @@ body::before {
   display: flex; align-items: flex-start; gap: 6px;
 }
 
-/* Legacy compat - keep for table coloring */
+/* Legacy compat — keep for table coloring */
 .rank-boost-time      { color:#f5a623; }
 .rank-boost-grandtime { color:#40d0ff; }
 .rank-boost-frags     { color:#4ade80; }
@@ -1217,7 +1194,7 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 
 /* ---- Performance: kill CPU-heavy animations on low-end / mobile ---- */
 @media (max-width: 760px) {
-  /* Disable glow pulsing on rank badges - these run continuously and are the main FPS killer */
+  /* Disable glow pulsing on rank badges — these run continuously and are the main FPS killer */
   .rank-badge.rarity-legendary,
   .rank-badge.rarity-mythic,
   .rank-badge.rarity-exotic,
@@ -1227,7 +1204,7 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
   /* Disable the emblem star wobble in the sheet */
   .rank-detail-emblem-star { animation: none !important; }
 
-  /* Simpler sheet bg - no gradient repaint */
+  /* Simpler sheet bg — no gradient repaint */
   .rank-float-sheet { will-change: transform; }
 
   /* Disable bar fill spring bounce on mobile (simple linear is faster to paint) */
@@ -1325,7 +1302,7 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
   .rank-sheet-backdrop { display: none !important; }
 }
 
-/* Backdrop - dims the page behind the sheet */
+/* Backdrop — dims the page behind the sheet */
 .rank-sheet-backdrop {
   display: none;
   position: fixed;
@@ -1342,7 +1319,7 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
   pointer-events: all;
 }
 
-/* Drag affordance - cursor hint on the handle row */
+/* Drag affordance — cursor hint on the handle row */
 .rfs-top-row {
   cursor: grab;
   user-select: none;
@@ -1376,7 +1353,7 @@ tr.rank-row-legacy:hover td { opacity: 0.75; }
 
 /* -- MOBILE: rank layout (≤ 760px) -- */
 @media (max-width: 760px) {
-  /* On narrow: hide the sticky side panel entirely - use floating sheet instead */
+  /* On narrow: hide the sticky side panel entirely — use floating sheet instead */
   .rank-detail-sticky { display: none !important; }
 
   /* Full width for the badge list */
@@ -1760,7 +1737,7 @@ a:active {
 
 /* -- CARD TILT -- */
 /* will-change is applied dynamically by JS on mouseover only */
-/* preserve-3d removed from .game-panel and .quick-stat - unnecessary compositing overhead */
+/* preserve-3d removed from .game-panel and .quick-stat — unnecessary compositing overhead */
 
 /* -- SKELETON LOADER -- */
 .skel {
@@ -1936,7 +1913,7 @@ a:active {
 
 /* -- MODAL OVERLAY -- */
 /* When a modal is open, collapse the nav out of the stacking context entirely.
-   Changing position alone isn't enough - backdrop-filter on the overlay creates
+   Changing position alone isn't enough — backdrop-filter on the overlay creates
    its own compositing layer, and any z-index on the nav can bleed through it in
    Chromium. Setting z-index: 0 (and position: relative) puts the nav definitively
    below the modal's z-index: 9999 layer. */
@@ -2136,28 +2113,20 @@ body.modal-open .site-header {
   backdrop-filter: blur(4px);
 }
 
-/* Tab panel animations - one source of truth */
+/* Improved animation for .tab-panel */
 @keyframes fadeUp {
   from { opacity:0; transform:translateY(18px); }
   to   { opacity:1; transform:translateY(0); }
 }
-@keyframes slideInFromRight {
+@keyframes slideInRight {
   from { opacity:0; transform:translateX(28px); }
-  to   { opacity:1; transform:translateX(0); }
-}
-@keyframes slideInFromLeft {
-  from { opacity:0; transform:translateX(-28px); }
   to   { opacity:1; transform:translateX(0); }
 }
 @keyframes popIn {
   from { opacity:0; transform:scale(0.94); }
   to   { opacity:1; transform:scale(1); }
 }
-/* Default entrance: fade up */
-.tab-panel.active { animation: fadeUp .38s cubic-bezier(0.22,1,0.36,1); }
-/* Directional overrides - take priority over fadeUp */
-.tab-panel.active.slide-forward { animation: slideInFromRight .3s cubic-bezier(0.22,1,0.36,1); }
-.tab-panel.active.slide-back    { animation: slideInFromLeft  .3s cubic-bezier(0.22,1,0.36,1); }
+.tab-panel { animation: fadeUp .38s cubic-bezier(0.22,1,0.36,1); }
 
 /* Improved scroll reveal */
 .sr { transition: opacity .7s cubic-bezier(0.22,1,0.36,1), transform .7s cubic-bezier(0.22,1,0.36,1); }
@@ -2205,7 +2174,7 @@ body.modal-open .site-header {
   background: rgba(255,255,255,0.05);
   border-color: rgba(255,255,255,0.18);
 }
-/* Glow pseudo-element - animating opacity is GPU-composited, no repaint */
+/* Glow pseudo-element — animating opacity is GPU-composited, no repaint */
 .tier-row::before {
   content: '';
   position: absolute;
@@ -2264,7 +2233,7 @@ body.modal-open .site-header {
    ========================================== */
 /* tier-row glow now handled by ::before pseudo-element opacity (see above) */
 
-/* -- Compare toggle button -- */
+/* ── Compare toggle button ── */
 .compare-toggle-btn {
   display: inline-flex; align-items: center; gap: 7px;
   padding: 7px 16px; border-radius: 8px;
@@ -2293,7 +2262,7 @@ body.modal-open .site-header {
   gap: 14px;
 }
 
-/* -- Compare mode slot-picker panel -- */
+/* ── Compare mode slot-picker panel ── */
 #compare-slot-panel {
   display: none;
   margin-top: 18px;
@@ -2439,7 +2408,7 @@ body.modal-open .site-header {
   color: rgba(255,255,255,0.65);
 }
 
-/* Result card inside compare box - richer layout - inherits from existing rules, extra style below */
+/* Result card inside compare box - richer layout — inherits from existing rules, extra style below */
 .compare-result-card {
   display: flex;
   align-items: stretch;
@@ -3011,10 +2980,11 @@ body.modal-open .site-header {
    FEATURE 3 – PANEL BAR LOAD SHIMMER
    ========================================== */
 @keyframes barShimmer {
-  0%   { transform: translateX(-180%); }
-  100% { transform: translateX(340%); }
+  0%   { left: -80%; }
+  100% { left: 150%; }
 }
 .panel-bar.shimmer-once::before {
+  left: -80%;
   animation: barShimmer .7s ease forwards;
 }
 
@@ -3038,610 +3008,3 @@ body.modal-open .site-header {
   from { transform: translate(0, 0); }
   to   { transform: translate(36px, 36px); }
 }
-
-/* ==========================================
-   GAMEPASSES PAGE
-   ========================================== */
-
-/* -- Warning box -- */
-.gp-warning-box {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 18px 22px;
-  border-radius: 12px;
-  background: rgba(245,166,35,0.07);
-  border: 1.5px solid rgba(245,166,35,0.35);
-  margin-bottom: 28px;
-  animation: gpWarnPulse 3s ease-in-out infinite;
-}
-@keyframes gpWarnPulse {
-  0%,100% { box-shadow: 0 0 0 rgba(245,166,35,0); }
-  50%     { box-shadow: 0 0 20px rgba(245,166,35,0.2); }
-}
-.gp-warning-icon { font-size: 1.7rem; flex-shrink: 0; margin-top: 2px; }
-.gp-warning-title {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.9rem; font-weight: 900;
-  color: rgba(245,190,60,0.95);
-  letter-spacing: 0.04em;
-  margin-bottom: 5px;
-}
-.gp-warning-text {
-  font-size: 0.82rem; font-weight: 700;
-  color: rgba(255,255,255,0.52);
-  line-height: 1.65;
-}
-.gp-warning-text strong { color: rgba(255,255,255,0.8); font-weight: 800; }
-
-/* -- Filter bar -- */
-.gp-filter-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 32px;
-}
-.gp-filter-btn {
-  background: rgba(255,255,255,0.04);
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 20px;
-  color: rgba(255,255,255,0.5);
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.8rem; font-weight: 800;
-  letter-spacing: 0.05em;
-  padding: 8px 20px;
-  cursor: pointer;
-  transition: background .18s, border-color .18s, color .18s, transform .12s;
-}
-.gp-filter-btn:hover {
-  background: rgba(168,85,247,0.12);
-  border-color: rgba(168,85,247,0.4);
-  color: #c084fc;
-  transform: translateY(-1px);
-}
-.gp-filter-btn.active {
-  background: rgba(168,85,247,0.18);
-  border-color: rgba(168,85,247,0.55);
-  color: #d8b4fe;
-  box-shadow: 0 0 14px rgba(168,85,247,0.28);
-}
-
-/* -- Section block - now a game-panel with panel-bar header -- */
-.gp-section {
-  margin-bottom: 24px;
-}
-.gp-section.gp-hidden { display: none; }
-
-/* Cards body inside each section panel */
-.gp-cards-body {
-  padding: 20px;
-}
-
-/* Stagger entrance animation triggered by JS */
-.gp-stagger-in {
-  animation: gpCardStaggerIn .32s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-@keyframes gpCardStaggerIn {
-  from { opacity: 0; transform: translateY(14px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);    }
-}
-
-/* Section exit on filter change */
-.gp-exiting {
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity .18s ease, transform .18s ease;
-  pointer-events: none;
-}
-
-/* -- Card grid -- */
-.gp-card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-  align-items: start; /* each card sizes independently - expanding one won't stretch its row-mates */
-}
-
-/* -- Gamepass card - glassmorphic -- */
-.gp-card {
-  background: rgba(255,255,255,0.045);
-  backdrop-filter: blur(18px) saturate(1.6);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
-  border: 1.5px solid rgba(255,255,255,0.11);
-  border-radius: 14px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: border-color .22s, box-shadow .22s, transform .16s, background .22s;
-  position: relative;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
-}
-.gp-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(168,85,247,0.55), transparent);
-  opacity: 0;
-  transition: opacity .22s;
-}
-.gp-card:hover::before { opacity: 1; }
-.gp-card:hover {
-  background: rgba(255,255,255,0.07);
-  border-color: rgba(168,85,247,0.45);
-  box-shadow: 0 8px 36px rgba(168,85,247,0.22), 0 2px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
-  transform: translateY(-3px);
-}
-.gp-card-ch1::before { background: linear-gradient(90deg, transparent, rgba(217,70,180,0.6), transparent); }
-.gp-card-ch1 { border-color: rgba(217,70,180,0.22); background: rgba(217,70,180,0.04); }
-.gp-card-ch1:hover { background: rgba(217,70,180,0.09); border-color: rgba(217,70,180,0.55); box-shadow: 0 8px 36px rgba(217,70,180,0.22), 0 2px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); }
-.gp-card-ch2::before { background: linear-gradient(90deg, transparent, rgba(46,168,232,0.6), transparent); }
-.gp-card-ch2 { border-color: rgba(46,168,232,0.22); background: rgba(46,168,232,0.04); }
-.gp-card-ch2:hover { background: rgba(46,168,232,0.09); border-color: rgba(46,168,232,0.55); box-shadow: 0 8px 36px rgba(46,168,232,0.22), 0 2px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); }
-.gp-card-ch3::before { background: linear-gradient(90deg, transparent, rgba(34,196,94,0.6), transparent); }
-.gp-card-ch3 { border-color: rgba(34,196,94,0.22); background: rgba(34,196,94,0.04); }
-.gp-card-ch3:hover { background: rgba(34,196,94,0.09); border-color: rgba(34,196,94,0.55); box-shadow: 0 8px 36px rgba(34,196,94,0.22), 0 2px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); }
-.gp-card-ch4::before { background: linear-gradient(90deg, transparent, rgba(245,166,35,0.6), transparent); }
-.gp-card-ch4 { border-color: rgba(245,166,35,0.22); background: rgba(245,166,35,0.04); }
-.gp-card-ch4:hover { background: rgba(245,166,35,0.09); border-color: rgba(245,166,35,0.55); box-shadow: 0 8px 36px rgba(245,166,35,0.22), 0 2px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); }
-
-.gp-card-recommended {
-  border-color: rgba(245,166,35,0.38) !important;
-  box-shadow: 0 0 20px rgba(245,166,35,0.13) !important;
-}
-.gp-card-recommended::before {
-  background: linear-gradient(90deg, transparent, rgba(245,166,35,0.55), transparent) !important;
-  opacity: 1 !important;
-}
-
-/* Card top - icon + name/price block, no cramped tag row */
-.gp-card-top {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px 20px 16px;
-}
-.gp-card-icon {
-  font-size: 2rem;
-  width: 52px; height: 52px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.05);
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.08);
-  flex-shrink: 0;
-  transition: background .2s, transform .2s;
-}
-.gp-card:hover .gp-card-icon {
-  background: rgba(255,255,255,0.09);
-  transform: scale(1.06);
-}
-.gp-card-info { flex: 1; min-width: 0; }
-.gp-card-name {
-  font-family: 'Lilita One', cursive;
-  font-size: 1.1rem;
-  color: rgba(255,255,255,0.95);
-  margin-bottom: 5px;
-  line-height: 1.2;
-  /* No ellipsis - let it wrap naturally */
-}
-.gp-card-price {
-  font-family: 'Lilita One', cursive;
-  font-size: 1.05rem;
-  color: var(--gold);
-  text-shadow: 0 0 12px rgba(245,166,35,0.55);
-}
-.robux-sym {
-  color: var(--gold);
-  font-family: 'Lilita One', cursive;
-}
-
-/* Tag row below the top block - sits between top and desc */
-.gp-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 7px;
-  padding: 0 20px 14px;
-}
-.gp-perm-tag {
-  font-size: 0.65rem; font-weight: 900;
-  letter-spacing: 0.1em;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: rgba(34,196,94,0.12);
-  border: 1px solid rgba(34,196,94,0.3);
-  color: #4ade80;
-  white-space: nowrap;
-}
-.gp-recommended-tag {
-  font-size: 0.65rem; font-weight: 900;
-  letter-spacing: 0.08em;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: rgba(245,166,35,0.15);
-  border: 1px solid rgba(245,166,35,0.45);
-  color: #fcd34d;
-  white-space: nowrap;
-  animation: gpRecPulse 2.5s ease-in-out infinite;
-}
-@keyframes gpRecPulse {
-  0%,100% { box-shadow: none; }
-  50% { box-shadow: 0 0 10px rgba(245,166,35,0.35); }
-}
-
-/* Expand hint */
-.gp-card-expand-hint {
-  font-size: 0.66rem; font-weight: 800;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.22);
-  padding: 0 20px 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.gp-card-expand-hint::before {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255,255,255,0.06);
-}
-.gp-card-chevron {
-  font-size: 0.75rem;
-  transition: transform .22s;
-}
-.gp-card.open .gp-card-chevron { transform: rotate(180deg); }
-
-/* Desc panel - smooth expand via max-height transition */
-.gp-card-desc {
-  max-height: 0;
-  overflow: hidden;
-  padding: 0 20px;
-  font-size: 0.85rem; font-weight: 600;
-  color: rgba(255,255,255,0.55);
-  line-height: 1.7;
-  border-top: 1px solid transparent;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition:
-    max-height .38s cubic-bezier(0.4, 0, 0.2, 1),
-    padding    .38s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color .28s ease,
-    opacity    .28s ease .08s,
-    transform  .28s ease .08s;
-}
-.gp-card-desc strong { color: rgba(255,255,255,0.85); font-weight: 800; }
-.gp-card.open .gp-card-desc {
-  max-height: 700px;
-  padding: 14px 20px 18px;
-  border-top-color: rgba(255,255,255,0.07);
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* -- Admin Commands tile grid -- */
-.admin-cmd-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.admin-cmd-tile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 14px;
-  background: rgba(0,0,0,0.35);
-  border: 1.5px solid rgba(255,255,255,0.09);
-  border-radius: 8px;
-  transition: background .18s, border-color .18s;
-}
-.admin-cmd-tile:hover {
-  background: rgba(168,85,247,0.12);
-  border-color: rgba(168,85,247,0.35);
-}
-.admin-cmd-icon {
-  font-size: 1rem;
-  flex-shrink: 0;
-  width: 22px;
-  text-align: center;
-  filter: drop-shadow(0 0 4px rgba(255,255,255,0.25));
-}
-.admin-cmd-name {
-  font-family: 'Source Code Pro', monospace;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.88);
-  letter-spacing: 0.02em;
-}
-
-/* Fruit chapter tags */
-.gp-fruit-tags { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
-.gp-fruit-tag {
-  font-size: 0.76rem; font-weight: 800;
-  padding: 6px 12px;
-  border-radius: 7px;
-  letter-spacing: 0.03em;
-  line-height: 1.5;
-}
-.gp-fruit-ch2 { background: rgba(46,168,232,0.1); border: 1px solid rgba(46,168,232,0.25); color: #60c8ff; }
-.gp-fruit-ch3 { background: rgba(34,196,94,0.1); border: 1px solid rgba(34,196,94,0.25); color: #4ade80; }
-.gp-fruit-na  { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); color: rgba(255,255,255,0.22); }
-
-/* -- Chest card grid -- */
-.gp-card-grid-chests {
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  align-items: start;
-}
-.gp-chest-card {
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1.5px solid transparent;
-  background: rgba(255,255,255,0.038);
-  backdrop-filter: blur(18px) saturate(1.5);
-  -webkit-backdrop-filter: blur(18px) saturate(1.5);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.07);
-  transition: transform .18s, box-shadow .22s, background .22s, border-color .22s;
-}
-.gp-chest-card:hover { transform: translateY(-3px); }
-.gp-chest-common  { border-color: rgba(200,200,200,0.18); background: rgba(200,200,200,0.03); }
-.gp-chest-common:hover  { background: rgba(200,200,200,0.07); box-shadow: 0 8px 32px rgba(200,200,200,0.13), inset 0 1px 0 rgba(255,255,255,0.1); }
-.gp-chest-rare    { border-color: rgba(46,168,232,0.25); background: rgba(46,168,232,0.04); }
-.gp-chest-rare:hover    { background: rgba(46,168,232,0.08); box-shadow: 0 8px 32px rgba(46,168,232,0.22), inset 0 1px 0 rgba(255,255,255,0.1); }
-.gp-chest-special { border-color: rgba(168,85,247,0.3); background: rgba(168,85,247,0.04); }
-.gp-chest-special:hover { background: rgba(168,85,247,0.08); box-shadow: 0 8px 32px rgba(168,85,247,0.22), inset 0 1px 0 rgba(255,255,255,0.1); }
-
-.gp-chest-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 18px 20px 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-}
-.gp-chest-common  .gp-chest-header { background: rgba(200,200,200,0.04); }
-.gp-chest-rare    .gp-chest-header { background: rgba(46,168,232,0.06); }
-.gp-chest-special .gp-chest-header { background: rgba(168,85,247,0.06); }
-.gp-chest-icon { font-size: 1.6rem; }
-.gp-chest-name {
-  font-family: 'Lilita One', cursive;
-  font-size: 1.1rem;
-  letter-spacing: 0.03em;
-}
-.gp-chest-common  .gp-chest-name { color: #d0d0d0; }
-.gp-chest-rare    .gp-chest-name { color: #7cc8ff; }
-.gp-chest-special .gp-chest-name { color: #d4a0ff; }
-
-.gp-chest-body { padding: 18px 20px 20px; }
-
-.gp-roll-pool-label {
-  font-size: 0.65rem; font-weight: 900;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(255,255,255,0.3);
-  margin-bottom: 12px;
-}
-.gp-roll-pool { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.gp-roll-row {
-  display: grid;
-  grid-template-columns: 1fr 38px 1fr;
-  align-items: center;
-  gap: 10px;
-}
-.gp-roll-bar-wrap {
-  height: 8px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.gp-roll-bar {
-  height: 100%;
-  border-radius: 4px;
-  min-width: 5px;
-  transition: width .65s cubic-bezier(0.34, 1.1, 0.64, 1);
-}
-.gp-roll-pct {
-  font-family: 'Lilita One', cursive;
-  font-size: 0.82rem;
-  color: rgba(255,255,255,0.55);
-  text-align: center;
-}
-.gp-roll-pct.gp-roll-rare   { color: #fbbf24; }
-.gp-roll-pct.gp-roll-secret { color: #e0b8ff; }
-.gp-roll-reward {
-  font-size: 0.8rem; font-weight: 700;
-  color: rgba(255,255,255,0.6);
-}
-.gp-roll-reward.gp-roll-rare   { color: #fbbf24; font-weight: 800; }
-.gp-roll-reward.gp-roll-secret { color: #e0b8ff; font-weight: 800; }
-
-.gp-chest-pricing {
-  border-top: 1px solid rgba(255,255,255,0.07);
-  padding-top: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.gp-chest-price-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 9px 14px;
-  border-radius: 9px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: background .15s, border-color .15s;
-}
-.gp-chest-price-row:hover {
-  background: rgba(245,166,35,0.08);
-  border-color: rgba(245,166,35,0.25);
-}
-.gp-chest-qty {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.85rem; font-weight: 800;
-  color: rgba(255,255,255,0.55);
-}
-.gp-chest-cost {
-  font-family: 'Lilita One', cursive;
-  font-size: 0.95rem;
-  color: var(--gold);
-  text-shadow: 0 0 10px rgba(245,166,35,0.45);
-}
-
-/* -- Responsive -- */
-@media (max-width: 640px) {
-  .gp-card-grid, .gp-card-grid-chests { grid-template-columns: 1fr; }
-  .gp-filter-bar { gap: 6px; }
-  .gp-filter-btn { font-size: 0.74rem; padding: 7px 14px; }
-  .gp-card-top { padding: 16px 16px 12px; gap: 14px; }
-  .gp-card-tags, .gp-card-expand-hint, .gp-card-desc { padding-left: 16px; padding-right: 16px; }
-  .gp-chest-header { padding: 14px 16px 12px; }
-  .gp-chest-body { padding: 14px 16px 16px; }
-}
-/* ==========================================
-   IMPROVEMENTS BATCH
-   ========================================== */
-
-/* -- 5. Footer CSS classes (replacing all inline styles) -- */
-.footer-links {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-.footer-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 16px;
-  border-radius: 8px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  transition: background .2s, box-shadow .2s;
-}
-.footer-link img { display: block; }
-.footer-link-discord {
-  background: rgba(88,101,242,0.15);
-  border: 1.5px solid rgba(88,101,242,0.4);
-  color: #a5b4fc;
-}
-.footer-link-discord:hover {
-  background: rgba(88,101,242,0.28);
-  box-shadow: 0 0 16px rgba(88,101,242,0.3);
-  color: #a5b4fc;
-}
-.footer-link-roblox {
-  background: rgba(34,196,94,0.1);
-  border: 1.5px solid rgba(34,196,94,0.3);
-  color: #4ade80;
-}
-.footer-link-roblox:hover {
-  background: rgba(34,196,94,0.2);
-  box-shadow: 0 0 16px rgba(34,196,94,0.25);
-  color: #4ade80;
-}
-.footer-copy {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  color: var(--text-dim);
-  text-transform: uppercase;
-}
-
-/* -- 6. Tab switching directional slide -- */
-@keyframes tabSlideInRight  { from { opacity:0; transform:translateX( 28px); } to { opacity:1; transform:translateX(0); } }
-@keyframes tabSlideInLeft   { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
-.tab-slide-right { animation: tabSlideInRight .32s cubic-bezier(0.22,1,0.36,1) both; }
-.tab-slide-left  { animation: tabSlideInLeft  .32s cubic-bezier(0.22,1,0.36,1) both; }
-
-/* -- 15. Special Ranks filter bar -- */
-.sr-filter-bar {
-  display: flex;
-  gap: 7px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 14px 18px 2px;
-  /* fade hint at right edge */
-  -webkit-mask-image: linear-gradient(to right, black calc(100% - 32px), transparent 100%);
-  mask-image: linear-gradient(to right, black calc(100% - 32px), transparent 100%);
-}
-.sr-filter-bar::-webkit-scrollbar { display: none; }
-/* hide fade mask when pills all fit (JS adds .overflows when they don't) */
-.sr-filter-bar:not(.overflows) {
-  -webkit-mask-image: none;
-  mask-image: none;
-  flex-wrap: wrap;
-}
-.sr-filter-bar-wrap {
-  position: relative;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  margin-bottom: 0;
-}
-.sr-filter-pill {
-  flex-shrink: 0;
-  background: rgba(255,255,255,0.04);
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 20px;
-  color: rgba(255,255,255,0.5);
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  padding: 6px 14px;
-  cursor: pointer;
-  transition: background .18s, border-color .18s, color .18s, transform .12s;
-  white-space: nowrap;
-}
-.sr-filter-pill:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.22); color: rgba(255,255,255,0.85); transform: translateY(-1px); }
-.sr-filter-pill.active { color:#fff; box-shadow: 0 0 12px var(--pill-glow, rgba(168,85,247,0.3)); }
-.sr-filter-pill[data-rarity="all"]       { --pill-col: rgba(168,85,247,0.55); --pill-glow: rgba(168,85,247,0.35); }
-.sr-filter-pill[data-rarity="Secret"]    { --pill-col: rgba(200,120,255,0.55); --pill-glow: rgba(200,120,255,0.35); }
-.sr-filter-pill[data-rarity="Exotic"]    { --pill-col: rgba(40,240,210,0.55);  --pill-glow: rgba(40,240,210,0.35); }
-.sr-filter-pill[data-rarity="Mythic"]    { --pill-col: rgba(255,80,110,0.55);  --pill-glow: rgba(255,80,110,0.35); }
-.sr-filter-pill[data-rarity="Legendary"] { --pill-col: rgba(255,200,50,0.55);  --pill-glow: rgba(255,200,50,0.35); }
-.sr-filter-pill[data-rarity="Epic"]      { --pill-col: rgba(180,100,255,0.55); --pill-glow: rgba(180,100,255,0.35); }
-.sr-filter-pill[data-rarity="Rare"]      { --pill-col: rgba(80,180,255,0.55);  --pill-glow: rgba(80,180,255,0.35); }
-.sr-filter-pill[data-rarity="Common"]    { --pill-col: rgba(200,200,200,0.45); --pill-glow: rgba(200,200,200,0.25); }
-.sr-filter-pill.active {
-  background: color-mix(in srgb, var(--pill-col) 18%, transparent);
-  border-color: var(--pill-col);
-}
-.sr-filter-bar-empty {
-  padding: 20px 18px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.3);
-  text-align: center;
-  display: none;
-}
-.sr-filter-bar-empty.visible { display: block; }
-
-/* -- 17. Filter bar scroll fade hints -- */
-.gp-filter-bar-wrap {
-  position: relative;
-}
-.gp-filter-bar {
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding-bottom: 6px;
-  -webkit-mask-image: linear-gradient(to right, black calc(100% - 36px), transparent 100%);
-  mask-image: linear-gradient(to right, black calc(100% - 36px), transparent 100%);
-}
-.gp-filter-bar::-webkit-scrollbar { display: none; }
-/* re-enable mask only when content actually overflows (JS adds .overflows class) */
-.gp-filter-bar:not(.overflows) {
-  -webkit-mask-image: none;
-  mask-image: none;
-  flex-wrap: wrap;
-}
-
-/* -- 20. Touch feedback on interactive cards -- */
-.gp-card:active,
-.gp-chest-card:active  { transform: scale(0.97) !important; transition: transform .1s ease !important; }
-.game-panel:active     { transform: scale(0.99); transition: transform .1s ease; }
-.rank-badge:active     { transform: scale(0.95); }

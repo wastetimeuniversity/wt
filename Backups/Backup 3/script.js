@@ -174,29 +174,23 @@ function showOthersTab(name) {
   if (tab) { tab.style.display = 'block'; tab.style.animation = 'fadeUp .3s cubic-bezier(0.22,1,0.36,1)'; }
   if (pill) pill.classList.add('active');
   try { localStorage.setItem('wt_others_subtab', name); } catch(_){}
-
-  // Gamepasses: init roll bars once and stagger cards on every reveal
-  if (name === 'gamepasses') {
-    if (!rollBarObserver) initRollBars();
-    requestAnimationFrame(() => staggerGpCards());
-  }
 }
 
 /* -- SPECIAL RANKS DATA + INTERACTION -- */
 const SPECIAL_RANKS_DATA = {
-  // -- Currently obtainable --
+  // ── Currently obtainable ──
   '???':      { name: '???',        rarity: 'Secret',    boosts: { Time: 0.70, GT: 0.35,  Fragments: 0.20  } },
   accretion:  { name: 'Accretion',  rarity: 'Exotic',    boosts: { Time: 0.60, GT: 0.30,  Fragments: 0.15  },
                 how: '🎟️ Available via <strong>Event Crates</strong> during limited-time events (e.g. Admin Abuse)' },
   nitrogen:   { name: 'Nitrogen',   rarity: 'Exotic',    boosts: { Time: 0.60, GT: 0.30,  Fragments: 0.15  } },
   lord:       { name: 'Lord',       rarity: 'Mythic',    boosts: { Time: 0.50, GT: 0.25,  Fragments: 0.125 } },
   ethereal:   { name: 'Ethereal',   rarity: 'Legendary', boosts: { Time: 0.40, GT: 0.20,  Fragments: 0.10  },
-                trivia: '✦ First introduced during the Easter Egg event - still obtainable in the current event.' },
+                trivia: '✦ First introduced during the Easter Egg event — still obtainable in the current event.' },
   bejeweled:  { name: 'Bejeweled',  rarity: 'Epic',      boosts: { Time: 0.30, GT: 0.15,  Fragments: 0.075 } },
   devoted:    { name: 'Devoted',    rarity: 'Rare',      boosts: { Time: 0.20, GT: 0.10,  Fragments: 0.05  },
                 how: '🎁 Reach <strong>Day 7</strong> on the Daily Reward system' },
 
-  // -- Past-event only (unobtainable) --
+  // ── Past-event only (unobtainable) ──
   cupid:      { name: 'Cupid',      rarity: 'Exotic',    boosts: { Time: 0.60, GT: 0.30,  Fragments: 0.15  },
                 unobtainable: true, event: "Valentine's Event" },
   fourleaf:   { name: 'Four Leaf',  rarity: 'Mythic',    boosts: { Time: 0.50, GT: 0.25,  Fragments: 0.125 },
@@ -399,7 +393,7 @@ function _initSheetDrag(sheet) {
 
   let startY = 0, currentY = 0, dragging = false, startTime = 0;
   const DISMISS_THRESHOLD = 80;   // px dragged down to auto-dismiss
-  const VELOCITY_THRESHOLD = 0.5; // px/ms - fast flick always dismisses
+  const VELOCITY_THRESHOLD = 0.5; // px/ms — fast flick always dismisses
 
   function onStart(e) {
     dragging = true;
@@ -450,8 +444,7 @@ function _initSheetDrag(sheet) {
 /* Auto-close floating sheet when rank table scrolls into full view */
 (function setupRankTableObserver() {
   document.addEventListener('DOMContentLoaded', () => {
-    // Feature 9 fix: use stable ID selector instead of fragile :last-of-type
-    const rankTablePanel = document.getElementById('rank-full-table-panel');
+    const rankTablePanel = document.querySelector('#others-special-ranks .game-panel:last-of-type');
     if (!rankTablePanel) return;
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -479,7 +472,7 @@ function _initSheetDrag(sheet) {
     const tr = document.createElement('tr');
     if (rank.unobtainable) tr.classList.add('rank-row-legacy');
     tr.style.cursor = 'pointer';
-    tr.title = '';  // no native tooltip - we have the caption instead
+    tr.title = '';  // no native tooltip — we have the caption instead
     tr.onclick = () => {
       showOthersTab('special-ranks');
       showRankDetail(key);
@@ -533,10 +526,10 @@ function _initSheetDrag(sheet) {
     if (el) el.textContent = v;
   };
 
-  setText('stat-active', stats.playing > 0 ? fmt(stats.playing) : '-');
-  setText('stat-visits', stats.visits > 0 ? fmt(stats.visits) : '-');
-  setText('stat-favorites', stats.favoritedCount > 0 ? fmt(stats.favoritedCount) : '-');
-  setText('stat-likes', stats.likeCount > 0 ? fmt(stats.likeCount) : '-');
+  setText('stat-active', stats.playing > 0 ? fmt(stats.playing) : '—');
+  setText('stat-visits', stats.visits > 0 ? fmt(stats.visits) : '—');
+  setText('stat-favorites', stats.favoritedCount > 0 ? fmt(stats.favoritedCount) : '—');
+  setText('stat-likes', stats.likeCount > 0 ? fmt(stats.likeCount) : '—');
   setText('stat-maxplayers', stats.maxPlayers ?? '-');
 
   // Only show the live badge when there are real active players
@@ -552,7 +545,7 @@ function _initSheetDrag(sheet) {
     const el = document.getElementById('codes-section-sub');
     if (!el) return;
     if (activeRows === 0) {
-      el.textContent = 'No active codes right now - check back soon!';
+      el.textContent = 'No active codes right now — check back soon!';
     } else if (activeRows === 1) {
       el.textContent = 'There is 1 active code right now. Redeem it before it expires!';
     } else {
@@ -568,36 +561,12 @@ function _initSheetDrag(sheet) {
    Also scrolls the page to the top after switching tabs.
    Persists the active tab to localStorage so it survives a refresh.
 */
-// Tab order for directional slide animation (Feature 6)
-const _TAB_ORDER = ['home','chapters','enhancements','others','codes','faq'];
-let _currentTab = 'home';
-
 function showTab(n){
   // Exit compare mode when navigating away from enhancements
   if (n !== 'enhancements' && window.exitCompareMode) window.exitCompareMode();
-
-  // Determine slide direction (Feature 6)
-  const prevIdx = _TAB_ORDER.indexOf(_currentTab);
-  const nextIdx = _TAB_ORDER.indexOf(n);
-  const dir = nextIdx > prevIdx ? 'slide-forward' : 'slide-back';
-  _currentTab = n;
-
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active','slide-forward','slide-back'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const p=document.getElementById('tab-'+n);
-  if(p) {
-    // Add both classes atomically so the browser only triggers one animation,
-    // not fadeUp first then a restart when the slide class lands.
-    if (prevIdx !== nextIdx) {
-      // Add both classes atomically - one animation fires, no restart.
-      // Don't remove dir class afterwards: next showTab call strips it anyway
-      // via classList.remove('active','slide-forward','slide-back'), so there's
-      // nothing to clean up and no second animation can trigger.
-      p.classList.add('active', dir);
-    } else {
-      p.classList.add('active');
-    }
-  }
+  const p=document.getElementById('tab-'+n); if(p) p.classList.add('active');
   // Mark the matching nav button active
   document.querySelectorAll('.nav-btn').forEach(b=>{
     const t = b.textContent.toLowerCase();
@@ -625,22 +594,12 @@ function showChapter(n){
 function toggleFaq(btn){
   const i = btn.closest('.faq-item');
   const was = i.classList.contains('open');
-  // Feature 18: clear aria-expanded on all items when closing
-  document.querySelectorAll('.faq-item.open').forEach(x => {
-    x.classList.remove('open');
-    const b = x.querySelector('button, [onclick]');
-    if (b) b.setAttribute('aria-expanded', 'false');
-  });
-  if (!was) {
-    i.classList.add('open');
-    btn.setAttribute('aria-expanded', 'true');   // Feature 18
-  } else {
-    btn.setAttribute('aria-expanded', 'false');  // Feature 18
-  }
+  document.querySelectorAll('.faq-item.open').forEach(x => x.classList.remove('open'));
+  if (!was) i.classList.add('open');
 }
 
 /* Copies a redeem code into the clipboard and shows a fixed bottom toast. */
-// -- Singleton copy-toast element ------------------------------------------
+// ── Singleton copy-toast element ──────────────────────────────────────────
 const _copyToastEl = (() => {
   const el = document.createElement('div');
   el.id = 'copy-fixed-toast';
@@ -812,7 +771,7 @@ staggerPills('[id^="others-pill-"]');
 
   document.addEventListener('mousemove', e => {
     const now = performance.now();
-    if (now - lastTrail < 32) return; // ~30fps cap - no visual difference, huge perf gain
+    if (now - lastTrail < 32) return; // ~30fps cap — no visual difference, huge perf gain
     lastTrail = now;
 
     const slot = acquire();
@@ -1184,12 +1143,8 @@ function animateCountUp(el, targetStr) {
    One-time sweep across panel bars when tab becomes visible
    ========================================== */
 (function(){
-  // Track which tabs have already been shimmered this session (Feature 16 fix)
-  const _shimmedTabs = new Set();
-
-  function shimmerBars(tabEl, tabName) {
-    if (_shimmedTabs.has(tabName)) return;  // shimmer only once per tab per session
-    _shimmedTabs.add(tabName);
+  // Fire shimmer on all visible panel bars on first tab show
+  function shimmerBars(tabEl) {
     tabEl.querySelectorAll('.panel-bar').forEach((bar, i) => {
       setTimeout(() => {
         bar.classList.remove('shimmer-once');
@@ -1204,12 +1159,12 @@ function animateCountUp(el, targetStr) {
   window.showTab = function(n) {
     origShowTab(n);
     const panel = document.getElementById('tab-' + n);
-    if (panel) setTimeout(() => shimmerBars(panel, n), 60);
+    if (panel) setTimeout(() => shimmerBars(panel), 60);
   };
   // Fire on home tab immediately
   setTimeout(() => {
     const home = document.getElementById('tab-home');
-    if (home) shimmerBars(home, 'home');
+    if (home) shimmerBars(home);
   }, 400);
 })();
 
@@ -1233,7 +1188,7 @@ function animateCountUp(el, targetStr) {
   let compareMode = false;
   let compareA = null, compareB = null;
 
-  // -- Slot DOM helpers --------------------------
+  // ── Slot DOM helpers ──────────────────────────
   function fillSlot(slot, tier, data) {
     const isA = slot === 'a';
     const elSlot   = document.getElementById('compare-slot-' + slot);
@@ -1258,7 +1213,7 @@ function animateCountUp(el, targetStr) {
     const elMult = document.getElementById('slot-' + slot + '-mult');
     const elHint = document.getElementById('slot-' + slot + '-hint');
     if (!elSlot) return;
-    elTier.textContent = '-';
+    elTier.textContent = '—';
     elTier.style.color = '';
     elTier.style.textShadow = '';
     elMult.style.display = 'none';
@@ -1276,12 +1231,12 @@ function animateCountUp(el, targetStr) {
       hint.textContent = '👇 Now drag or tap a second tier row for Tier B';
       hint.classList.remove('done');
     } else {
-      hint.textContent = '✓ Comparison ready - see results below';
+      hint.textContent = '✓ Comparison ready — see results below';
       hint.classList.add('done');
     }
   }
 
-  // -- Drag & Drop – shared drop handler -------
+  // ── Drag & Drop – shared drop handler ───────
   function applyDropToSlot(slot, tier, row) {
     const data     = tierData[tier];
     const box      = document.getElementById('tier-compare-box');
@@ -1306,7 +1261,7 @@ function animateCountUp(el, targetStr) {
     if (compareA && compareB) renderComparison(compareA, compareB);
   }
 
-  // -- Auto-scroll while dragging near viewport edges --------------
+  // ── Auto-scroll while dragging near viewport edges ──────────────
   // Works for both desktop HTML5 drag events and mobile touch drag.
   const EDGE_ZONE  = 100; // px band at top/bottom that triggers scrolling
   const MAX_SPEED  = 16;  // maximum px scrolled per animation frame
@@ -1341,9 +1296,9 @@ function animateCountUp(el, targetStr) {
     _autoScrollDir = 0;
     if (_autoScrollRAF) { cancelAnimationFrame(_autoScrollRAF); _autoScrollRAF = null; }
   }
-  // ----------------------------------------------------------------
+  // ────────────────────────────────────────────────────────────────
 
-  // -- Desktop HTML5 Drag & Drop ----------------
+  // ── Desktop HTML5 Drag & Drop ────────────────
   let _draggedTier = null;
   let _draggedRow  = null;
 
@@ -1397,7 +1352,7 @@ function animateCountUp(el, targetStr) {
     });
   }
 
-  // -- Mobile Touch Drag & Drop -----------------
+  // ── Mobile Touch Drag & Drop ─────────────────
   const _touchGhost = (() => {
     const g = document.createElement('div');
     g.id = 'compare-drag-ghost';
@@ -1475,7 +1430,7 @@ function animateCountUp(el, targetStr) {
     });
   }
 
-  // -- Enable / disable draggable attribute on rows --
+  // ── Enable / disable draggable attribute on rows ──
   function setDraggableRows(enable) {
     document.querySelectorAll('.tier-row').forEach(row => {
       if (enable) {
@@ -1492,8 +1447,8 @@ function animateCountUp(el, targetStr) {
   initDesktopDragListeners();
   initTouchDragListeners();
 
-  // -- Public: reset slots -----------------------
-  // -- Result card renderer ----------------------
+  // ── Public: reset slots ───────────────────────
+  // ── Result card renderer ──────────────────────
   function renderComparison(aSel, bSel) {
     const box = document.getElementById('tier-compare-box');
     if (!aSel || !bSel || !box) return;
@@ -1549,7 +1504,7 @@ function animateCountUp(el, targetStr) {
     box.classList.add('open');
   }
 
-  // -- Public: reset slots -----------------------
+  // ── Public: reset slots ───────────────────────
   window.resetCompareSlots = function() {
     if (compareA) { compareA.row.classList.remove('compare-a'); compareA = null; }
     if (compareB) { compareB.row.classList.remove('compare-b'); compareB = null; }
@@ -1559,7 +1514,7 @@ function animateCountUp(el, targetStr) {
     if (box) box.classList.remove('open');
   };
 
-  // -- Public: exit compare mode (called on tab switch) --
+  // ── Public: exit compare mode (called on tab switch) ──
   window.exitCompareMode = function() {
     if (!compareMode) return;
     compareMode = false;
@@ -1574,7 +1529,7 @@ function animateCountUp(el, targetStr) {
     document.querySelectorAll('.tier-row').forEach(r => r.classList.remove('compare-a','compare-b'));
   };
 
-  // -- Public: toggle ----------------------------
+  // ── Public: toggle ────────────────────────────
   window.toggleCompareMode = function() {
     compareMode = !compareMode;
     const btn   = document.getElementById('compare-toggle-btn');
@@ -1603,7 +1558,7 @@ function animateCountUp(el, targetStr) {
     }
   };
 
-  // -- Patch enhTierClick for compare mode ------
+  // ── Patch enhTierClick for compare mode ──────
   window.enhTierClick = (function(origFn){
     return function(row, tier) {
       const box       = document.getElementById('tier-compare-box');
@@ -1728,7 +1683,7 @@ function animateCountUp(el, targetStr) {
 (function(){
   const milestones = [
     { secs: 60,  icon: '⏱️', title: 'Time Scholar',      sub: '1 minute on the Wiki!' },
-    { secs: 300, icon: '🎲', title: 'Reroll Enthusiast', sub: '5 minutes - you deserve a P+ roll' },
+    { secs: 300, icon: '🎲', title: 'Reroll Enthusiast', sub: '5 minutes — you deserve a P+ roll' },
     { secs: 600, icon: '✦',  title: 'Waste Time Legend', sub: '10 minutes of dedication!' },
   ];
   const earned = new Set();
@@ -1790,16 +1745,12 @@ function filterCodes(filter, btn) {
   const emptyRow = document.getElementById('codes-empty-row');
   if (emptyRow) emptyRow.style.display = shown === 0 ? '' : 'none';
 
-  // Feature 14 fix: recalculate ALL three count badges on every filter change
+  // Update counts
   const total   = rows.length;
-  const expiredCount = Array.from(rows).filter(r => r.classList.contains('expired')).length;
-  const activeCount  = total - expiredCount;
-  const allEl  = document.getElementById('count-all');
-  const actEl  = document.getElementById('count-active');
-  const expEl  = document.getElementById('count-expired');
-  if (allEl)  allEl.textContent  = total;
-  if (actEl)  actEl.textContent  = activeCount;
-  if (expEl)  expEl.textContent  = expiredCount;
+  const expired = Array.from(rows).filter(r => r.classList.contains('expired')).length;
+  const active  = total - expired;
+  const countEl = document.getElementById('count-' + filter);
+  if (countEl) countEl.textContent = shown;
 }
 
 /* ==========================================
@@ -1820,9 +1771,8 @@ function searchCodes(query) {
   rows.forEach(row => {
     const isExpired = row.classList.contains('expired');
     const passesFilter = filter === 'all' || (filter === 'active' && !isExpired) || (filter === 'expired' && isExpired);
-    const codeText   = (row.querySelector('.codes span') || row.cells[0])?.textContent.toLowerCase() || '';
-    const rewardText = row.cells[1]?.textContent.toLowerCase() || '';  // Feature 12: search rewards too
-    const show = passesFilter && (q === '' || codeText.includes(q) || rewardText.includes(q));
+    const codeText = (row.querySelector('.codes span') || row.cells[0])?.textContent.toLowerCase() || '';
+    const show = passesFilter && (q === '' || codeText.includes(q));
     row.style.display = show ? '' : 'none';
     if (show) shown++;
   });
@@ -1846,12 +1796,9 @@ function searchCodes(query) {
     // Restore last visited tab
     let savedTab = 'home';
     try { savedTab = localStorage.getItem('wt_tab') || 'home'; } catch(_){}
-    // Feature 8 fix: sync _currentTab before calling showTab so direction calc is correct
-    if (typeof _currentTab !== 'undefined') _currentTab = savedTab;
     showTab(savedTab);
 
     // Restore last viewed chapter (only matters if starting on chapters tab)
-    // Feature 8 fix: showChapter sets both content visibility AND pill active state
     let savedChapter = 1;
     try { savedChapter = parseInt(localStorage.getItem('wt_chapter'), 10) || 1; } catch(_){}
     showChapter(savedChapter);
@@ -1864,134 +1811,5 @@ function searchCodes(query) {
     // Default codes filter to Active so users see useful codes first
     const activeBtn = document.querySelector('.codes-filter-btn.active-codes');
     if (activeBtn) filterCodes('active', activeBtn);
-  });
-})();
-/* ==========================================
-   GAMEPASSES - toggle cards & filter
-   ========================================== */
-function toggleGpCard(card) {
-  // Each card toggles independently - no forced close of siblings.
-  // align-items:start on the grid ensures expanding one card doesn't
-  // stretch others in the same row.
-  const isOpen = card.classList.contains('open');
-  if (isOpen) {
-    card.classList.remove('open');
-    card.setAttribute('aria-expanded', 'false');
-  } else {
-    card.classList.add('open');
-    card.setAttribute('aria-expanded', 'true');
-  }
-}
-
-/* -- Roll-pool bar animation via IntersectionObserver -- */
-let rollBarObserver = null;
-
-function initRollBars() {
-  // Store target widths and reset to 0 for animation
-  document.querySelectorAll('.gp-roll-bar').forEach(bar => {
-    const w = bar.style.width;
-    if (w && w !== '0' && w !== '0%') {
-      bar.dataset.targetWidth = w;
-      bar.style.width = '0';
-    }
-  });
-
-  rollBarObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const pool = entry.target;
-      pool.querySelectorAll('.gp-roll-bar[data-target-width]').forEach((bar, i) => {
-        setTimeout(() => { bar.style.width = bar.dataset.targetWidth; }, i * 90);
-      });
-      rollBarObserver.unobserve(pool);
-    });
-  }, { threshold: 0.25 });
-
-  document.querySelectorAll('.gp-roll-pool').forEach(pool => rollBarObserver.observe(pool));
-}
-
-/* -- Stagger cards inside visible sections -- */
-function staggerGpCards(sections) {
-  // Feature 7 fix: delay resets per section so late sections don't have huge delays
-  (sections || document.querySelectorAll('.gp-section:not(.gp-hidden)')).forEach(sec => {
-    let delay = 0;  // reset delay for each section
-    sec.querySelectorAll('.gp-card, .gp-chest-card').forEach(card => {
-      card.classList.remove('gp-stagger-in');
-      card.style.animationDelay = delay + 'ms';
-      // Double rAF forces a style recalc so the class removal is committed before re-add
-      requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('gp-stagger-in')));
-      delay = Math.min(delay + 55, 350);  // also cap per-section at 350ms max
-    });
-  });
-}
-
-function filterGamepasses(cat, btn) {
-  document.querySelectorAll('.gp-filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  const sections = document.querySelectorAll('.gp-section');
-
-  // Step 1 - fade out all currently-visible sections
-  sections.forEach(sec => {
-    if (!sec.classList.contains('gp-hidden')) sec.classList.add('gp-exiting');
-  });
-
-  setTimeout(() => {
-    // Step 2 - swap visibility and remove exit class
-    sections.forEach(sec => {
-      sec.classList.remove('gp-exiting');
-      if (cat === 'all') {
-        sec.classList.remove('gp-hidden');
-      } else {
-        sec.classList.toggle('gp-hidden', sec.dataset.gpCategory !== cat);
-      }
-    });
-
-    // Step 3 - stagger cards into view
-    staggerGpCards();
-
-    // Step 4 - re-observe any roll pools whose bars haven't animated yet
-    if (rollBarObserver) {
-      document.querySelectorAll('.gp-section:not(.gp-hidden) .gp-roll-pool').forEach(pool => {
-        const firstBar = pool.querySelector('.gp-roll-bar[data-target-width]');
-        if (firstBar && (firstBar.style.width === '0' || firstBar.style.width === '0%')) {
-          rollBarObserver.observe(pool);
-        }
-      });
-    }
-  }, 200);
-}
-/* ==========================================
-   FEATURE 17 – FILTER BAR OVERFLOW DETECTION
-   Adds .overflows class when pills exceed container width,
-   activating the CSS fade-hint mask on the right edge.
-   Watches both the gamepass filter bar and the special ranks filter bar.
-   ========================================== */
-(function(){
-  function syncOverflow(bar) {
-    if (!bar) return;
-    if (bar.scrollWidth > bar.clientWidth) {
-      bar.classList.add('overflows');
-    } else {
-      bar.classList.remove('overflows');
-    }
-  }
-
-  function initOverflowWatcher(bar) {
-    if (!bar) return;
-    syncOverflow(bar);
-    // Re-check on window resize
-    window.addEventListener('resize', () => syncOverflow(bar), { passive: true });
-    // Re-check if pills are added/removed dynamically
-    if (window.ResizeObserver) {
-      new ResizeObserver(() => syncOverflow(bar)).observe(bar);
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    // Gamepass filter bar
-    initOverflowWatcher(document.querySelector('.gp-filter-bar'));
-    // Special Ranks filter bar
-    initOverflowWatcher(document.getElementById('sr-filter-bar'));
   });
 })();
