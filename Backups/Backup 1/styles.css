@@ -124,44 +124,6 @@ body {
   color:var(--text-dim); letter-spacing:0.12em; text-transform:uppercase;
 }
 
-/* -- TICKER -- */
-.ticker-wrap {
-  overflow: hidden; white-space: nowrap; position: relative; z-index: 9;
-  background: linear-gradient(90deg,
-    rgba(217,70,180,0.14) 0%,
-    rgba(46,168,232,0.07) 50%,
-    rgba(217,70,180,0.14) 100%);
-  border-top: 1px solid rgba(217,70,180,0.25);
-  border-bottom: 2px solid rgba(217,70,180,0.38);
-  padding: 7px 0;
-  box-shadow: 0 0 24px rgba(217,70,180,0.12) inset;
-}
-/* Edge fade masks */
-.ticker-wrap::before,
-.ticker-wrap::after {
-  content: '';
-  position: absolute; top: 0; bottom: 0;
-  width: 90px; z-index: 2; pointer-events: none;
-}
-.ticker-wrap::before {
-  left: 0;
-  background: linear-gradient(90deg, #0d0d0f 15%, transparent);
-}
-.ticker-wrap::after {
-  right: 0;
-  background: linear-gradient(270deg, #0d0d0f 15%, transparent);
-}
-.ticker-inner {
-  display: inline-block; animation: ticker 32s linear infinite;
-  font-family: 'Nunito', sans-serif; font-size: 0.75rem; font-weight: 800;
-  color: rgba(255,255,255,0.82); letter-spacing: 0.12em; text-transform: uppercase;
-}
-/* Coloured accent spans inside the ticker */
-.ticker-inner .tk-accent { color: var(--pink); text-shadow: 0 0 10px rgba(217,70,180,0.6); }
-.ticker-inner .tk-sep    { color: rgba(46,168,232,0.6); margin: 0 8px; }
-.ticker-inner .tk-dim    { color: rgba(255,255,255,0.35); }
-@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
 /* -- NAV -- */
 .nav-wrapper {
   position:sticky; top:0; z-index:90;
@@ -292,13 +254,13 @@ body {
 .panel-bar::before {
   content:''; position:absolute;
   top:0; left:-80%; width:45%; height:100%;
-  background: linear-gradient(105deg, transparent 25%, rgba(255,255,255,0.22) 50%, transparent 75%);
+  background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.32) 50%, transparent 80%);
   pointer-events:none; z-index:2;
   transition: left 0s;
 }
 .panel-bar:hover::before {
   left: 150%;
-  transition: left 0.55s ease;
+  transition: left 0.45s ease;
 }
 
 .panel-body { padding: 18px 18px; }
@@ -838,7 +800,14 @@ body {
 ::-webkit-scrollbar{width:5px} ::-webkit-scrollbar-track{background:var(--bg)} ::-webkit-scrollbar-thumb{background:#3a1a3a;border-radius:6px} ::-webkit-scrollbar-thumb:hover{background:var(--pink)}
 
 /* -- FOOTER -- */
-footer { position:relative; z-index:5; background:#0a0a0c; border-top:2px solid rgba(255,255,255,0.06); padding:18px 20px; text-align:center; }
+footer {
+  position: relative; z-index: 5;
+  background: linear-gradient(180deg, #0d0d0f, #0a0a0c);
+  border-top: 3px solid var(--pink);
+  box-shadow: 0 -4px 32px rgba(217,70,180,0.25), 0 -1px 0 rgba(255,255,255,0.04) inset;
+  padding: 22px 20px;
+  text-align: center;
+}
 
 /* -- LINK STATES -- */
 a:link {
@@ -908,6 +877,23 @@ a:active {
 
 .activec {
   background-color: #05220f;
+}
+
+.status-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 6px;
+  font-size: 0.72rem; font-weight: 800; letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.expired-badge {
+  background: rgba(220,50,50,0.12);
+  border: 1px solid rgba(220,50,50,0.3);
+  color: #f87171;
+}
+.active-badge {
+  background: rgba(34,196,94,0.12);
+  border: 1px solid rgba(34,196,94,0.3);
+  color: #4ade80;
 }
 
 /* -- SCROLL PROGRESS BAR -- */
@@ -1084,8 +1070,7 @@ a:active {
 @keyframes sparklePop{0%{transform:scale(0) rotate(0deg);opacity:1}100%{transform:scale(1.6) rotate(45deg);opacity:0}}
 
 /* -- SMOOTH SCROLL -- */
-html { scroll-behavior: smooth; }
-* { scroll-behavior: smooth; }
+/* scroll-behavior only on html; applying it to * breaks overflow containers */
 
 /* -- ENH TIER ROW EXPAND - smooth -- */
 #enh-tier-detail {
@@ -1117,7 +1102,6 @@ html { scroll-behavior: smooth; }
    Chromium. Setting z-index: 0 (and position: relative) puts the nav definitively
    below the modal's z-index: 9999 layer. */
 body.modal-open .nav-wrapper,
-body.modal-open .ticker-wrap,
 body.modal-open .site-header {
   position: static !important;
   z-index: auto !important;
@@ -1132,9 +1116,9 @@ body.modal-open .site-header {
   transition: background 0.32s ease, backdrop-filter 0.32s ease;
 }
 .modal-overlay.open {
-  background: rgba(0,0,0,0);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  background: rgba(0,0,0,0.62);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   pointer-events: all;
 }
 .modal-box {
@@ -1173,6 +1157,21 @@ body.modal-open .site-header {
 .modal-box .panel-bar > span:first-child { flex: 1; }
 .modal-close-btn:hover { filter:brightness(1.2); }
 .modal-close-btn:active { transform:translateY(2px); }
+
+/* ESC keyboard hint in modal title bar */
+.modal-esc-hint {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 2px 7px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.6rem; font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.06em;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
 
 /* -- HOME EXPAND CARD -- */
 .home-expand-card { transition: border-color .2s, box-shadow .2s, transform .2s !important; }
@@ -1229,8 +1228,6 @@ body.modal-open .site-header {
   letter-spacing: 0.04em;
 }
 
-/* -- TICKER update (remove removed tabs) -- */
-
 /* Improved animation for .tab-panel */
 @keyframes fadeUp {
   from { opacity:0; transform:translateY(18px); }
@@ -1250,6 +1247,92 @@ body.modal-open .site-header {
 .sr { transition: opacity .7s cubic-bezier(0.22,1,0.36,1), transform .7s cubic-bezier(0.22,1,0.36,1); }
 .sr-scale { transition: opacity .6s cubic-bezier(0.34,1.56,0.64,1), transform .6s cubic-bezier(0.34,1.56,0.64,1); }
 /* ==========================================
+   ENHANCEMENT TAB – MOVED FROM INLINE <style>
+   (was inside #tab-enhancements; belongs here)
+   ========================================== */
+.enh-pill{padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.06em;display:inline-flex;align-items:center;gap:6px;}
+.enh-pill.green{background:rgba(34,196,94,0.12);border:1.5px solid rgba(34,196,94,0.4);color:#22c45e;}
+.enh-pill.purple{background:rgba(168,85,247,0.12);border:1.5px solid rgba(168,85,247,0.4);color:#c084fc;}
+.enh-pill.blue{background:rgba(46,168,232,0.12);border:1.5px solid rgba(46,168,232,0.4);color:#2ea8e8;}
+.enh-pill.gold{background:rgba(245,166,35,0.12);border:1.5px solid rgba(245,166,35,0.4);color:#f5a623;}
+.enh-pill.black{background:rgba(80,80,79,0.12);border:1.5px solid rgba(15,15,15,0.4);color:#040404;}
+
+/* tier-row – single unified rule, no !important fights */
+.tier-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 110px 90px;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  /* only transition properties that don't conflict with tierGlowPulse animation */
+  transition: background .18s, border-color .18s;
+  position: relative;
+  background: rgba(255,255,255,0.02);
+  overflow: hidden;
+  will-change: box-shadow;
+}
+.tier-row::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--tier-grad, transparent);
+  opacity: 0.13;
+  pointer-events: none;
+  border-radius: 8px;
+  transition: opacity .18s;
+}
+.tier-row:hover::after { opacity: 0.22; }
+/* hover: background + border via transition, glow via animation — no !important needed */
+.tier-row:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.18);
+  animation: tierGlowPulse 1.2s ease-in-out infinite;
+}
+.tier-row.active {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+}
+.tier-left-bar{position:absolute;left:0;top:5px;bottom:5px;width:3px;border-radius:3px;}
+.tier-badge{font-family:'Lilita One',cursive;font-size:0.95rem;padding:4px 0;border-radius:6px;text-align:center;font-weight:700;border:2px solid currentColor;width:48px;}
+.tier-rarity{font-size:0.88rem;font-weight:700;color:rgba(255,255,255,0.6);}
+.tier-boost{font-family:'Lilita One',cursive;font-size:1.05rem;text-align:right;}
+.tier-access{font-size:0.68rem;font-weight:800;text-align:right;white-space:nowrap;overflow:visible;}
+.method-card{display:flex;gap:14px;align-items:flex-start;padding:13px 14px;border-radius:8px;background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.07);margin-bottom:8px;transition:border-color .18s;}
+.method-card:hover{border-color:rgba(255,255,255,0.13);}
+.method-icon{font-size:1.5rem;flex-shrink:0;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(255,255,255,0.05);}
+.method-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.93rem;color:#fff;margin-bottom:4px;}
+.method-desc{font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.52);line-height:1.58;}
+.shop-card{border-radius:10px;padding:14px 10px;text-align:center;position:relative;border:2px solid transparent;transition:all .18s;cursor:default;}
+.shop-card:hover{transform:translateY(-2px);}
+.shop-card.reroll{background:linear-gradient(160deg,#2a1050,#1a0838);border-color:rgba(168,85,247,0.4);}
+.shop-card.lock{background:linear-gradient(160deg,#102050,#081030);border-color:rgba(46,168,232,0.4);}
+.shop-card.best{border-color:var(--gold);box-shadow:0 0 18px rgba(245,166,35,0.2);}
+.best-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:0.6rem;font-weight:900;padding:2px 10px;border-radius:10px;letter-spacing:0.08em;white-space:nowrap;}
+.shop-amount{font-family:'Lilita One',cursive;font-size:1.15rem;color:#fff;display:block;margin:6px 0 2px;}
+.shop-price{font-size:0.8rem;font-weight:800;color:var(--gold);display:flex;align-items:center;justify-content:center;gap:4px;margin-top:5px;}
+.sim-ccy-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;margin-bottom:5px;background:#111115;border:1.5px solid rgba(255,255,255,0.06);transition:border-color .18s;}
+.sim-ccy-row:hover{border-color:rgba(255,255,255,0.14);}
+.ccy-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.ccy-name{font-weight:800;font-size:0.9rem;flex:1;}
+.ccy-tag{font-size:0.6rem;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap;}
+.ch-block{border-radius:9px;overflow:hidden;border:1.5px solid;}
+.ch-header{padding:8px 14px;font-family:'Lilita One',cursive;font-size:0.9rem;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
+.ch-body{padding:10px 12px;}
+.updated-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:20px;background:rgba(34,196,94,0.1);border:1.5px solid rgba(34,196,94,0.3);font-size:0.72rem;font-weight:800;color:#22c45e;letter-spacing:0.05em;margin-bottom:18px;}
+.blink-dot{width:7px;height:7px;border-radius:50%;background:#22c45e;box-shadow:0 0 6px #22c45e;animation:blinkDot 1.4s ease-in-out infinite;}
+@keyframes blinkDot{0%,100%{opacity:1;box-shadow:0 0 6px #22c45e}50%{opacity:0.2;box-shadow:none}}
+@media(max-width:500px){
+  .tier-row{grid-template-columns:52px 1fr 90px auto;gap:6px;padding:8px 10px;}
+  .tier-access{font-size:0.62rem;max-width:80px;text-align:right;}
+  .tier-boost{font-size:0.9rem;}
+  .tier-list-header{grid-template-columns:52px 1fr 90px auto !important;gap:6px !important;padding:0 10px 8px !important;}
+}
+
+/* ==========================================
    FEATURE 1 – TIER ROW HOVER GLOW (pulsing)
    ========================================== */
 @keyframes tierGlowPulse {
@@ -1264,14 +1347,7 @@ body.modal-open .site-header {
                 inset 0 0 10px var(--tier-color, rgba(255,255,255,0.10));
   }
 }
-.tier-row {
-  transition: background .18s, border-color .18s !important;
-  will-change: box-shadow;
-}
-.tier-row:hover {
-  animation: tierGlowPulse 1.2s ease-in-out infinite !important;
-  border-color: rgba(255,255,255,0.18) !important;
-}
+/* tier-row hover glow animation keyframes */
 
 /* ── Compare toggle button ── */
 .compare-toggle-btn {
@@ -1542,6 +1618,35 @@ body.modal-open .site-header {
   margin-top: 3px;
 }
 
+/* Stack result card vertically on narrow mobile screens */
+@media (max-width: 420px) {
+  .compare-result-card {
+    flex-direction: column;
+  }
+  .compare-result-center {
+    min-width: unset;
+    width: 100%;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 10px 14px;
+  }
+  .compare-result-side {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+  }
+  .compare-result-bar-wrap {
+    width: 100%;
+    margin-top: 4px;
+  }
+}
+
 /* ==========================================
    FEATURE 5B – COMPARE DRAG & DROP
    ========================================== */
@@ -1707,8 +1812,7 @@ body.modal-open .site-header {
    FEATURE 6 – BACK TO TOP BUTTON
    ========================================== */
 #back-to-top {
-  position: fixed;
-  bottom: 32px; right: 24px;
+  /* position is provided by the #ui-stack-br flex container */
   width: auto;
   padding: 0;
   border-radius: 10px;
@@ -1721,15 +1825,15 @@ body.modal-open .site-header {
     0 0 0 1px rgba(255,255,255,0.04);
   cursor: pointer;
   display: flex; flex-direction: column; align-items: stretch;
-  z-index: 8000;
-  opacity: 0; pointer-events: none;
+  pointer-events: none; /* enabled via .visible */
+  opacity: 0;
   transform: translateY(12px) scale(0.88);
   transition: opacity .3s ease, transform .3s cubic-bezier(0.34,1.56,0.64,1),
               border-color .2s, box-shadow .2s;
   font-size: inherit;
   color: inherit;
-  /* kill default button styles */
   -webkit-appearance: none; appearance: none;
+  position: relative; /* for ::after gloss */
 }
 
 /* Panel-bar style top strip */
@@ -1803,18 +1907,33 @@ body.modal-open .site-header {
 .kbd-flash { animation: kbdFlash .32s ease-out; }
 
 /* ==========================================
+   BOTTOM-RIGHT UI STACK
+   Achievement popup and Back-to-Top are
+   stacked inside #ui-stack-br so they never
+   overlap each other regardless of height.
+   ========================================== */
+#ui-stack-br {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  display: flex;
+  flex-direction: column-reverse; /* last DOM child = bottom of stack */
+  align-items: flex-end;
+  gap: 10px;
+  z-index: 8001;
+  pointer-events: none; /* children opt-in individually */
+}
+
+/* ==========================================
    FEATURE 8 – MILESTONE ACHIEVEMENT BADGES
    ========================================== */
 .achievement-popup {
-  position: fixed;
-  bottom: 80px; right: 24px;
+  /* position is now provided by the #ui-stack-br flex container */
   background: linear-gradient(135deg, #1a1025, #22143a);
   border: 2px solid var(--purple);
   border-radius: 12px;
   padding: 12px 16px;
   display: flex; align-items: center; gap: 12px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 24px rgba(168,85,247,0.3);
-  z-index: 8001;
   max-width: 280px;
   opacity: 0; pointer-events: none;
   transform: translateX(32px) scale(0.92);

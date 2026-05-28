@@ -2019,6 +2019,54 @@ body.modal-open .site-header {
 /* -- OTHERS SUB-TABS -- */
 .others-subtab { animation: fadeUp .3s ease; }
 
+/* Subtab-specific title/subtitle styles to differentiate from main section headings */
+.others-subtab .section-title {
+  font-family: var(--font-body);
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+  color: var(--purple);
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.others-subtab .section-title::before {
+  content: '';
+  width: 6px;
+  height: 28px;
+  background: linear-gradient(180deg,var(--purple),var(--pink));
+  border-radius: 4px;
+  display: inline-block;
+}
+.others-subtab .section-sub {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.44);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+/* -- CROSS-CHAPTER CURRENCY FLOW -- */
+.stars-extends-to-ch2 {
+  position: relative;
+}
+
+/* Mobile: hide connector */
+@media (max-width: 768px) {
+  .stars-extends-to-ch2::after {
+    display: none;
+  }
+  .stars-extends-to-ch2::before {
+    display: none;
+  }
+}
+
 /* -- NAV GUIDE CARDS -- */
 .nav-guide-card { transition: border-color .2s, box-shadow .2s, transform .18s !important; }
 .nav-guide-card:hover {
@@ -3053,13 +3101,14 @@ body.modal-open .site-header {
   background: rgba(245,166,35,0.07);
   border: 1.5px solid rgba(245,166,35,0.35);
   margin-bottom: 28px;
-  animation: gpWarnPulse 3s ease-in-out infinite;
+  animation: gpWarnPulse 2s ease-in-out infinite;
 }
 @keyframes gpWarnPulse {
   0%,100% { box-shadow: 0 0 0 rgba(245,166,35,0); }
   50%     { box-shadow: 0 0 20px rgba(245,166,35,0.2); }
 }
-.gp-warning-icon { font-size: 1.7rem; flex-shrink: 0; margin-top: 2px; }
+.gp-warning-icon { font-size: 1.7rem; flex-shrink: 0; margin-top: -7px; }
+
 .gp-warning-title {
   font-family: 'Nunito', sans-serif;
   font-size: 0.9rem; font-weight: 900;
@@ -3492,6 +3541,94 @@ body.modal-open .site-header {
   .gp-card-tags, .gp-card-expand-hint, .gp-card-desc { padding-left: 16px; padding-right: 16px; }
   .gp-chest-header { padding: 14px 16px 12px; }
   .gp-chest-body { padding: 14px 16px 16px; }
+}
+/* Admin command grid: single column on narrow screens */
+@media (max-width: 520px) {
+  .admin-cmd-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -- Rank table serial number column - minimal width -- */
+#rank-full-table-panel .styled-table th:first-child,
+#rank-full-table-panel .styled-table td:first-child {
+  width: 28px;
+  min-width: 0 !important;
+  white-space: nowrap;
+  padding-right: 4px;
+  font-size: 0.78rem;
+}
+
+/* -- Full Rank Table filter bar -- */
+.rank-tf-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.rank-tf-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.76rem; font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background .18s, border-color .18s, color .18s, box-shadow .18s;
+}
+.rank-tf-btn:hover {
+  background: rgba(46,168,232,0.1);
+  border-color: rgba(46,168,232,0.35);
+  color: #60c8ff;
+}
+.rank-tf-btn.active {
+  background: rgba(46,168,232,0.15);
+  border-color: rgba(46,168,232,0.5);
+  color: #60c8ff;
+  box-shadow: 0 0 10px rgba(46,168,232,0.2);
+}
+
+/* -- Gamepass warning collapsible toggle -- */
+.gp-warning-collapsible {
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 12px;
+}
+.gp-warning-collapsible:last-of-type { margin-bottom: 28px; }
+.gp-warning-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.gp-warning-chevron {
+  font-size: 1.5rem;
+  color: rgba(245,190,60,0.55);
+  flex-shrink: 0;
+  transition: transform .22s cubic-bezier(0.4,0,0.2,1);
+}
+.gp-warning-collapsible.open .gp-warning-chevron {
+  transform: rotate(180deg);
+}
+.gp-warning-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows .3s cubic-bezier(0.4,0,0.2,1);
+}
+.gp-warning-collapse > div {
+  overflow: hidden;
+  min-height: 0;
+}
+.gp-warning-collapsible.open .gp-warning-collapse {
+  grid-template-rows: 1fr;
+}
+.gp-warning-collapsible .gp-warning-text {
+  padding-top: 9px;
 }
 /* ==========================================
    IMPROVEMENTS BATCH

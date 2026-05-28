@@ -44,18 +44,12 @@
   <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
 </header>
 
-<!-- -- TICKER -- -->
-<div class="ticker-wrap"><div class="ticker-inner">
-  <span class="tk-accent">✦</span>&nbsp; CH.1 <span class="tk-dim">·</span> CH.2 <span class="tk-dim">·</span> CH.3 <span class="tk-dim">·</span> CH.4 <span class="tk-sep">|</span> ENHANCEMENTS <span class="tk-dim">·</span> GAMEPASSES <span class="tk-dim">·</span> FAQ <span class="tk-sep">|</span> <span class="tk-accent">💎</span>&nbsp; TIER LIST &amp; STRATEGY <span class="tk-sep">|</span> <span class="tk-accent">🎟️</span>&nbsp; REDEEM CODES <span class="tk-sep">|</span> <span class="tk-accent">🏆</span>&nbsp; SPECIAL RANKS <span class="tk-sep">|</span> <span class="tk-accent">⭐</span>&nbsp; WASTE TIME UNIVERSITY WIKI <span class="tk-sep">|</span>&nbsp;&nbsp;
-  <span class="tk-accent">✦</span>&nbsp; CH.1 <span class="tk-dim">·</span> CH.2 <span class="tk-dim">·</span> CH.3 <span class="tk-dim">·</span> CH.4 <span class="tk-sep">|</span> ENHANCEMENTS <span class="tk-dim">·</span> GAMEPASSES <span class="tk-dim">·</span> FAQ <span class="tk-sep">|</span> <span class="tk-accent">💎</span>&nbsp; TIER LIST &amp; STRATEGY <span class="tk-sep">|</span> <span class="tk-accent">🎟️</span>&nbsp; REDEEM CODES <span class="tk-sep">|</span> <span class="tk-accent">🏆</span>&nbsp; SPECIAL RANKS <span class="tk-sep">|</span> <span class="tk-accent">⭐</span>&nbsp; WASTE TIME UNIVERSITY WIKI <span class="tk-sep">|</span>&nbsp;&nbsp;
-</div></div>
-
 <!-- -- NAV -- -->
 <nav class="nav-wrapper">
   <div class="nav-inner">
   </div>
   <div class="nav-links" id="nav-links">
-    <button class="nav-btn active" id="nav-home" onclick="showTab('home');closeMobileNav()">🏠 Home<span class="kbd-hint">H</span></button>
+    <button class="nav-btn" id="nav-home" onclick="showTab('home');closeMobileNav()">🏠 Home<span class="kbd-hint">H</span></button>
     <span class="nav-sep">|</span>
     <div class="nav-group">
       <button class="nav-btn" id="nav-chapters" onclick="showTab('chapters');closeMobileNav()">📖 Chapters ▾<span class="kbd-hint">C</span></button>
@@ -87,7 +81,7 @@
 <main class="site-main">
 
   <!-- HOME -->
-  <div id="tab-home" class="tab-panel active">
+  <div id="tab-home" class="tab-panel">
     <div class="section-block">
     <div class="hero-panel-outer" style="border: 2.5px solid rgba(157, 42, 224, 0.621);">
     <div class="hero-panel">
@@ -198,7 +192,7 @@
     <div class="section-title">Chapter Guides</div>
     <div class="section-sub">Select a chapter below.</div>
     <div class="chapter-tab-row">
-      <button class="chapter-pill active" onclick="showChapter(1)">Chapter 1</button>
+      <button class="chapter-pill" onclick="showChapter(1)">Chapter 1</button>
       <button class="chapter-pill"        onclick="showChapter(2)">Chapter 2</button>
       <button class="chapter-pill"        onclick="showChapter(3)">Chapter 3</button>
       <button class="chapter-pill"        onclick="showChapter(4)">Chapter 4</button>
@@ -206,7 +200,7 @@
 
     <div id="chapter-1" class="chapter-content">
       <div class="game-panel" style="margin-bottom:14px;">
-        <div class="panel-bar pink"><span>📖 Chapter 1</span><button class="panel-x">✕</button></div>
+        <div class="panel-bar pink"><span>📖 Chapter 1</span></div>
         <div class="panel-body"><div class="card-title">-</div><div class="card-body">-</div></div>
       </div>
       <div class="panel-grid">
@@ -218,7 +212,7 @@
 
     <div id="chapter-2" class="chapter-content" style="display:none;">
       <div class="game-panel" style="margin-bottom:14px;">
-        <div class="panel-bar blue"><span>📖 Chapter 2</span><button class="panel-x">✕</button></div>
+        <div class="panel-bar blue"><span>📖 Chapter 2</span></div>
         <div class="panel-body"><div class="card-title">-</div><div class="card-body">-</div></div>
       </div>
       <div class="coming-soon"><span class="coming-soon-icon">⚙️</span><h3>Data Incoming</h3><p>-</p></div>
@@ -226,7 +220,7 @@
 
     <div id="chapter-3" class="chapter-content" style="display:none;">
       <div class="game-panel" style="margin-bottom:14px;">
-        <div class="panel-bar gold"><span>📖 Chapter 3</span><button class="panel-x">✕</button></div>
+        <div class="panel-bar gold"><span>📖 Chapter 3</span></div>
         <div class="panel-body"><div class="card-title">-</div><div class="card-body">-</div></div>
       </div>
       <div class="coming-soon"><span class="coming-soon-icon">⚙️</span><h3>Data Incoming</h3><p>-</p></div>
@@ -234,7 +228,7 @@
 
     <div id="chapter-4" class="chapter-content" style="display:none;">
       <div class="game-panel" style="margin-bottom:14px;">
-        <div class="panel-bar purple"><span>📖 Chapter 4</span><button class="panel-x">✕</button></div>
+        <div class="panel-bar purple"><span>📖 Chapter 4</span></div>
         <div class="panel-body"><div class="card-title">-</div><div class="card-body">-</div></div>
       </div>
       <div class="coming-soon"><span class="coming-soon-icon">⚙️</span><h3>Data Incoming</h3><p>-</p></div>
@@ -243,56 +237,6 @@
 
   <!-- ENHANCEMENTS -->
   <div id="tab-enhancements" class="tab-panel">
-  <!-- Enhancement tab-specific inline styles used only for the tier list and enhancement cards -->
-  <style>
-  /* Enhancement tab-specific styles */
-  .enh-pill{padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.06em;display:inline-flex;align-items:center;gap:6px;}
-  .enh-pill.green{background:rgba(34,196,94,0.12);border:1.5px solid rgba(34,196,94,0.4);color:#22c45e;}
-  .enh-pill.purple{background:rgba(168,85,247,0.12);border:1.5px solid rgba(168,85,247,0.4);color:#c084fc;}
-  .enh-pill.blue{background:rgba(46,168,232,0.12);border:1.5px solid rgba(46,168,232,0.4);color:#2ea8e8;}
-  .enh-pill.gold{background:rgba(245,166,35,0.12);border:1.5px solid rgba(245,166,35,0.4);color:#f5a623;}
-  .enh-pill.black{background:rgba(80, 80, 79, 0.12);border:1.5px solid rgba(15, 15, 15, 0.4);color:#040404;}
-  .tier-row{display:grid;grid-template-columns:60px 1fr 110px 90px;align-items:center;gap:10px;padding:9px 14px;border-radius:8px;margin-bottom:5px;border:1.5px solid transparent;cursor:pointer;transition:all .18s;position:relative;background:rgba(255,255,255,0.02);overflow:hidden;}
-  .tier-row::after{content:'';position:absolute;inset:0;background:var(--tier-grad,transparent);opacity:0.13;pointer-events:none;border-radius:8px;transition:opacity .18s;}
-  .tier-row:hover::after{opacity:0.22;}
-  .tier-row:hover{background:rgba(255,255,255,0.05);}
-  .tier-row.active{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);}
-  .tier-left-bar{position:absolute;left:0;top:5px;bottom:5px;width:3px;border-radius:3px;}
-  .tier-badge{font-family:'Lilita One',cursive;font-size:0.95rem;padding:4px 0;border-radius:6px;text-align:center;font-weight:700;border:2px solid currentColor;width:48px;}
-  .tier-rarity{font-size:0.88rem;font-weight:700;color:rgba(255,255,255,0.6);}
-  .tier-boost{font-family:'Lilita One',cursive;font-size:1.05rem;text-align:right;}
-  .tier-access{font-size:0.68rem;font-weight:800;text-align:right;white-space:nowrap;overflow:visible;}
-  .method-card{display:flex;gap:14px;align-items:flex-start;padding:13px 14px;border-radius:8px;background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.07);margin-bottom:8px;transition:border-color .18s;}
-  .method-card:hover{border-color:rgba(255,255,255,0.13);}
-  .method-icon{font-size:1.5rem;flex-shrink:0;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(255,255,255,0.05);}
-  .method-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.93rem;color:#fff;margin-bottom:4px;}
-  .method-desc{font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.52);line-height:1.58;}
-  .shop-card{border-radius:10px;padding:14px 10px;text-align:center;position:relative;border:2px solid transparent;transition:all .18s;cursor:default;}
-  .shop-card:hover{transform:translateY(-2px);}
-  .shop-card.reroll{background:linear-gradient(160deg,#2a1050,#1a0838);border-color:rgba(168,85,247,0.4);}
-  .shop-card.lock{background:linear-gradient(160deg,#102050,#081030);border-color:rgba(46,168,232,0.4);}
-  .shop-card.best{border-color:var(--gold);box-shadow:0 0 18px rgba(245,166,35,0.2);}
-  .best-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:0.6rem;font-weight:900;padding:2px 10px;border-radius:10px;letter-spacing:0.08em;white-space:nowrap;}
-  .shop-amount{font-family:'Lilita One',cursive;font-size:1.15rem;color:#fff;display:block;margin:6px 0 2px;}
-  .shop-price{font-size:0.8rem;font-weight:800;color:var(--gold);display:flex;align-items:center;justify-content:center;gap:4px;margin-top:5px;}
-  .sim-ccy-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;margin-bottom:5px;background:#111115;border:1.5px solid rgba(255,255,255,0.06);transition:border-color .18s;}
-  .sim-ccy-row:hover{border-color:rgba(255,255,255,0.14);}
-  .ccy-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-  .ccy-name{font-weight:800;font-size:0.9rem;flex:1;}
-  .ccy-tag{font-size:0.6rem;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap;}
-  .ch-block{border-radius:9px;overflow:hidden;border:1.5px solid;}
-  .ch-header{padding:8px 14px;font-family:'Lilita One',cursive;font-size:0.9rem;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
-  .ch-body{padding:10px 12px;}
-  .updated-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:20px;background:rgba(34,196,94,0.1);border:1.5px solid rgba(34,196,94,0.3);font-size:0.72rem;font-weight:800;color:#22c45e;letter-spacing:0.05em;margin-bottom:18px;}
-  .blink-dot{width:7px;height:7px;border-radius:50%;background:#22c45e;box-shadow:0 0 6px #22c45e;animation:blinkDot 1.4s ease-in-out infinite;}
-  @keyframes blinkDot{0%,100%{opacity:1;box-shadow:0 0 6px #22c45e}50%{opacity:0.2;box-shadow:none}}
-  @media(max-width:500px){
-    .tier-row{grid-template-columns:52px 1fr 90px auto;gap:6px;padding:8px 10px;}
-    .tier-access{font-size:0.62rem;max-width:80px;text-align:right;}
-    .tier-boost{font-size:0.9rem;}
-    .tier-list-header{grid-template-columns:52px 1fr 90px auto !important;gap:6px !important;padding:0 10px 8px !important;}
-  }
-  </style>
 
     <div class="section-title">💎 Enhancements</div>
     <div class="section-sub">Randomised boost multipliers applied to each in-game currency - one of the most impactful progression systems in Waste Time.</div>
@@ -718,7 +662,7 @@
     <div class="section-sub">Special Ranks, Gamepasses, and more.</div>
     <!-- Sub-tab pills -->
     <div class="chapter-tab-row">
-      <button class="chapter-pill active" id="others-pill-special-ranks" onclick="showOthersTab('special-ranks')">🏆 Special Ranks</button>
+      <button class="chapter-pill" id="others-pill-special-ranks" onclick="showOthersTab('special-ranks')">🏆 Special Ranks</button>
       <button class="chapter-pill" id="others-pill-gamepasses" onclick="showOthersTab('gamepasses')">🎮 Gamepasses</button>
     </div>
 
@@ -727,7 +671,7 @@
       <div class="section-sub" style="margin-bottom:16px;">Special ranks available in Waste Time - each with unique passive bonuses.</div>
       <div class="hero-2col" style="margin-bottom:20px; align-items:start;">
         <div class="game-panel" data-no-tilt>
-          <div class="panel-bar blue"><span>🏆 Special Ranks</span><button class="panel-x">✕</button></div>
+          <div class="panel-bar blue"><span>🏆 Special Ranks</span></div>
           <div class="panel-body" style="display:flex; flex-direction:column; gap:8px;">
             <div class="rank-badge ethereal">✦ ETHEREAL</div>
             <div class="rank-badge gold-coin">✦ Gold Coin</div>
@@ -773,7 +717,7 @@
     <div class="section-title">Redeem Codes</div>
     <div class="section-sub" id="codes-section-sub">Loading codes...</div>
     <div class="game-panel" style="margin-bottom:20px;">
-      <div class="panel-bar green"><span>📋 Information</span><button class="panel-x">✕</button></div>
+      <div class="panel-bar green"><span>📋 Information</span></div>
       <div class="panel-body"><div class="card-title">How to Redeem</div><div class="card-body">
         Click the "+" icon on the right sidebar. On the "More" panel that opens up, click on "Info". There, you will find a button named "Codes". You will be able to enter the redeem codes in the blank field of the panel that opens for rewards!
       </div></div>
@@ -783,6 +727,9 @@
     </div>
     <div class="game-panel" data-no-tilt>
       <div class="panel-bar dark"><span>🎟️ Redeem Codes List</span></div>
+      <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <input id="codes-search" type="text" placeholder="🔍  Search codes…" oninput="searchCodes(this.value)" autocomplete="off" spellcheck="false" style="width:100%;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;font-family:'Source Code Pro',monospace;font-size:0.82rem;font-weight:500;color:#e8d9ff;outline:none;transition:border-color .18s,box-shadow .18s;" onfocus="this.style.borderColor='rgba(168,85,247,0.5)';this.style.boxShadow='0 0 12px rgba(168,85,247,0.2)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)';this.style.boxShadow=''">
+      </div>
       <div class="codes-filter-bar">
         <div class="codes-filter-segment">
           <button class="codes-filter-btn all active" onclick="filterCodes('all',this)"><span class="codes-filter-icon">📋</span> All <span class="codes-filter-count" id="count-all">13</span></button>
@@ -795,19 +742,20 @@
           <table class="styled-table">
             <thead><tr><th>Code</th><th>Reward</th><th>Status</th></tr></thead>
             <tbody>
-              <tr class="expired"><td class="codes"><span>ChapterIV</span><button class="code-copy-button" onclick="copyCode('ChapterIV', this)">Copy</button></td><td>🔒 10 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>ClansUPD</span><button class="code-copy-button" onclick="copyCode('ClansUPD', this)">Copy</button></td><td>🔒 7 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>MoreTree</span><button class="code-copy-button" onclick="copyCode('MoreTree', this)">Copy</button></td><td>🔒 7 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>sorryfordelay2</span><button class="code-copy-button" onclick="copyCode('sorryfordelay2', this)">Copy</button></td><td>🔒 7 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>obby</span><button class="code-copy-button" onclick="copyCode('obby', this)">Copy</button></td><td>🔒 5 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>QOL</span><button class="code-copy-button" onclick="copyCode('QOL', this)">Copy</button></td><td>🔒 3 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>dailyrewards</span><button class="code-copy-button" onclick="copyCode('dailyrewards', this)">Copy</button></td><td>🔒 5 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>ruined</span><button class="code-copy-button" onclick="copyCode('ruined', this)">Copy</button></td><td>🔒 7 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>easterevent</span><button class="code-copy-button" onclick="copyCode('easterevent', this)">Copy</button></td><td>🎲 9 rerolls</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>sorryfordelay</span><button class="code-copy-button" onclick="copyCode('sorryfordelay', this)">Copy</button></td><td>🎲 9 rerolls</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>wereback</span><button class="code-copy-button" onclick="copyCode('wereback', this)">Copy</button></td><td>🔒 5 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>newpillar</span><button class="code-copy-button" onclick="copyCode('newpillar', this)">Copy</button></td><td>🔒 5 locks</td><td>Expired</td></tr>
-            <tr class="expired"><td class="codes"><span>etherealontop</span><button class="code-copy-button" onclick="copyCode('etherealontop', this)">Copy</button></td><td>🔒 25 locks</td><td>Expired</td></tr>
+              <tr id="codes-empty-row" style="display:none;"><td colspan="3" style="text-align:center;padding:22px 16px;color:rgba(255,255,255,0.35);font-size:0.84rem;font-weight:700;letter-spacing:0.03em;">🎟️ No codes are active at the moment. Check back later.</td></tr>
+              <tr class="expired"><td class="codes"><span>ChapterIV</span><button class="code-copy-button" onclick="copyCode('ChapterIV', this)">Copy</button></td><td>🔒 10 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>ClansUPD</span><button class="code-copy-button" onclick="copyCode('ClansUPD', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>MoreTree</span><button class="code-copy-button" onclick="copyCode('MoreTree', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>sorryfordelay2</span><button class="code-copy-button" onclick="copyCode('sorryfordelay2', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>obby</span><button class="code-copy-button" onclick="copyCode('obby', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>QOL</span><button class="code-copy-button" onclick="copyCode('QOL', this)">Copy</button></td><td>🔒 3 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>dailyrewards</span><button class="code-copy-button" onclick="copyCode('dailyrewards', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>ruined</span><button class="code-copy-button" onclick="copyCode('ruined', this)">Copy</button></td><td>🔒 7 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>easterevent</span><button class="code-copy-button" onclick="copyCode('easterevent', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>sorryfordelay</span><button class="code-copy-button" onclick="copyCode('sorryfordelay', this)">Copy</button></td><td>🎲 9 rerolls</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>wereback</span><button class="code-copy-button" onclick="copyCode('wereback', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>newpillar</span><button class="code-copy-button" onclick="copyCode('newpillar', this)">Copy</button></td><td>🔒 5 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
+            <tr class="expired"><td class="codes"><span>etherealontop</span><button class="code-copy-button" onclick="copyCode('etherealontop', this)">Copy</button></td><td>🔒 25 locks</td><td><span class="status-badge expired-badge">⛔ Expired</span></td></tr>
           </tbody>
         </table>
         </div>
@@ -836,6 +784,7 @@
   <div class="modal-box">
     <div class="panel-bar purple" style="border-radius:0;flex-shrink:0;">
       <span>🗓️ Upcoming Events</span>
+      <span class="modal-esc-hint">ESC</span>
       <button class="modal-close-btn" onclick="closeModal('modal-events')">✕</button>
     </div>
     <div class="modal-scroll">
@@ -867,6 +816,7 @@
   <div class="modal-box">
     <div class="panel-bar gold" style="border-radius:0;flex-shrink:0;">
       <span>📌 Bulletins</span>
+      <span class="modal-esc-hint">ESC</span>
       <button class="modal-close-btn" onclick="closeModal('modal-bulletins')">✕</button>
     </div>
     <div class="modal-scroll">
@@ -886,24 +836,36 @@
 </main>
 
 <footer>
-  <div style="font-family:'Nunito',sans-serif;font-size:0.65rem;font-weight:800;letter-spacing:0.16em;color:var(--text-dim);text-transform:uppercase;">
-    WASTE TIME ULTIMATE GUIDE &nbsp;✦&nbsp; CREATED AND MAINTAINED BY <a href="https://discord.gg/pJ8R7uJJtn">WASTE TIME UNIVERSITY</a> &nbsp;✦&nbsp; OFFICIALLY AFFILIATED TO <a href="https://www.roblox.com/games/129548273770183/Waste-Time">WASTE TIME</a>
+  <div style="display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-bottom:10px;">
+    <a href="https://discord.gg/pJ8R7uJJtn" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;background:rgba(88,101,242,0.15);border:1.5px solid rgba(88,101,242,0.4);color:#a5b4fc;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:0.04em;text-decoration:none;transition:background .2s,box-shadow .2s;" onmouseover="this.style.background='rgba(88,101,242,0.28)';this.style.boxShadow='0 0 16px rgba(88,101,242,0.3)'" onmouseout="this.style.background='rgba(88,101,242,0.15)';this.style.boxShadow=''">
+      <img src="img/discordlogo.svg" alt="Discord" width="16" height="16" style="display:block;"/>
+      Waste Time University
+    </a>
+    <a href="https://www.roblox.com/games/129548273770183/Waste-Time" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;background:rgba(34,196,94,0.1);border:1.5px solid rgba(34,196,94,0.3);color:#4ade80;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:0.04em;text-decoration:none;transition:background .2s,box-shadow .2s;" onmouseover="this.style.background='rgba(34,196,94,0.2)';this.style.boxShadow='0 0 16px rgba(34,196,94,0.25)'" onmouseout="this.style.background='rgba(34,196,94,0.1)';this.style.boxShadow=''">
+      <img src="img/robloxlogo.png" alt="Roblox" width="16" height="16" style="display:block;"/>
+      Play on Roblox
+    </a>
+  </div>
+  <div style="font-family:'Nunito',sans-serif;font-size:0.62rem;font-weight:800;letter-spacing:0.14em;color:var(--text-dim);text-transform:uppercase;">
+    WASTE TIME ULTIMATE GUIDE &nbsp;✦&nbsp; CREATED AND MAINTAINED BY WASTE TIME UNIVERSITY &nbsp;✦&nbsp; OFFICIALLY AFFILIATED TO WASTE TIME
   </div>
 </footer>
 
 <!-- Main page behavior and interactive logic for tabs, modals, timers, and effects. -->
 <script src="script.js" defer></script>
 
-<!-- Back to top button -->
-<button id="back-to-top" title="Back to top" aria-label="Back to top"></button>
-
-<!-- Achievement popup container -->
-<div id="achievement-popup" class="achievement-popup">
-  <div class="achievement-icon" id="ach-icon">🏆</div>
-  <div class="achievement-text-wrap">
-    <div class="achievement-label">Achievement Unlocked</div>
-    <div class="achievement-title" id="ach-title">-</div>
-    <div class="achievement-sub" id="ach-sub">-</div>
+<!-- Bottom-right UI stack: BtT + achievement always stacked, never overlapping -->
+<div id="ui-stack-br">
+  <!-- Back to top button — listed first so column-reverse places it at the bottom -->
+  <button id="back-to-top" title="Back to top" aria-label="Back to top"></button>
+  <!-- Achievement popup container — listed second so column-reverse floats it above BtT -->
+  <div id="achievement-popup" class="achievement-popup">
+    <div class="achievement-icon" id="ach-icon">🏆</div>
+    <div class="achievement-text-wrap">
+      <div class="achievement-label">Achievement Unlocked</div>
+      <div class="achievement-title" id="ach-title">-</div>
+      <div class="achievement-sub" id="ach-sub">-</div>
+    </div>
   </div>
 </div>
 </body>

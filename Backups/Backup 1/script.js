@@ -35,7 +35,11 @@
   ];
 
   let t = 0;
-  (function loop(){
+  let _rafId = null;
+  let _animPaused = false;
+
+  function loop(){
+    if (_animPaused) { _rafId = null; return; }
     t++; ctx.clearRect(0,0,W,H);
 
     // --- Full-page ambient colour blobs ---
@@ -67,8 +71,21 @@
       ctx.fillStyle=`rgba(255,255,255,${a})`;
       ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
     });
-    requestAnimationFrame(loop);
-  })();
+    _rafId = requestAnimationFrame(loop);
+  }
+
+  // Pause when the tab is backgrounded, resume when it returns
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      _animPaused = true;
+      if (_rafId) { cancelAnimationFrame(_rafId); _rafId = null; }
+    } else {
+      _animPaused = false;
+      _rafId = requestAnimationFrame(loop);
+    }
+  });
+
+  _rafId = requestAnimationFrame(loop);
 })();
 
 /* -- ENHANCEMENT TIER CLICK - smooth expand -- */
@@ -93,7 +110,7 @@ function enhTierClick(row, tier) {
     'A':   { c:'#f59e0b', desc:'Above average at 11.27%. A 5× boost is solid and worth locking on most currencies until you can roll S or higher.', tip:'Lock and keep on non-primary currencies. Hunt higher for Time / Eons.' },
     'S':   { c:'#f97316', desc:'Rare at 9.39%. A 7.7× multiplier is where enhancements become genuinely powerful. Lock on every active currency.', tip:'Lock immediately on anything you actively use.' },
     'S+':  { c:'#ef4444', desc:'Very rare at 7.51%. At 10.99× this is an excellent roll that will noticeably accelerate progression on any currency.', tip:'Always lock S+. Great roll - protect it.' },
-    'S++': { c:'#ff2222', desc:"Extremely rare at just 1.88%. The 14.99× multiplier is the absolute peak attainable before unlocking the CH2 Upgrade Tree. Celebrate this roll.', tip:'Best possible without CH2. Lock it and never look back. But after unlocking P+ enhancement, definitely reroll for P+. This tier might be the rarest, but it's not the best one." },
+    'S++': { c:'#ff2222', desc:'Extremely rare at just 1.88%. The 14.99× multiplier is the absolute peak attainable before unlocking the CH2 Upgrade Tree. Celebrate this roll.', tip:"Best possible without CH2. Lock it and never look back. But after unlocking P+ enhancement, definitely reroll for P+. This tier might be the rarest, but it's not the best one." },
     'P':   { c:'#a855f7', desc:'Requires the Chapter 2 Upgrade Tree to enter the roll pool. At 25.99× this is a massive leap above S++ and will dramatically accelerate CH2+ progression.', tip:'Unlock the CH2 Upgrade Tree first, then hunt for P on primary currencies.' },
     'P+':  { c:'#d946ef', desc:'The most powerful tier at 49.99×. Requires the CH2 Upgrade Tree. Securing P+ on your key currencies is a major milestone that compresses enormous amounts of grind.', tip:'The holy grail. Prioritise getting CH2 Upgrade Tree unlocked to access this tier.' },
   };
@@ -163,6 +180,7 @@ function showOthersTab(name) {
   const pill = document.getElementById('others-pill-' + name);
   if (tab) { tab.style.display = 'block'; tab.style.animation = 'fadeUp .3s cubic-bezier(0.22,1,0.36,1)'; }
   if (pill) pill.classList.add('active');
+  try { localStorage.setItem('wt_others_subtab', name); } catch(_){}
 }
 
 /* -- ROBLOX LIVE STATS (hardcoded values only) -- */
@@ -221,6 +239,7 @@ function showOthersTab(name) {
 /* -- TABS -- */
 /* Selects one of the main page tabs and updates the navigation state.
    Also scrolls the page to the top after switching tabs.
+   Persists the active tab to localStorage so it survives a refresh.
 */
 function showTab(n){
   // Exit compare mode when navigating away from enhancements
@@ -235,15 +254,19 @@ function showTab(n){
     else if(n!=='others' && t.includes(n.slice(0,4).toLowerCase())) b.classList.add('active');
   });
   scrollTo({top:0,behavior:'smooth'});
+  try { localStorage.setItem('wt_tab', n); } catch(_){}
 }
 
 /* -- CHAPTERS -- */
-/* Shows the requested chapter content and updates the chapter pill button state. */
+/* Shows the requested chapter content and updates the chapter pill button state.
+   Persists the active chapter to localStorage so it survives a refresh.
+*/
 function showChapter(n){
   document.querySelectorAll('.chapter-content').forEach(c=>c.style.display='none');
   document.querySelectorAll('.chapter-pill').forEach(p=>p.classList.remove('active'));
   const ch=document.getElementById('chapter-'+n); if(ch)ch.style.display='block';
   const pills=document.querySelectorAll('.chapter-pill'); if(pills[n-1])pills[n-1].classList.add('active');
+  try { localStorage.setItem('wt_chapter', n); } catch(_){}
 }
 
 /* -- FAQ -- */
@@ -404,18 +427,45 @@ staggerPills('[id^="others-pill-"]');
   });
 })();
 
-/* -- ENHANCED MOUSE TRAIL - alternates pink/blue/gold -- */
-let _trailIdx = 0;
-const _trailCols = ['rgba(217,70,180,0.7)','rgba(46,168,232,0.7)','rgba(245,166,35,0.6)','rgba(168,85,247,0.7)'];
-document.addEventListener('mousemove',e=>{
-  const col = _trailCols[_trailIdx++ % _trailCols.length];
-  const size = 3 + Math.random()*3;
-  const d=document.createElement('div');
-  d.style.cssText=`position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:${size}px;height:${size}px;border-radius:50%;background:${col};box-shadow:0 0 ${size*2}px ${col};pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:opacity .5s,transform .5s;`;
-  document.body.appendChild(d);
-  setTimeout(()=>{d.style.opacity='0';d.style.transform='translate(-50%,-50%) scale(0)';},40);
-  setTimeout(()=>d.remove(),560);
-});
+/* -- ENHANCED MOUSE TRAIL - pooled + throttled, alternates pink/blue/gold -- */
+(function(){
+  const COLS = ['rgba(217,70,180,0.7)','rgba(46,168,232,0.7)','rgba(245,166,35,0.6)','rgba(168,85,247,0.7)'];
+  const POOL_SIZE = 24;
+  const pool = [];
+  let colIdx = 0, lastTrail = 0;
+
+  // Pre-build pool elements and park them off-screen
+  for (let i = 0; i < POOL_SIZE; i++) {
+    const d = document.createElement('div');
+    d.style.cssText = 'position:fixed;left:-99px;top:-99px;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:opacity .5s,transform .5s;';
+    document.body.appendChild(d);
+    pool.push({ el: d, free: true });
+  }
+
+  function acquire() {
+    return pool.find(p => p.free) || null;
+  }
+
+  document.addEventListener('mousemove', e => {
+    const now = performance.now();
+    if (now - lastTrail < 32) return; // ~30fps cap — no visual difference, huge perf gain
+    lastTrail = now;
+
+    const slot = acquire();
+    if (!slot) return;
+    slot.free = false;
+
+    const col  = COLS[colIdx++ % COLS.length];
+    const size = 3 + Math.random() * 3;
+    const d    = slot.el;
+    d.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:${size}px;height:${size}px;border-radius:50%;background:${col};box-shadow:0 0 ${size*2}px ${col};pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:opacity .5s,transform .5s;`;
+    setTimeout(() => { d.style.opacity = '0'; d.style.transform = 'translate(-50%,-50%) scale(0)'; }, 40);
+    setTimeout(() => {
+      d.style.cssText = 'position:fixed;left:-99px;top:-99px;border-radius:50%;pointer-events:none;z-index:9999;transition:none;opacity:1;transform:translate(-50%,-50%);';
+      slot.free = true;
+    }, 560);
+  }, { passive: true });
+})();
 
 /* -- NAV SPARKLES -- */
 document.querySelectorAll('.nav-btn').forEach(btn=>{
@@ -429,78 +479,71 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
   });
 });
 
-/* -- CLICK BURST -- */
+/* -- CLICK BURST - pooled, suppressed on interactive elements -- */
 (function(){
   const BURST_COLS = ['#d946b4','#2ea8e8','#f5a623','#a855f7','#22c45e','#ffffff'];
   const SHAPES = ['●','✦','★','◆','✸','⬡'];
+  const SUPPRESS_TAGS = new Set(['BUTTON','A','INPUT','TEXTAREA','SELECT']);
+
+  // Particle pool
+  const PARTICLE_POOL_SIZE = 80;
+  const pPool = [];
+  for (let i = 0; i < PARTICLE_POOL_SIZE; i++) {
+    const p = document.createElement('div');
+    p.style.cssText = 'position:fixed;left:-99px;top:-99px;pointer-events:none;z-index:9998;';
+    document.body.appendChild(p);
+    pPool.push({ el: p, free: true });
+  }
+  function acquireParticle() { return pPool.find(p => p.free) || null; }
 
   document.addEventListener('click', e => {
+    // Suppress burst on buttons and interactive controls
+    if (SUPPRESS_TAGS.has(e.target.tagName) || e.target.closest('button,a,[role="button"]')) return;
+
     const x = e.clientX, y = e.clientY;
     const col = BURST_COLS[Math.floor(Math.random() * BURST_COLS.length)];
 
     // -- Ring pulse --
     const ring = document.createElement('div');
-    ring.style.cssText = `
-      position:fixed; left:${x}px; top:${y}px;
-      width:6px; height:6px; border-radius:50%;
-      border:2px solid ${col};
-      box-shadow: 0 0 12px ${col}, 0 0 24px ${col}44;
-      transform:translate(-50%,-50%) scale(1);
-      pointer-events:none; z-index:9999;
-      transition: transform .55s cubic-bezier(0.2,0,0.3,1), opacity .55s ease;
-    `;
+    ring.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:6px;height:6px;border-radius:50%;border:2px solid ${col};box-shadow:0 0 12px ${col},0 0 24px ${col}44;transform:translate(-50%,-50%) scale(1);pointer-events:none;z-index:9999;transition:transform .55s cubic-bezier(0.2,0,0.3,1),opacity .55s ease;`;
     document.body.appendChild(ring);
-    requestAnimationFrame(() => {
-      ring.style.transform = 'translate(-50%,-50%) scale(9)';
-      ring.style.opacity = '0';
-    });
+    requestAnimationFrame(() => { ring.style.transform='translate(-50%,-50%) scale(9)'; ring.style.opacity='0'; });
     setTimeout(() => ring.remove(), 580);
 
-    // -- Particle burst --
+    // -- Particle burst (pooled) --
     const count = 10 + Math.floor(Math.random() * 6);
     for (let i = 0; i < count; i++) {
-      const angle  = (i / count) * Math.PI * 2;
-      const dist   = 38 + Math.random() * 44;
-      const tx     = Math.cos(angle) * dist;
-      const ty     = Math.sin(angle) * dist;
-      const size   = 3 + Math.random() * 4;
-      const shape  = SHAPES[Math.floor(Math.random() * SHAPES.length)];
-      const pCol   = BURST_COLS[Math.floor(Math.random() * BURST_COLS.length)];
-      const delay  = Math.random() * 60;
-      const dur    = 420 + Math.random() * 200;
+      const slot = acquireParticle();
+      if (!slot) continue;
+      slot.free = false;
 
-      const p = document.createElement('div');
-      p.textContent = Math.random() > 0.55 ? shape : '';
-      p.style.cssText = `
-        position:fixed; left:${x}px; top:${y}px;
-        width:${size}px; height:${size}px;
-        border-radius: ${Math.random()>0.4 ? '50%' : '2px'};
-        background: ${p.textContent ? 'transparent' : pCol};
-        color: ${pCol}; font-size:${size + 3}px; line-height:1;
-        box-shadow: 0 0 ${size*2}px ${pCol}88;
-        pointer-events:none; z-index:9998;
-        transform:translate(-50%,-50%) scale(1) rotate(0deg);
-        transition: transform ${dur}ms cubic-bezier(0.2,0,0.4,1) ${delay}ms,
-                    opacity   ${dur * 0.7}ms ease ${delay + dur * 0.35}ms;
-      `;
-      document.body.appendChild(p);
+      const angle = (i / count) * Math.PI * 2;
+      const dist  = 38 + Math.random() * 44;
+      const tx    = Math.cos(angle) * dist;
+      const ty    = Math.sin(angle) * dist;
+      const size  = 3 + Math.random() * 4;
+      const shape = Math.random() > 0.55 ? SHAPES[Math.floor(Math.random() * SHAPES.length)] : '';
+      const pCol  = BURST_COLS[Math.floor(Math.random() * BURST_COLS.length)];
+      const delay = Math.random() * 60;
+      const dur   = 420 + Math.random() * 200;
+
+      const p = slot.el;
+      p.textContent = shape;
+      p.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:${size}px;height:${size}px;border-radius:${Math.random()>0.4?'50%':'2px'};background:${shape?'transparent':pCol};color:${pCol};font-size:${size+3}px;line-height:1;box-shadow:0 0 ${size*2}px ${pCol}88;pointer-events:none;z-index:9998;transform:translate(-50%,-50%) scale(1) rotate(0deg);transition:transform ${dur}ms cubic-bezier(0.2,0,0.4,1) ${delay}ms,opacity ${dur*.7}ms ease ${delay+dur*.35}ms;`;
       requestAnimationFrame(() => {
-        p.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0) rotate(${Math.random()*360}deg)`;
+        p.style.transform = `translate(calc(-50% + ${tx}px),calc(-50% + ${ty}px)) scale(0) rotate(${Math.random()*360}deg)`;
         p.style.opacity = '0';
       });
-      setTimeout(() => p.remove(), dur + delay + 60);
+      setTimeout(() => {
+        p.style.cssText = 'position:fixed;left:-99px;top:-99px;pointer-events:none;z-index:9998;transition:none;opacity:1;transform:none;';
+        p.textContent = '';
+        slot.free = true;
+      }, dur + delay + 60);
     }
 
     // -- Central flash --
     const flash = document.createElement('div');
-    flash.style.cssText = `
-      position:fixed; left:${x}px; top:${y}px;
-      width:14px; height:14px; border-radius:50%;
-      background: radial-gradient(circle, #fff 0%, ${col} 50%, transparent 100%);
-      transform:translate(-50%,-50%) scale(1);
-      pointer-events:none; z-index:10000;
-      transition: transform .22s ease, opacity .22s ease;
-    `;
+    flash.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,#fff 0%,${col} 50%,transparent 100%);transform:translate(-50%,-50%) scale(1);pointer-events:none;z-index:10000;transition:transform .22s ease,opacity .22s ease;`;
     document.body.appendChild(flash);
     requestAnimationFrame(() => { flash.style.transform='translate(-50%,-50%) scale(2.4)'; flash.style.opacity='0'; });
     setTimeout(() => flash.remove(), 240);
@@ -532,10 +575,18 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
   const statSels = '.stat-row,.faq-item,.stage-card,.prog-wrap';
 
   function applyClass(sel, cls){
-    document.querySelectorAll(sel).forEach((el, i) => {
-      el.classList.add(cls);
-      // stagger siblings within the same parent
-      el.style.transitionDelay = ((i % 8) * 0.07) + 's';
+    // Group by parent so stagger index resets per container, not across the whole document
+    const grouped = new Map();
+    document.querySelectorAll(sel).forEach(el => {
+      const key = el.parentElement;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(el);
+    });
+    grouped.forEach(els => {
+      els.forEach((el, i) => {
+        el.classList.add(cls);
+        el.style.transitionDelay = ((i % 8) * 0.07) + 's';
+      });
     });
   }
   applyClass(upSels,    'sr');
@@ -547,6 +598,8 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
     entries.forEach(e => {
       if(e.isIntersecting){
         e.target.classList.add('visible');
+        // Clear the stagger delay so subsequent transitions (hover, etc.) are instant
+        e.target.style.transitionDelay = '0s';
         io.unobserve(e.target); // animate once, then done
       }
     });
@@ -878,6 +931,43 @@ function animateCountUp(el, targetStr) {
     if (compareA && compareB) renderComparison(compareA, compareB);
   }
 
+  // ── Auto-scroll while dragging near viewport edges ──────────────
+  // Works for both desktop HTML5 drag events and mobile touch drag.
+  const EDGE_ZONE  = 100; // px band at top/bottom that triggers scrolling
+  const MAX_SPEED  = 16;  // maximum px scrolled per animation frame
+  let _autoScrollDir = 0; // negative = scroll up, positive = scroll down
+  let _autoScrollRAF = null;
+
+  function _autoScrollTick() {
+    if (_autoScrollDir === 0) { _autoScrollRAF = null; return; }
+    window.scrollBy({ top: _autoScrollDir, left: 0, behavior: 'instant' });
+    _autoScrollRAF = requestAnimationFrame(_autoScrollTick);
+  }
+
+  function _setAutoScrollFromY(clientY) {
+    const vh = window.innerHeight;
+    if (clientY < EDGE_ZONE) {
+      // Near top edge – scroll up proportionally
+      const ratio = 1 - (clientY / EDGE_ZONE);
+      _autoScrollDir = -(ratio * MAX_SPEED);
+      if (!_autoScrollRAF) _autoScrollRAF = requestAnimationFrame(_autoScrollTick);
+    } else if (clientY > vh - EDGE_ZONE) {
+      // Near bottom edge – scroll down proportionally
+      const ratio = (clientY - (vh - EDGE_ZONE)) / EDGE_ZONE;
+      _autoScrollDir = ratio * MAX_SPEED;
+      if (!_autoScrollRAF) _autoScrollRAF = requestAnimationFrame(_autoScrollTick);
+    } else {
+      _autoScrollDir = 0;
+      // RAF will stop itself on next tick when dir === 0
+    }
+  }
+
+  function _stopAutoScroll() {
+    _autoScrollDir = 0;
+    if (_autoScrollRAF) { cancelAnimationFrame(_autoScrollRAF); _autoScrollRAF = null; }
+  }
+  // ────────────────────────────────────────────────────────────────
+
   // ── Desktop HTML5 Drag & Drop ────────────────
   let _draggedTier = null;
   let _draggedRow  = null;
@@ -898,6 +988,7 @@ function animateCountUp(el, targetStr) {
         row.classList.remove('is-dragging');
         _draggedTier = null;
         _draggedRow  = null;
+        _stopAutoScroll();
         document.querySelectorAll('.compare-slot').forEach(s => s.classList.remove('drag-over-a','drag-over-b'));
       });
     });
@@ -922,6 +1013,12 @@ function animateCountUp(el, targetStr) {
         el.classList.remove('drag-over-a','drag-over-b');
         applyDropToSlot(slot, _draggedTier, _draggedRow);
       });
+    });
+
+    // Auto-scroll when dragging near the top/bottom edge of the viewport
+    document.addEventListener('dragover', e => {
+      if (!compareMode || !_draggedTier) return;
+      _setAutoScrollFromY(e.clientY);
     });
   }
 
@@ -965,6 +1062,9 @@ function animateCountUp(el, targetStr) {
         _touchGhost.style.left = touch.clientX + 'px';
         _touchGhost.style.top  = touch.clientY + 'px';
 
+        // Auto-scroll when near the viewport top/bottom edge
+        _setAutoScrollFromY(touch.clientY);
+
         // Highlight whichever slot the finger is over
         ['a','b'].forEach(slot => {
           const slotEl = document.getElementById('compare-slot-' + slot);
@@ -978,6 +1078,7 @@ function animateCountUp(el, targetStr) {
 
       row.addEventListener('touchend', e => {
         if (!_touchTier) return;
+        _stopAutoScroll();
         _touchGhost.style.display = 'none';
         row.classList.remove('is-dragging');
 
@@ -1293,7 +1394,11 @@ function filterCodes(filter, btn) {
   document.querySelectorAll('.codes-filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  const rows = document.querySelectorAll('#tab-codes .styled-table tbody tr');
+  // Clear search so it doesn't conflict with the filter
+  const searchEl = document.getElementById('codes-search');
+  if (searchEl) searchEl.value = '';
+
+  const rows = document.querySelectorAll('#tab-codes .styled-table tbody tr:not(#codes-empty-row)');
   let shown = 0;
   rows.forEach(row => {
     const isExpired = row.classList.contains('expired');
@@ -1306,6 +1411,10 @@ function filterCodes(filter, btn) {
     if (show) shown++;
   });
 
+  // Show empty-state row if nothing is visible
+  const emptyRow = document.getElementById('codes-empty-row');
+  if (emptyRow) emptyRow.style.display = shown === 0 ? '' : 'none';
+
   // Update counts
   const total   = rows.length;
   const expired = Array.from(rows).filter(r => r.classList.contains('expired')).length;
@@ -1314,10 +1423,36 @@ function filterCodes(filter, btn) {
   if (countEl) countEl.textContent = shown;
 }
 
-// Init counts on load
+/* ==========================================
+   CODES SEARCH
+   ========================================== */
+function searchCodes(query) {
+  const q = query.trim().toLowerCase();
+  const rows = document.querySelectorAll('#tab-codes .styled-table tbody tr:not(#codes-empty-row)');
+  let shown = 0;
+
+  // Determine what filter is currently active
+  const activeFilter = document.querySelector('.codes-filter-btn.active');
+  const filter = activeFilter ? (
+    activeFilter.classList.contains('active-codes') ? 'active' :
+    activeFilter.classList.contains('expired-codes') ? 'expired' : 'all'
+  ) : 'all';
+
+  rows.forEach(row => {
+    const isExpired = row.classList.contains('expired');
+    const passesFilter = filter === 'all' || (filter === 'active' && !isExpired) || (filter === 'expired' && isExpired);
+    const codeText = (row.querySelector('.codes span') || row.cells[0])?.textContent.toLowerCase() || '';
+    const show = passesFilter && (q === '' || codeText.includes(q));
+    row.style.display = show ? '' : 'none';
+    if (show) shown++;
+  });
+
+  const emptyRow = document.getElementById('codes-empty-row');
+  if (emptyRow) emptyRow.style.display = shown === 0 ? '' : 'none';
+}
 (function(){
   document.addEventListener('DOMContentLoaded', () => {
-    const rows    = document.querySelectorAll('#tab-codes .styled-table tbody tr');
+    const rows    = document.querySelectorAll('#tab-codes .styled-table tbody tr:not(#codes-empty-row)');
     const total   = rows.length;
     const expired = Array.from(rows).filter(r => r.classList.contains('expired')).length;
     const active  = total - expired;
@@ -1327,5 +1462,24 @@ function filterCodes(filter, btn) {
     if (allEl)  allEl.textContent  = total;
     if (actEl)  actEl.textContent  = active;
     if (expEl)  expEl.textContent  = expired;
+
+    // Restore last visited tab
+    let savedTab = 'home';
+    try { savedTab = localStorage.getItem('wt_tab') || 'home'; } catch(_){}
+    showTab(savedTab);
+
+    // Restore last viewed chapter (only matters if starting on chapters tab)
+    let savedChapter = 1;
+    try { savedChapter = parseInt(localStorage.getItem('wt_chapter'), 10) || 1; } catch(_){}
+    showChapter(savedChapter);
+
+    // Restore last viewed Others subtab (only matters if starting on others tab)
+    let savedOthersSubtab = 'special-ranks';
+    try { savedOthersSubtab = localStorage.getItem('wt_others_subtab') || 'special-ranks'; } catch(_){}
+    showOthersTab(savedOthersSubtab);
+
+    // Default codes filter to Active so users see useful codes first
+    const activeBtn = document.querySelector('.codes-filter-btn.active-codes');
+    if (activeBtn) filterCodes('active', activeBtn);
   });
 })();

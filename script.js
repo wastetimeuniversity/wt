@@ -369,10 +369,13 @@ function _showRankFloatingSheet(innerHtml, barIdBase) {
     sheet.style.transform = '';
     sheet.style.transition = '';
     setTimeout(() => {
-      [barIdBase+'-t', barIdBase+'-g', barIdBase+'-fr'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.width = el.dataset.pct + '%';
-      });
+      // Query within rfs-body to avoid duplicate-ID collision with hidden desktop panel
+      const rfsBody = document.getElementById('rfs-body');
+      if (rfsBody) {
+        rfsBody.querySelectorAll('.rbt-bar-fill[data-pct]').forEach(el => {
+          el.style.width = el.dataset.pct + '%';
+        });
+      }
     }, 120);
   });
 }
@@ -1867,6 +1870,31 @@ function searchCodes(query) {
   });
 })();
 /* ==========================================
+   RANK TABLE FILTER
+   ========================================== */
+function filterRankTable(filter, btn) {
+  document.querySelectorAll('.rank-tf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const rows = document.querySelectorAll('#rank-table-body tr');
+  rows.forEach(row => {
+    if (filter === 'all') {
+      row.style.display = '';
+    } else if (filter === 'legacy') {
+      row.style.display = row.classList.contains('rank-row-legacy') ? '' : 'none';
+    } else if (filter === 'obtainable') {
+      row.style.display = row.classList.contains('rank-row-legacy') ? 'none' : '';
+    }
+  });
+}
+
+/* ==========================================
+   GAMEPASS WARNING BOX TOGGLE
+   ========================================== */
+function toggleGpWarning(el) {
+  el.classList.toggle('open');
+}
+
+/* ==========================================
    GAMEPASSES - toggle cards & filter
    ========================================== */
 function toggleGpCard(card) {
@@ -1991,7 +2019,5 @@ function filterGamepasses(cat, btn) {
   document.addEventListener('DOMContentLoaded', () => {
     // Gamepass filter bar
     initOverflowWatcher(document.querySelector('.gp-filter-bar'));
-    // Special Ranks filter bar
-    initOverflowWatcher(document.getElementById('sr-filter-bar'));
   });
 })();
