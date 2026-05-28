@@ -6,8 +6,12 @@
 
 <title>Waste Time Wiki</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
-<link rel="stylesheet" href="styles.css"/>
-
+<script>
+  const cssLink = document.createElement('link');
+  cssLink.rel = 'stylesheet';
+  cssLink.href = `styles.css?${Date.now()}`;
+  document.head.appendChild(cssLink);
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
